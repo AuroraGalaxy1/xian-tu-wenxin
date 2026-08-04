@@ -96,6 +96,9 @@ export const scenesData: Record<string, Scene> = {
     exits: [
       { sceneId: 'shan_gu', direction: '西', label: '返回山谷', isLocked: false },
       { sceneId: 'duan_hun_ya', direction: '南', label: '前往断魂崖', isLocked: false },
+      { sceneId: 'bai_cao_yuan', direction: '东', label: '前往百草园', isLocked: false },
+      { sceneId: 'fang_shi', direction: '南', label: '前往溪风坊市', isLocked: false },
+      { sceneId: 'qing_yang_fen_tan', direction: '东南', label: '前往青阳宗分坛', isLocked: false },
     ],
     npcs: ['lao_yao_shi', 'tie_jiang', 'lin_xiu_shi'],
     items: [],
@@ -119,6 +122,121 @@ export const scenesData: Record<string, Scene> = {
     exits: [
       { sceneId: 'qing_mu_ling', direction: '西北', label: '返回青木岭', isLocked: false },
       { sceneId: 'xi_feng_zhen', direction: '北', label: '返回溪风镇', isLocked: false },
+    ],
+    npcs: [],
+    items: [],
+    isUnlocked: false,
+    isExplored: false,
+  },
+
+  /* ================= 百草园（资源区） ================= */
+  bai_cao_yuan: {
+    id: 'bai_cao_yuan',
+    name: '百草园',
+    description: '溪风镇东侧一片被竹篱圈起的药田，灵药成畦，药香扑鼻。一个老药农正弯腰侍弄药苗，田埂间时有巴掌大的药灵蹦跳而过。',
+    location: { region: '落星坡', x: 560, y: 120 },
+    atmosphere: { lingqi: '充裕', danger: '中', time: '卯时' },
+    actions: [
+      { id: 'view_detail', label: '查看详情', icon: 'BookOpen', description: '仔细观察这片药田', action: () => {}, type: 'info' },
+      { id: 'gather_herb', label: '采摘灵草', icon: 'Leaf', description: '采摘一株灵草', action: () => {}, type: 'gather', payload: { itemId: 'ling_cao' } },
+      { id: 'gather_rare', label: '搜寻珍药', icon: 'Sprout', description: '在药田深处搜寻百年灵药', action: () => {}, type: 'gather', payload: { itemId: 'bai_cao_zhi' } },
+      { id: 'explore', label: '探查四周', icon: 'Search', description: '小心探查，谨防药灵惊扰', action: () => {}, type: 'explore' },
+      { id: 'talk_yao_nong', label: '与药农交谈', icon: 'Users', description: '与药农攀谈', action: () => {}, type: 'talk', payload: { npcId: 'yao_nong' } },
+      { id: 'leave', label: '返回镇里', icon: 'MapPin', description: '返回溪风镇', action: () => {}, type: 'leave' },
+    ],
+    exits: [
+      { sceneId: 'xi_feng_zhen', direction: '西', label: '返回溪风镇', isLocked: false },
+    ],
+    npcs: ['yao_nong'],
+    items: [],
+    isUnlocked: true,
+    isExplored: false,
+  },
+
+  /* ================= 溪风坊市（城镇） ================= */
+  fang_shi: {
+    id: 'fang_shi',
+    name: '溪风坊市',
+    description: '溪风镇南边的露天坊市，摊位鳞次栉比，叫卖声不绝。散修们在此交换丹药法宝，也偶尔流传出黑市货的消息。一位说书人坐在角落，正拍着醒木讲古。',
+    location: { region: '落星坡', x: 540, y: 240 },
+    atmosphere: { lingqi: '普通', danger: '低', time: '午时' },
+    actions: [
+      { id: 'view_detail', label: '查看详情', icon: 'BookOpen', description: '打量这座热闹的坊市', action: () => {}, type: 'info' },
+      { id: 'shop_merchant', label: '坊市商人', icon: 'ShoppingBag', description: '看看坊市商人卖的货物', action: () => {}, type: 'shop', payload: { npcId: 'fang_shi_shang_ren' } },
+      { id: 'talk_story', label: '听说书人讲古', icon: 'MessageCircle', description: '听人说书，长长见识', action: () => {}, type: 'talk', payload: { npcId: 'shuo_shu_ren' } },
+      { id: 'inquire', label: '打听消息', icon: 'Search', description: '在坊市里打听消息', action: () => {}, type: 'explore' },
+      { id: 'leave', label: '离开坊市', icon: 'MapPin', description: '离开坊市', action: () => {}, type: 'leave' },
+    ],
+    exits: [
+      { sceneId: 'xi_feng_zhen', direction: '北', label: '返回溪风镇', isLocked: false },
+    ],
+    npcs: ['fang_shi_shang_ren', 'shuo_shu_ren'],
+    items: [],
+    isUnlocked: true,
+    isExplored: false,
+  },
+
+  /* ================= 青阳宗分坛（势力） ================= */
+  qing_yang_fen_tan: {
+    id: 'qing_yang_fen_tan',
+    name: '青阳宗分坛',
+    description: '青石阶直通半山，山门巍峨，剑光森然。护山法阵隐隐流转，一名青衫弟子持剑立于门侧——这是青阳宗在落星坡的分坛，明面除妖护民，实则也搜罗古星遗物。',
+    location: { region: '落星坡', x: 360, y: 280 },
+    atmosphere: { lingqi: '充裕', danger: '中', time: '申时' },
+    actions: [
+      { id: 'view_detail', label: '查看详情', icon: 'BookOpen', description: '打量青阳宗分坛', action: () => {}, type: 'info' },
+      { id: 'talk_jieyin', label: '与接引弟子交谈', icon: 'Users', description: '与青阳宗接引弟子攀谈', action: () => {}, type: 'talk', payload: { npcId: 'jie_yin_di_zi' } },
+      { id: 'shilian', label: '参加宗门试炼', icon: 'Sword', description: '挑战护坛傀儡，一试身手', action: () => {}, type: 'combat', payload: { enemyId: 'shi_lian_kui_lei' } },
+      { id: 'meditate', label: '借地修炼', icon: 'Coffee', description: '借分坛灵气浓郁之地修炼', action: () => {}, type: 'meditate' },
+      { id: 'leave', label: '离开分坛', icon: 'MapPin', description: '离开青阳宗分坛', action: () => {}, type: 'leave' },
+    ],
+    exits: [
+      { sceneId: 'xi_feng_zhen', direction: '西', label: '返回溪风镇', isLocked: false },
+      { sceneId: 'mi_jing_ru_kou', direction: '东北', label: '前往秘境入口', isLocked: false },
+    ],
+    npcs: ['jie_yin_di_zi'],
+    items: [],
+    isUnlocked: true,
+    isExplored: false,
+  },
+
+  /* ================= 废宅（探索 · 怨灵） ================= */
+  fei_zhai: {
+    id: 'fei_zhai',
+    name: '废宅',
+    description: '一座半塌的宅院立在荒僻处，匾额锈蚀难辨。庭院杂草及腰，廊下浮着幽蓝鬼火。传闻这是落星坡一位陨落修士的旧居，至今无人敢近。',
+    location: { region: '落星坡', x: 40, y: 330 },
+    atmosphere: { lingqi: '暴走', danger: '高', time: '亥时' },
+    actions: [
+      { id: 'view_detail', label: '查看详情', icon: 'BookOpen', description: '打量这座荒废的宅院', action: () => {}, type: 'info' },
+      { id: 'explore', label: '探查宅院', icon: 'Search', description: '小心探查，警惕怨灵', action: () => {}, type: 'explore' },
+      { id: 'search', label: '搜寻遗物', icon: 'SearchCheck', description: '在废墟中搜寻前人遗物', action: () => {}, type: 'gather', payload: { itemId: 'heiyu' } },
+      { id: 'leave', label: '离开废宅', icon: 'MapPin', description: '离开这座废宅', action: () => {}, type: 'leave' },
+    ],
+    exits: [
+      { sceneId: 'qing_mu_ling', direction: '东北', label: '前往青木岭', isLocked: false },
+      { sceneId: 'po_miao', direction: '北', label: '前往破庙', isLocked: false },
+    ],
+    npcs: [],
+    items: [],
+    isUnlocked: true,
+    isExplored: false,
+  },
+
+  /* ================= 秘境入口（高等级锁定） ================= */
+  mi_jing_ru_kou: {
+    id: 'mi_jing_ru_kou',
+    name: '秘境入口',
+    description: '一道山崖裂口横陈眼前，灵气如雾般自裂隙涌出，崖壁刻满古老禁制符文。传言此地通往古星陨落时遗下的秘境，非金丹境不可擅入。',
+    location: { region: '落星坡', x: 620, y: 60 },
+    atmosphere: { lingqi: '暴走', danger: '极危', time: '子时' },
+    actions: [
+      { id: 'view_detail', label: '查看详情', icon: 'BookOpen', description: '打量这处古老的禁制', action: () => {}, type: 'info' },
+      { id: 'explore', label: '探查裂隙', icon: 'Search', description: '试着探查裂隙内的气息', action: () => {}, type: 'explore' },
+      { id: 'leave', label: '离开此地', icon: 'MapPin', description: '离开秘境入口', action: () => {}, type: 'leave' },
+    ],
+    exits: [
+      { sceneId: 'qing_yang_fen_tan', direction: '西南', label: '返回青阳宗分坛', isLocked: false },
     ],
     npcs: [],
     items: [],

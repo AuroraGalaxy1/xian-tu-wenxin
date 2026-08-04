@@ -170,6 +170,73 @@ export const itemsData: Record<string, Item> = {
     price: 20,
     stackable: false,
   },
+
+  /* ===== 新增丹药 ===== */
+  zhu_ji_dan: {
+    id: 'zhu_ji_dan',
+    name: '筑基丹',
+    type: 'dan',
+    rarity: 'xuan',
+    description: '汇聚灵材精粹的珍品丹药，服下可大幅增进修为，助人冲击筑基。',
+    effect: { type: 'gain_xiuwei', value: 300, desc: '修为 +300' },
+    price: 200,
+    stackable: true,
+  },
+  hui_ling_dan: {
+    id: 'hui_ling_dan',
+    name: '回灵丹',
+    type: 'dan',
+    rarity: 'ling',
+    description: '比疗伤丹更胜一筹的恢复丹药，可迅速温养气血。',
+    effect: { type: 'restore_hp', value: 100, desc: '恢复气血 100 点' },
+    price: 60,
+    stackable: true,
+  },
+
+  /* ===== 新增材料 ===== */
+  bai_cao_zhi: {
+    id: 'bai_cao_zhi',
+    name: '百年灵药',
+    type: 'cailiao',
+    rarity: 'xuan',
+    description: '汲取百年灵气的药草，通体流转灵光，是炼制筑基丹的主药。',
+    price: 60,
+    stackable: true,
+  },
+  heiyu: {
+    id: 'heiyu',
+    name: '黑玉',
+    type: 'cailiao',
+    rarity: 'ling',
+    description: '一种泛着幽光的黑色玉石，坊市间时有流通，来路不明。',
+    price: 35,
+    stackable: true,
+  },
+
+  /* ===== 新增法宝 ===== */
+  qing_yang_jian: {
+    id: 'qing_yang_jian',
+    name: '青阳剑',
+    type: 'fabao',
+    rarity: 'xuan',
+    description: '青阳宗制式佩剑，剑身流转淡青灵光，锋锐远胜凡铁。',
+    equipSlot: 'weapon',
+    atkBonus: 14,
+    price: 300,
+    stackable: false,
+  },
+
+  /* ===== 新增功法 ===== */
+  bai_cao_ji: {
+    id: 'bai_cao_ji',
+    name: '百草集',
+    type: 'gongfa',
+    rarity: 'ling',
+    description: '药王谷流出的炼丹手札，虽非功法，参悟间却似有灵气灌顶。',
+    effect: { type: 'gain_xiuwei', value: 500, desc: '修为 +500' },
+    price: 250,
+    stackable: false,
+  },
 };
 
 /** 获取物品信息 */

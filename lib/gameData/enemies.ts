@@ -103,6 +103,91 @@ export const enemiesData: Record<string, Enemy> = {
     ],
     sceneId: 'duan_hun_ya',
   },
+
+  /* ===== 百草园 ===== */
+  yao_ling: {
+    id: 'yao_ling',
+    name: '药灵',
+    realm: '凡胎',
+    description: '一株成了精的灵药，化作巴掌大的翠绿小人，在药田间蹦跳。它守护着百年灵药，靠近者皆被藤蔓缠住。',
+    hp: 40,
+    atk: 8,
+    def: 3,
+    skills: [
+      { id: 'vine', name: '藤蔓缠绕', power: 1, desc: '以藤蔓抽打' },
+      { id: 'spore', name: '药尘迷眼', power: 0.7, desc: '洒出迷魂药尘' },
+    ],
+    xiuweiReward: 25,
+    drops: [
+      { itemId: 'ling_cao', rate: 0.6 },
+      { itemId: 'bai_cao_zhi', rate: 0.25 },
+    ],
+    sceneId: 'bai_cao_yuan',
+  },
+
+  /* ===== 坊市外围 ===== */
+  jie_xiu: {
+    id: 'jie_xiu',
+    name: '劫修',
+    realm: '开脉',
+    description: '一个在坊市外围打劫落单散修的家伙，眼神阴鸷，手里攥着把染血的短刀。',
+    hp: 50,
+    atk: 12,
+    def: 4,
+    skills: [
+      { id: 'stab', name: '暗刀', power: 1.3, desc: '阴险的暗刀' },
+      { id: 'snatch', name: '夺宝', power: 0.9, desc: '趁乱夺物' },
+    ],
+    xiuweiReward: 45,
+    drops: [
+      { itemId: 'heiyu', rate: 0.4 },
+      { itemId: 'ju_qi_dan', rate: 0.3 },
+      { itemId: 'ling_cao', rate: 0.3 },
+    ],
+    sceneId: 'fang_shi',
+  },
+
+  /* ===== 青阳宗分坛 ===== */
+  shi_lian_kui_lei: {
+    id: 'shi_lian_kui_lei',
+    name: '试炼傀儡',
+    realm: '筑基',
+    description: '青阳宗以玄铁与灵石铸成的护坛傀儡，力大无穷，不知疲倦。弟子入门，皆需在它手下走过三招。',
+    hp: 90,
+    atk: 18,
+    def: 10,
+    skills: [
+      { id: 'iron_fist', name: '铁拳', power: 1.2, desc: '势大力沉的铁拳' },
+      { id: 'crush', name: '碾碎', power: 1.6, desc: '以整身碾压' },
+    ],
+    xiuweiReward: 90,
+    drops: [
+      { itemId: 'qing_mu_ling_cai', rate: 0.5 },
+      { itemId: 'qing_yang_jian', rate: 0.1 },
+    ],
+    sceneId: 'qing_yang_fen_tan',
+  },
+
+  /* ===== 废宅 ===== */
+  yuan_ling: {
+    id: 'yuan_ling',
+    name: '怨灵',
+    realm: '筑基',
+    description: '废宅中盘踞的怨灵，曾是那位陨落修士未散的执念所化。幽蓝鬼火中，它发出呜咽般的低语，摄人心魄。',
+    hp: 70,
+    atk: 15,
+    def: 6,
+    skills: [
+      { id: 'haunt', name: '鬼影缠绕', power: 1.2, desc: '鬼影缠身' },
+      { id: 'wail', name: '夺魂哀嚎', power: 1.5, desc: '摄魂的哀嚎' },
+    ],
+    xiuweiReward: 75,
+    drops: [
+      { itemId: 'heiyu', rate: 0.5 },
+      { itemId: 'yao_he', rate: 0.3 },
+    ],
+    sceneId: 'fei_zhai',
+  },
 };
 
 /** 获取场景中的随机敌人（未指定则返回 undefined） */

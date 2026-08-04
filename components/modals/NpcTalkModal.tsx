@@ -1,12 +1,14 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { X, ShoppingBag, ScrollText, MessageCircle } from 'lucide-react';
 import { useUiStore } from '@/stores/uiStore';
 import { usePlayerStore } from '@/stores/playerStore';
 import { useLogStore } from '@/stores/logStore';
+import { useLoreStore } from '@/stores/loreStore';
 import { npcsData } from '@/lib/gameData/npcs';
+import { npcLoreMap } from '@/lib/gameData/lore';
 import { questsData } from '@/lib/gameData/quests';
 
 export const NpcTalkModal = ({ npcId }: { npcId: string }) => {
@@ -14,6 +16,12 @@ export const NpcTalkModal = ({ npcId }: { npcId: string }) => {
   const player = usePlayerStore((s) => s.player);
   const [round, setRound] = useState(0);
   const { closeTalk, openShop } = useUiStore();
+
+  // 与 NPC 交谈解锁人物志见闻
+  useEffect(() => {
+    const loreId = npcLoreMap[npcId];
+    if (loreId) useLoreStore.getState().unlock(loreId);
+  }, [npcId]);
 
   if (!npc || !player) return null;
 

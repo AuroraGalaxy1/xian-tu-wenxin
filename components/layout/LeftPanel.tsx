@@ -3,8 +3,8 @@
 import { usePlayerStore } from '@/stores/playerStore';
 import { useUiStore } from '@/stores/uiStore';
 import { useLogStore } from '@/stores/logStore';
-import { 
-  BookOpen, Sword, Backpack, Map, Users, Home, Sparkles, Building2, MoreHorizontal
+import {
+  BookOpen, Sword, Backpack, Map, Users, Home, Sparkles, Building2, MoreHorizontal, ScrollText
 } from 'lucide-react';
 
 export const LeftPanel = () => {
@@ -15,6 +15,7 @@ export const LeftPanel = () => {
 
   const openCultivate = () => useUiStore.getState().setCultivateOpen(true);
   const openBackpack = () => useUiStore.getState().setBackpackOpen(true);
+  const openLore = () => useUiStore.getState().setLoreOpen(true);
   const comingSoon = (name: string) =>
     useLogStore.getState().addLog(`「${name}」尚未开启，敬请期待。`, 'normal');
 
@@ -22,6 +23,7 @@ export const LeftPanel = () => {
     { icon: BookOpen, label: '修炼', color: 'text-[#C9A04E]', onClick: openCultivate },
     { icon: Sword, label: '战斗', color: 'text-[#C94E4E]', onClick: () => comingSoon('战斗') },
     { icon: Backpack, label: '背包', color: 'text-[#4EC9C9]', onClick: openBackpack },
+    { icon: ScrollText, label: '见闻', color: 'text-[#9B6EC9]', onClick: openLore },
     { icon: Map, label: '地图', color: 'text-[#7DDDDD]', onClick: () => comingSoon('地图') },
     { icon: Users, label: '社交', color: 'text-[#9B6EC9]', onClick: () => comingSoon('社交') },
     { icon: Home, label: '洞府', color: 'text-[#E8DCC8]', onClick: () => comingSoon('洞府') },

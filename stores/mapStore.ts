@@ -75,13 +75,72 @@ const defaultLocations: MapLocation[] = [
     isExplored: false,
     type: 'danger',
   },
+  {
+    id: 'bai_cao_yuan',
+    name: '百草园',
+    x: 560,
+    y: 120,
+    region: '落星坡',
+    isUnlocked: true,
+    isExplored: false,
+    type: 'resource',
+  },
+  {
+    id: 'fang_shi',
+    name: '溪风坊市',
+    x: 540,
+    y: 240,
+    region: '落星坡',
+    isUnlocked: true,
+    isExplored: false,
+    type: 'town',
+  },
+  {
+    id: 'qing_yang_fen_tan',
+    name: '青阳宗分坛',
+    x: 360,
+    y: 280,
+    region: '落星坡',
+    isUnlocked: true,
+    isExplored: false,
+    type: 'scene',
+  },
+  {
+    id: 'fei_zhai',
+    name: '废宅',
+    x: 40,
+    y: 330,
+    region: '落星坡',
+    isUnlocked: true,
+    isExplored: false,
+    type: 'secret',
+  },
+  {
+    id: 'mi_jing_ru_kou',
+    name: '秘境入口',
+    x: 620,
+    y: 60,
+    region: '落星坡',
+    isUnlocked: false,
+    isExplored: false,
+    type: 'secret',
+  },
 ];
 
 export const useMapStore = create<MapState>()(
   persist(
     (set, get) => ({
       currentLocation: defaultLocations[0],
-      unlockedLocations: ['po_miao', 'shan_gu', 'qing_mu_ling', 'xi_feng_zhen'],
+      unlockedLocations: [
+        'po_miao',
+        'shan_gu',
+        'qing_mu_ling',
+        'xi_feng_zhen',
+        'bai_cao_yuan',
+        'fang_shi',
+        'qing_yang_fen_tan',
+        'fei_zhai',
+      ],
       exploredLocations: [],
       locations: defaultLocations,
 
@@ -128,6 +187,27 @@ export const useMapStore = create<MapState>()(
     }),
     {
       name: 'map-storage', // localStorage key
+      // 用最新 defaultLocations 合并旧存档解锁/探索状态，保证新增地点对旧存档生效
+      merge: (persisted, current) => {
+        if (!persisted || typeof persisted !== 'object') return current;
+        const p = persisted as Partial<MapState>;
+        const unlocked = p.unlockedLocations ?? current.unlockedLocations;
+        const explored = p.exploredLocations ?? current.exploredLocations;
+        const locations = current.locations.map((loc) => ({
+          ...loc,
+          isUnlocked: unlocked.includes(loc.id) || loc.isUnlocked,
+          isExplored: explored.includes(loc.id),
+        }));
+        const currentLoc =
+          locations.find((l) => l.id === p.currentLocation?.id) ?? locations[0];
+        return {
+          ...current,
+          unlockedLocations: unlocked,
+          exploredLocations: explored,
+          locations,
+          currentLocation: currentLoc,
+        } as MapState;
+      },
     }
   )
 );

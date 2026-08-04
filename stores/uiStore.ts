@@ -6,6 +6,9 @@ export type ItemDetailContext = 'backpack' | 'shop';
 interface UiState {
   backpackOpen: boolean;
   cultivateOpen: boolean;
+  loreOpen: boolean;
+  /** 当前打开的奇遇 id */
+  encounterId: string | null;
   /** 当前打开商铺的 NPC id */
   shopNpcId: string | null;
   /** 当前对话的 NPC id */
@@ -14,6 +17,9 @@ interface UiState {
   itemDetail: { itemId: string; context: ItemDetailContext } | null;
   setBackpackOpen: (v: boolean) => void;
   setCultivateOpen: (v: boolean) => void;
+  setLoreOpen: (v: boolean) => void;
+  openEncounter: (id: string) => void;
+  closeEncounter: () => void;
   openShop: (npcId: string) => void;
   closeShop: () => void;
   openTalk: (npcId: string) => void;
@@ -26,12 +32,17 @@ interface UiState {
 export const useUiStore = create<UiState>()((set) => ({
   backpackOpen: false,
   cultivateOpen: false,
+  loreOpen: false,
+  encounterId: null,
   shopNpcId: null,
   talkNpcId: null,
   itemDetail: null,
 
   setBackpackOpen: (v) => set({ backpackOpen: v }),
   setCultivateOpen: (v) => set({ cultivateOpen: v }),
+  setLoreOpen: (v) => set({ loreOpen: v }),
+  openEncounter: (id) => set({ encounterId: id }),
+  closeEncounter: () => set({ encounterId: null }),
   openShop: (npcId) => set({ shopNpcId: npcId, talkNpcId: null }),
   closeShop: () => set({ shopNpcId: null }),
   openTalk: (npcId) => set({ talkNpcId: npcId, shopNpcId: null }),
@@ -39,5 +50,13 @@ export const useUiStore = create<UiState>()((set) => ({
   openItemDetail: (itemId, context = 'backpack') => set({ itemDetail: { itemId, context } }),
   closeItemDetail: () => set({ itemDetail: null }),
   closeAll: () =>
-    set({ backpackOpen: false, cultivateOpen: false, shopNpcId: null, talkNpcId: null, itemDetail: null }),
+    set({
+      backpackOpen: false,
+      cultivateOpen: false,
+      loreOpen: false,
+      encounterId: null,
+      shopNpcId: null,
+      talkNpcId: null,
+      itemDetail: null,
+    }),
 }));

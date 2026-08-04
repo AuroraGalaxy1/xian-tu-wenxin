@@ -16,6 +16,10 @@ import {
   Hammer,
   BedDouble,
   Sparkles,
+  Sprout,
+  SearchCheck,
+  ShoppingBag,
+  MessageCircle,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
@@ -39,6 +43,10 @@ const iconMap: Record<string, LucideIcon> = {
   Hammer,
   BedDouble,
   Sparkles,
+  Sprout,
+  SearchCheck,
+  ShoppingBag,
+  MessageCircle,
 };
 
 export const SceneButtons = ({ actions, onAction }: SceneButtonsProps) => {

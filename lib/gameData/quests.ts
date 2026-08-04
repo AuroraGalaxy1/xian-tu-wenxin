@@ -75,4 +75,58 @@ export const questsData: Record<string, Quest> = {
     ],
     rewards: { xiuwei: 40, items: [{ itemId: 'ju_ling_dan', count: 1 }] },
   },
+  s3: {
+    id: 's3',
+    name: '百草园采药',
+    type: 'side',
+    description: '药农老周请你采一株百年灵药，说园子深处的那株药灵一直守着它。',
+    objectives: [
+      { type: 'collect_item', target: 'bai_cao_zhi', amount: 1, desc: '收集百年灵药 ×1' },
+    ],
+    rewards: { xiuwei: 80, lingShi: 50 },
+  },
+  s4: {
+    id: 's4',
+    name: '坊市寻玉',
+    type: 'side',
+    description: '吴掌柜托你寻一块黑玉，说是坊市近来走俏的稀罕物。',
+    objectives: [
+      { type: 'collect_item', target: 'heiyu', amount: 1, desc: '收集黑玉 ×1' },
+    ],
+    rewards: { xiuwei: 60, lingShi: 70 },
+  },
+  s5: {
+    id: 's5',
+    name: '青阳宗试炼',
+    type: 'side',
+    description: '接引弟子柳青说，击败护坛傀儡便有资格与青阳宗做交易。',
+    objectives: [
+      { type: 'kill_enemy', target: 'shi_lian_kui_lei', desc: '击败试炼傀儡' },
+    ],
+    rewards: { xiuwei: 120, lingShi: 100 },
+  },
+  s6: {
+    id: 's6',
+    name: '废宅探秘',
+    type: 'side',
+    description: '传闻落星坡陨落修士的旧居藏着不为人知的秘密。前往废宅一探。',
+    objectives: [
+      { type: 'scene_visit', target: 'fei_zhai', desc: '抵达废宅' },
+    ],
+    rewards: { xiuwei: 90, lingShi: 40 },
+  },
+  s7: {
+    id: 's7',
+    name: '除怨安魂',
+    type: 'side',
+    description: '说书人叹道，废宅的怨灵是那位陨落修士未散的执念。替他除去怨灵，还亡者一个安宁。',
+    objectives: [
+      { type: 'kill_enemy', target: 'yuan_ling', desc: '击败废宅怨灵' },
+    ],
+    rewards: {
+      xiuwei: 150,
+      lingShi: 120,
+      items: [{ itemId: 'bai_cao_ji', count: 1 }],
+    },
+  },
 };

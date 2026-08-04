@@ -9,14 +9,31 @@ import { CombatModal } from './CombatModal';
 import { ItemDetailModal } from './ItemDetailModal';
 import { NpcTalkModal } from './NpcTalkModal';
 import { ShopModal } from './ShopModal';
+import { LoreModal } from './LoreModal';
+import { EncounterModal } from './EncounterModal';
 
 export const ModalContainer = () => {
-  const { backpackOpen, cultivateOpen, shopNpcId, talkNpcId, itemDetail, closeAll } =
-    useUiStore();
+  const {
+    backpackOpen,
+    cultivateOpen,
+    loreOpen,
+    encounterId,
+    shopNpcId,
+    talkNpcId,
+    itemDetail,
+    closeAll,
+  } = useUiStore();
   const combatOpen = useCombatStore((s) => s.isOpen);
 
   const hasAny =
-    backpackOpen || cultivateOpen || combatOpen || !!shopNpcId || !!talkNpcId || !!itemDetail;
+    backpackOpen ||
+    cultivateOpen ||
+    loreOpen ||
+    combatOpen ||
+    !!encounterId ||
+    !!shopNpcId ||
+    !!talkNpcId ||
+    !!itemDetail;
 
   return (
     <AnimatePresence>
@@ -35,6 +52,8 @@ export const ModalContainer = () => {
             {cultivateOpen && <CultivateModal />}
             {combatOpen && <CombatModal />}
             {backpackOpen && <BackpackModal />}
+            {loreOpen && <LoreModal />}
+            {encounterId && <EncounterModal />}
             {itemDetail && <ItemDetailModal />}
             {talkNpcId && <NpcTalkModal npcId={talkNpcId} />}
             {shopNpcId && <ShopModal npcId={shopNpcId} />}
