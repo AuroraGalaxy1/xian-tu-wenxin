@@ -8,7 +8,7 @@ interface SceneState {
   getScene: (sceneId: string) => Scene | undefined;
 }
 
-export const useSceneStore = create<SceneState>((set, get) => ({
+export const useSceneStore = create<SceneState>((set) => ({
   currentScene: null, // 初始为null，由页面初始化时设置
   
   setCurrentScene: (sceneId) => {

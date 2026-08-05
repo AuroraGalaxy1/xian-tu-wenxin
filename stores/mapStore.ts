@@ -1,16 +1,9 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { MapLocation } from '@/types/map';
 
-export interface MapLocation {
-  id: string;
-  name: string;
-  x: number;
-  y: number;
-  region: string;
-  isUnlocked: boolean;
-  isExplored: boolean;
-  type: 'scene' | 'town' | 'danger' | 'resource' | 'secret';
-}
+// 兼容旧引用：re-export 类型，CompassMap 等组件仍可从本 store 导入
+export type { MapLocation } from '@/types/map';
 
 export interface MapState {
   // 当前位置
@@ -48,7 +41,7 @@ const defaultLocations: MapLocation[] = [
     x: 320,
     y: 150,
     region: '落星坡',
-    isUnlocked: false,
+    isUnlocked: true,
     isExplored: false,
     type: 'scene',
   },
@@ -58,7 +51,7 @@ const defaultLocations: MapLocation[] = [
     x: 80,
     y: 200,
     region: '落星坡',
-    isUnlocked: false,
+    isUnlocked: true,
     isExplored: false,
     type: 'resource',
   },
@@ -68,7 +61,7 @@ const defaultLocations: MapLocation[] = [
     x: 480,
     y: 180,
     region: '落星坡',
-    isUnlocked: false,
+    isUnlocked: true,
     isExplored: false,
     type: 'town',
   },
@@ -88,7 +81,7 @@ export const useMapStore = create<MapState>()(
   persist(
     (set, get) => ({
       currentLocation: defaultLocations[0],
-      unlockedLocations: ['po_miao'],
+      unlockedLocations: ['po_miao', 'shan_gu', 'qing_mu_ling', 'xi_feng_zhen'],
       exploredLocations: [],
       locations: defaultLocations,
 

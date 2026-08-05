@@ -3,50 +3,102 @@
 import { useSceneStore } from '@/stores/sceneStore';
 import { useLogStore } from '@/stores/logStore';
 import { usePlayerStore } from '@/stores/playerStore';
+import { useCombatStore } from '@/stores/combatStore';
+import { useUiStore } from '@/stores/uiStore';
 import { SceneButtons } from '@/components/game/SceneButtons';
 import { CompassMap } from '@/components/game/CompassMap';
+import { ResourceBar } from '@/components/game/ResourceBar';
 import { SceneAction } from '@/types/scene';
+import { getRandomEncounter } from '@/lib/utils/gameUtils';
+import { getEnemy } from '@/lib/gameData/enemies';
+import { itemsData } from '@/lib/gameData/items';
 
 export const CenterPanel = () => {
   const currentScene = useSceneStore((state) => state.currentScene);
   const { addLog } = useLogStore();
   const player = usePlayerStore((state) => state.player);
-  const changeScene = usePlayerStore((state) => state.changeScene);
+
+  /** 探查四周：消耗神识，可能遭遇妖兽 */
+  const handleExplore = () => {
+    if (!player || !currentScene) return;
+    if (player.stats.shenshi < 5) {
+      addLog('你的神识不足，无法探查。', 'normal');
+      return;
+    }
+    usePlayerStore.getState().updateStats({ shenshi: player.stats.shenshi - 2 });
+    if (currentScene.id === 'xi_feng_zhen') {
+      addLog('镇上人来人往，一片安宁，没有什么异常。', 'normal');
+      return;
+    }
+    const enemy = getRandomEncounter(currentScene.id);
+    if (enemy) {
+      addLog(`你凝神探查，忽觉一股凶煞之气逼近——遭遇了「${enemy.name}」！`, 'danger');
+      useCombatStore.getState().startCombat(enemy);
+    } else {
+      addLog('你仔细探查了四周，并没有发现异常。', 'normal');
+    }
+  };
 
   const handleAction = (action: SceneAction) => {
     if (action.condition && !action.condition()) {
       addLog('条件不足，无法执行此操作。', 'normal');
       return;
     }
+    const type = action.type ?? 'info';
+    const payload = action.payload ?? {};
 
-    switch (action.id) {
-      case 'view_detail':
-        addLog('你仔细观察四周，发现神像底座似乎有字...', 'normal');
-        break;
+    switch (type) {
       case 'explore':
-        if (player && player.stats.shenshi >= 5) {
-          addLog('你凝神探查，发现庙外草丛中有三只低阶妖兽徘徊。', 'special');
-          const updateStats = usePlayerStore.getState().updateStats;
-          updateStats({ shenshi: player.stats.shenshi - 2 });
-        } else {
-          addLog('你的神识不足，无法探查。', 'normal');
-        }
+        handleExplore();
         break;
       case 'meditate':
-        addLog('你盘膝坐下，尝试感应天地灵气...', 'normal');
-        const gainXiuwei = usePlayerStore.getState().gainXiuwei;
-        gainXiuwei(10);
-        addLog('修为 +10', 'stat');
+        useUiStore.getState().setCultivateOpen(true);
+        break;
+      case 'combat': {
+        const enemyId = payload.enemyId;
+        const enemy = enemyId
+          ? getEnemy(enemyId)
+          : currentScene
+            ? getRandomEncounter(currentScene.id)
+            : null;
+        if (enemy) {
+          useCombatStore.getState().startCombat(enemy);
+        } else {
+          addLog('这里没有可挑战的对象。', 'normal');
+        }
+        break;
+      }
+      case 'talk':
+        if (payload.npcId) useUiStore.getState().openTalk(payload.npcId);
+        else addLog('这里没有人可以交谈。', 'normal');
+        break;
+      case 'shop':
+        if (payload.npcId) useUiStore.getState().openShop(payload.npcId);
+        else addLog('这里没有商铺。', 'normal');
+        break;
+      case 'rest':
+        usePlayerStore.getState().heal(9999);
+        addLog('你在客栈歇了一夜，气血恢复如初。', 'item');
+        break;
+      case 'gather':
+        if (payload.itemId) {
+          usePlayerStore.getState().addItem(payload.itemId);
+          const it = itemsData[payload.itemId];
+          addLog(`你采集到了「${it?.name ?? '物品'}」！`, 'item');
+        } else {
+          addLog('你搜寻一番，这里空空如也。', 'normal');
+        }
+        break;
+      case 'backpack':
+        useUiStore.getState().setBackpackOpen(true);
         break;
       case 'leave':
-        addLog('你握紧玉简碎片，心中忽然多了一个方向感——东南方。', 'special');
-        addLog('你决定前往「灵脉交汇之眼」...', 'normal');
-        changeScene('shan_gu');
-        const setScene = useSceneStore.getState().setCurrentScene;
-        setScene('shan_gu');
+        addLog('你举目四望，罗盘指向可前往的方向。点击右下角罗盘选择目的地。', 'special');
         break;
+      case 'info':
       default:
-        addLog(`执行操作：${action.label}`, 'normal');
+        addLog(`—— ${action.label} ——`, 'normal');
+        addLog(action.description, 'normal');
     }
   };
 
@@ -60,6 +112,9 @@ export const CenterPanel = () => {
 
   return (
     <main className="flex-1 p-6 overflow-y-auto bg-[#0D0A08]/40 relative">
+      {/* 玩家状态条 */}
+      <ResourceBar />
+
       {/* 场景标题 */}
       <div className="flex items-center gap-3 mb-4">
         <div className="w-1 h-6 bg-[#C9A04E]/40 rounded-full" />
@@ -67,7 +122,7 @@ export const CenterPanel = () => {
           {currentScene.name}
         </h2>
         <span className="ml-auto text-[10px] text-[#8B7A5E]/50 tracking-wider">
-          {currentScene.location?.region || '未知'} · 第{currentScene.id === 'po_miao' ? '一' : '二'}境
+          {currentScene.location?.region || '未知'}
         </span>
       </div>
       
@@ -92,7 +147,6 @@ export const CenterPanel = () => {
       <div className="mt-6">
         <SceneButtons 
           actions={currentScene.actions} 
-          sceneId={currentScene.id}
           onAction={handleAction}
         />
       </div>

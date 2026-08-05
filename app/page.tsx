@@ -10,9 +10,11 @@ import { usePlayerStore } from '@/stores/playerStore';
 import { useLogStore } from '@/stores/logStore';
 import { useSceneStore } from '@/stores/sceneStore';
 import { useMapStore } from '@/stores/mapStore';
+import { ModalContainer } from '@/components/modals/ModalContainer';
 
 export default function Home() {
   const { player, setPlayer } = usePlayerStore();
+  const currentScene = useSceneStore((state) => state.currentScene);
   const { addLog } = useLogStore();
   const { setCurrentScene } = useSceneStore();
   const { setCurrentLocation } = useMapStore();
@@ -35,20 +37,29 @@ export default function Home() {
           zhinian: 12,
           xiuwei: 1240,
         },
+        hp: 160,
+        maxHp: 160,
+        lingShi: 100,
         currentScene: 'po_miao',
-        inventory: [],
+        inventory: ['yu_jian_sui_pian'],
         skills: [],
         quests: [],
         relationships: {},
+        equipment: {},
+        visitedScenes: ['po_miao'],
+        killedEnemies: [],
       });
-      
-      setCurrentScene('po_miao');
-      setCurrentLocation('po_miao');
-      
+      // 仅在首次创建角色时写入开场日志
       addLog('你从昏迷中醒来，发现自己身处一座破败的山神庙中...', 'special');
       addLog('眉心隐隐发烫，似有什么在呼唤你。', 'normal');
     }
-  }, [player, setPlayer, setCurrentScene, setCurrentLocation, addLog]);
+
+    // 确保当前场景与地图位置已初始化（持久化恢复后 player 可能已存在）
+    if (!currentScene) {
+      setCurrentScene('po_miao');
+      setCurrentLocation('po_miao');
+    }
+  }, [player, currentScene, setPlayer, setCurrentScene, setCurrentLocation, addLog]);
 
   if (!player) {
     return (
@@ -67,6 +78,7 @@ export default function Home() {
         <RightPanel />
       </div>
       <BottomBar />
+      <ModalContainer />
     </div>
   );
 }

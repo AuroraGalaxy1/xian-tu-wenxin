@@ -1,6 +1,8 @@
 'use client';
 
 import { usePlayerStore } from '@/stores/playerStore';
+import { useUiStore } from '@/stores/uiStore';
+import { useLogStore } from '@/stores/logStore';
 import { 
   BookOpen, Sword, Backpack, Map, Users, Home, Sparkles, Building2, MoreHorizontal
 } from 'lucide-react';
@@ -11,15 +13,20 @@ export const LeftPanel = () => {
 
   const { stats } = player;
 
+  const openCultivate = () => useUiStore.getState().setCultivateOpen(true);
+  const openBackpack = () => useUiStore.getState().setBackpackOpen(true);
+  const comingSoon = (name: string) =>
+    useLogStore.getState().addLog(`「${name}」尚未开启，敬请期待。`, 'normal');
+
   const navItems = [
-    { icon: BookOpen, label: '修炼', color: 'text-[#C9A04E]' },
-    { icon: Sword, label: '战斗', color: 'text-[#C94E4E]' },
-    { icon: Backpack, label: '背包', color: 'text-[#4EC9C9]' },
-    { icon: Map, label: '地图', color: 'text-[#7DDDDD]' },
-    { icon: Users, label: '社交', color: 'text-[#9B6EC9]' },
-    { icon: Home, label: '洞府', color: 'text-[#E8DCC8]' },
-    { icon: Sparkles, label: '奇遇', color: 'text-[#C9A04E]' },
-    { icon: Building2, label: '宗门', color: 'text-[#8B7A5E]' },
+    { icon: BookOpen, label: '修炼', color: 'text-[#C9A04E]', onClick: openCultivate },
+    { icon: Sword, label: '战斗', color: 'text-[#C94E4E]', onClick: () => comingSoon('战斗') },
+    { icon: Backpack, label: '背包', color: 'text-[#4EC9C9]', onClick: openBackpack },
+    { icon: Map, label: '地图', color: 'text-[#7DDDDD]', onClick: () => comingSoon('地图') },
+    { icon: Users, label: '社交', color: 'text-[#9B6EC9]', onClick: () => comingSoon('社交') },
+    { icon: Home, label: '洞府', color: 'text-[#E8DCC8]', onClick: () => comingSoon('洞府') },
+    { icon: Sparkles, label: '奇遇', color: 'text-[#C9A04E]', onClick: () => comingSoon('奇遇') },
+    { icon: Building2, label: '宗门', color: 'text-[#8B7A5E]', onClick: () => comingSoon('宗门') },
   ];
 
   return (
@@ -100,6 +107,7 @@ export const LeftPanel = () => {
           {navItems.map((item, index) => (
             <button
               key={index}
+              onClick={item.onClick}
               className="flex items-center gap-2 px-2 py-1.5 rounded bg-[#0A0806]/50 hover:bg-[#1A1410] transition-all duration-200 group"
             >
               <item.icon className={`w-3.5 h-3.5 ${item.color} group-hover:scale-110 transition-transform`} />

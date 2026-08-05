@@ -1,45 +1,49 @@
 'use client';
 
-export const PlayerList = () => {
-  const nearbyPlayers = [
-    { id: 'npc_1', name: '闲云子', realm: '开脉', status: 'online', distance: '500m' },
-    { id: 'npc_2', name: '月下客', realm: '凡胎', status: 'offline', distance: '1.2km' },
-    { id: 'npc_3', name: '无名枯骨', realm: '已逝', status: 'dead', distance: '--' },
-  ];
+import { useSceneStore } from '@/stores/sceneStore';
+import { useUiStore } from '@/stores/uiStore';
+import { npcsData } from '@/lib/gameData/npcs';
+import { MessageCircle } from 'lucide-react';
 
-  const getStatusDot = (status: string) => {
-    switch (status) {
-      case 'online': return '🟢';
-      case 'offline': return '🟡';
-      case 'dead': return '⚫';
-      default: return '⚪';
-    }
-  };
+export const PlayerList = () => {
+  const currentScene = useSceneStore((s) => s.currentScene);
+  const openTalk = (npcId: string) => useUiStore.getState().openTalk(npcId);
+
+  const npcs = currentScene
+    ? Object.values(npcsData).filter((n) => n.sceneId === currentScene.id)
+    : [];
 
   return (
     <div className="glass-panel-light rounded-lg p-3">
       <div className="flex items-center justify-between mb-2">
         <span className="text-[10px] text-[#8B7A5E] tracking-widest uppercase">
-          ◈ 附近道友
+          ◈ 此处人物
         </span>
-        <span className="text-[8px] text-[#8B7A5E]/50">{nearbyPlayers.filter(p => p.status === 'online').length} 在线</span>
+        <span className="text-[8px] text-[#8B7A5E]/50">{npcs.length} 位</span>
       </div>
       <div className="divider-antique" />
       <div className="mt-2 space-y-1.5">
-        {nearbyPlayers.map((player) => (
-          <div key={player.id} className="flex items-center justify-between text-xs p-1.5 rounded hover:bg-[#1A1410]/30 transition-colors">
-            <div className="flex items-center gap-2">
-              <span>{getStatusDot(player.status)}</span>
-              <span className="text-[#D4C9B8]">{player.name}</span>
-              <span className="text-[#8B7A5E]/50 text-[10px]">· {player.realm}</span>
-            </div>
-            <span className="text-[#8B7A5E]/50 text-[10px]">{player.distance}</span>
+        {npcs.length === 0 ? (
+          <div className="text-[11px] text-[#8B7A5E]/40 text-center py-3">
+            四下无人
           </div>
-        ))}
+        ) : (
+          npcs.map((npc) => (
+            <button
+              key={npc.id}
+              onClick={() => openTalk(npc.id)}
+              className="w-full flex items-center justify-between text-xs p-1.5 rounded hover:bg-[#1A1410]/40 transition-colors group"
+            >
+              <div className="flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#4EC9C9]" />
+                <span className="text-[#D4C9B8] group-hover:text-[#C9A04E]">{npc.name}</span>
+                <span className="text-[#8B7A5E]/50 text-[10px]">· {npc.title}</span>
+              </div>
+              <MessageCircle className="w-3 h-3 text-[#8B7A5E] group-hover:text-[#C9A04E]" />
+            </button>
+          ))
+        )}
       </div>
-      <button className="mt-1 text-[10px] text-[#8B7A5E] hover:text-[#D4C9B8] transition-colors">
-        查看全部 →
-      </button>
     </div>
   );
 };

@@ -1,15 +1,30 @@
 'use client';
 
 import { SceneAction } from '@/types/scene';
-import { BookOpen, Search, Coffee, DoorOpen, FileText, User, MapPin } from 'lucide-react';
+import {
+  BookOpen,
+  Search,
+  Coffee,
+  DoorOpen,
+  FileText,
+  User,
+  MapPin,
+  Users,
+  Sword,
+  Leaf,
+  FlaskConical,
+  Hammer,
+  BedDouble,
+  Sparkles,
+} from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 
 interface SceneButtonsProps {
   actions: SceneAction[];
-  sceneId: string;
   onAction: (action: SceneAction) => void;
 }
 
-const iconMap: Record<string, any> = {
+const iconMap: Record<string, LucideIcon> = {
   BookOpen,
   Search,
   Coffee: Coffee,
@@ -17,9 +32,16 @@ const iconMap: Record<string, any> = {
   FileText,
   User,
   MapPin,
+  Users,
+  Sword,
+  Leaf,
+  FlaskConical,
+  Hammer,
+  BedDouble,
+  Sparkles,
 };
 
-export const SceneButtons = ({ actions, sceneId, onAction }: SceneButtonsProps) => {
+export const SceneButtons = ({ actions, onAction }: SceneButtonsProps) => {
   const defaultActions: SceneAction[] = [
     { id: 'view_detail', label: '查看详情', icon: 'BookOpen', description: '仔细观察当前场景', action: () => {} },
     { id: 'explore', label: '探查四周', icon: 'Search', description: '消耗神识扫描周围', action: () => {} },

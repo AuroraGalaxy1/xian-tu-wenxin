@@ -20,6 +20,28 @@ export interface Scene {
   isExplored: boolean;
 }
 
+export type SceneActionType =
+  | 'explore'
+  | 'meditate'
+  | 'combat'
+  | 'talk'
+  | 'shop'
+  | 'rest'
+  | 'gather'
+  | 'backpack'
+  | 'leave'
+  | 'info'
+  | 'normal'
+  | 'danger'
+  | 'special'
+  | 'new';
+
+export interface SceneActionPayload {
+  npcId?: string;
+  enemyId?: string;
+  itemId?: string;
+}
+
 export interface SceneAction {
   id: string;
   label: string;
@@ -27,7 +49,8 @@ export interface SceneAction {
   description: string;
   action: () => void;      // 或使用事件系统
   condition?: () => boolean;
-  type?: 'normal' | 'danger' | 'special' | 'new';
+  type?: SceneActionType;
+  payload?: SceneActionPayload;
 }
 
 export interface SceneExit {
