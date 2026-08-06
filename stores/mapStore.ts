@@ -75,6 +75,7 @@ const defaultLocations: MapLocation[] = [
     isExplored: false,
     type: 'danger',
   },
+<<<<<<< HEAD
   {
     id: 'bai_cao_yuan',
     name: '百草园',
@@ -125,12 +126,15 @@ const defaultLocations: MapLocation[] = [
     isExplored: false,
     type: 'secret',
   },
+=======
+>>>>>>> 6da646e4e58e870374996db04b7b20524f5ca952
 ];
 
 export const useMapStore = create<MapState>()(
   persist(
     (set, get) => ({
       currentLocation: defaultLocations[0],
+<<<<<<< HEAD
       unlockedLocations: [
         'po_miao',
         'shan_gu',
@@ -141,6 +145,9 @@ export const useMapStore = create<MapState>()(
         'qing_yang_fen_tan',
         'fei_zhai',
       ],
+=======
+      unlockedLocations: ['po_miao', 'shan_gu', 'qing_mu_ling', 'xi_feng_zhen'],
+>>>>>>> 6da646e4e58e870374996db04b7b20524f5ca952
       exploredLocations: [],
       locations: defaultLocations,
 
@@ -187,6 +194,7 @@ export const useMapStore = create<MapState>()(
     }),
     {
       name: 'map-storage', // localStorage key
+<<<<<<< HEAD
       // 用最新 defaultLocations 合并旧存档解锁/探索状态，保证新增地点对旧存档生效
       merge: (persisted, current) => {
         if (!persisted || typeof persisted !== 'object') return current;
@@ -208,6 +216,8 @@ export const useMapStore = create<MapState>()(
           currentLocation: currentLoc,
         } as MapState;
       },
+=======
+>>>>>>> 6da646e4e58e870374996db04b7b20524f5ca952
     }
   )
 );

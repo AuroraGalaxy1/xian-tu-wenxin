@@ -7,7 +7,11 @@ export const TopBar = () => {
   const player = usePlayerStore((state) => state.player);
 
   return (
+<<<<<<< HEAD
     <header className="h-14 px-6 flex items-center justify-between bg-[#0D0A08]/90 border-b border-[#C9A04E]/20 backdrop-blur-md glass-panel-light">
+=======
+    <header className="h-14 px-6 flex items-center justify-between bg-[#0D0A08]/95 border-b border-[#C9A04E]/20 glass-panel-light">
+>>>>>>> 6da646e4e58e870374996db04b7b20524f5ca952
       {/* 左侧：Logo + 境界 */}
       <div className="flex items-center gap-5">
         <div className="flex items-center gap-2">

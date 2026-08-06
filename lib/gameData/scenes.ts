@@ -96,9 +96,12 @@ export const scenesData: Record<string, Scene> = {
     exits: [
       { sceneId: 'shan_gu', direction: '西', label: '返回山谷', isLocked: false },
       { sceneId: 'duan_hun_ya', direction: '南', label: '前往断魂崖', isLocked: false },
+<<<<<<< HEAD
       { sceneId: 'bai_cao_yuan', direction: '东', label: '前往百草园', isLocked: false },
       { sceneId: 'fang_shi', direction: '南', label: '前往溪风坊市', isLocked: false },
       { sceneId: 'qing_yang_fen_tan', direction: '东南', label: '前往青阳宗分坛', isLocked: false },
+=======
+>>>>>>> 6da646e4e58e870374996db04b7b20524f5ca952
     ],
     npcs: ['lao_yao_shi', 'tie_jiang', 'lin_xiu_shi'],
     items: [],
@@ -128,6 +131,7 @@ export const scenesData: Record<string, Scene> = {
     isUnlocked: false,
     isExplored: false,
   },
+<<<<<<< HEAD
 
   /* ================= 百草园（资源区） ================= */
   bai_cao_yuan: {
@@ -243,4 +247,6 @@ export const scenesData: Record<string, Scene> = {
     isUnlocked: false,
     isExplored: false,
   },
+=======
+>>>>>>> 6da646e4e58e870374996db04b7b20524f5ca952
 };

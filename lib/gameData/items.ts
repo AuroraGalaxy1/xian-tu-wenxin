@@ -170,6 +170,7 @@ export const itemsData: Record<string, Item> = {
     price: 20,
     stackable: false,
   },
+<<<<<<< HEAD
 
   /* ===== 新增丹药 ===== */
   zhu_ji_dan: {
@@ -237,6 +238,8 @@ export const itemsData: Record<string, Item> = {
     price: 250,
     stackable: false,
   },
+=======
+>>>>>>> 6da646e4e58e870374996db04b7b20524f5ca952
 };
 
 /** 获取物品信息 */

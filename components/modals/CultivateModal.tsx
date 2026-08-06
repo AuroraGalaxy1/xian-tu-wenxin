@@ -35,6 +35,7 @@ export const CultivateModal = () => {
 
   const meditate = () => {
     usePlayerStore.getState().gainXiuwei(medGain);
+<<<<<<< HEAD
     // 打坐调息亦温养神识
     const cur = usePlayerStore.getState().player?.stats.shenshi ?? 0;
     usePlayerStore.getState().updateStats({ shenshi: cur + 2 });
@@ -42,6 +43,10 @@ export const CultivateModal = () => {
       .getState()
       .addLog(`你盘膝打坐，引动${lingqi}灵气，修为 +${medGain}，神识 +2。`, 'stat');
     setMsg(`修为 +${medGain} · 神识 +2`);
+=======
+    useLogStore.getState().addLog(`你盘膝打坐，引动${lingqi}灵气，修为 +${medGain}。`, 'stat');
+    setMsg(`修为 +${medGain}`);
+>>>>>>> 6da646e4e58e870374996db04b7b20524f5ca952
   };
 
   const cultivateDaoxin = () => {

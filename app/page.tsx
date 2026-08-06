@@ -10,7 +10,10 @@ import { usePlayerStore } from '@/stores/playerStore';
 import { useLogStore } from '@/stores/logStore';
 import { useSceneStore } from '@/stores/sceneStore';
 import { useMapStore } from '@/stores/mapStore';
+<<<<<<< HEAD
 import { useLoreStore } from '@/stores/loreStore';
+=======
+>>>>>>> 6da646e4e58e870374996db04b7b20524f5ca952
 import { ModalContainer } from '@/components/modals/ModalContainer';
 
 export default function Home() {
@@ -53,8 +56,11 @@ export default function Home() {
       // 仅在首次创建角色时写入开场日志
       addLog('你从昏迷中醒来，发现自己身处一座破败的山神庙中...', 'special');
       addLog('眉心隐隐发烫，似有什么在呼唤你。', 'normal');
+<<<<<<< HEAD
       // 解锁初始携带器物的见闻
       useLoreStore.getState().unlock('artifact_yu_jian');
+=======
+>>>>>>> 6da646e4e58e870374996db04b7b20524f5ca952
     }
 
     // 确保当前场景与地图位置已初始化（持久化恢复后 player 可能已存在）

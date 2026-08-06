@@ -5,7 +5,10 @@ import { useLogStore } from '@/stores/logStore';
 import { usePlayerStore } from '@/stores/playerStore';
 import { useCombatStore } from '@/stores/combatStore';
 import { useUiStore } from '@/stores/uiStore';
+<<<<<<< HEAD
 import { useLoreStore } from '@/stores/loreStore';
+=======
+>>>>>>> 6da646e4e58e870374996db04b7b20524f5ca952
 import { SceneButtons } from '@/components/game/SceneButtons';
 import { CompassMap } from '@/components/game/CompassMap';
 import { ResourceBar } from '@/components/game/ResourceBar';
@@ -13,8 +16,11 @@ import { SceneAction } from '@/types/scene';
 import { getRandomEncounter } from '@/lib/utils/gameUtils';
 import { getEnemy } from '@/lib/gameData/enemies';
 import { itemsData } from '@/lib/gameData/items';
+<<<<<<< HEAD
 import { loreData } from '@/lib/gameData/lore';
 import { getRandomEncounterEvent } from '@/lib/gameData/encounters';
+=======
+>>>>>>> 6da646e4e58e870374996db04b7b20524f5ca952
 
 export const CenterPanel = () => {
   const currentScene = useSceneStore((state) => state.currentScene);
@@ -29,6 +35,7 @@ export const CenterPanel = () => {
       return;
     }
     usePlayerStore.getState().updateStats({ shenshi: player.stats.shenshi - 2 });
+<<<<<<< HEAD
     // 探查中有机会窥见一段秘闻
     const secretLores = Object.values(loreData).filter((l) => l.category === 'secret');
     const lockedSecret = secretLores.filter(
@@ -39,6 +46,8 @@ export const CenterPanel = () => {
       useLoreStore.getState().unlock(pick.id);
       addLog(`你在探查中窥见一段秘闻：「${pick.title}」已录入见闻录。`, 'special');
     }
+=======
+>>>>>>> 6da646e4e58e870374996db04b7b20524f5ca952
     if (currentScene.id === 'xi_feng_zhen') {
       addLog('镇上人来人往，一片安宁，没有什么异常。', 'normal');
       return;
@@ -47,6 +56,7 @@ export const CenterPanel = () => {
     if (enemy) {
       addLog(`你凝神探查，忽觉一股凶煞之气逼近——遭遇了「${enemy.name}」！`, 'danger');
       useCombatStore.getState().startCombat(enemy);
+<<<<<<< HEAD
     } else if (Math.random() < 0.25) {
       const enc = getRandomEncounterEvent();
       if (enc) {
@@ -55,6 +65,8 @@ export const CenterPanel = () => {
       } else {
         addLog('你仔细探查了四周，并没有发现异常。', 'normal');
       }
+=======
+>>>>>>> 6da646e4e58e870374996db04b7b20524f5ca952
     } else {
       addLog('你仔细探查了四周，并没有发现异常。', 'normal');
     }
@@ -99,10 +111,14 @@ export const CenterPanel = () => {
         break;
       case 'rest':
         usePlayerStore.getState().heal(9999);
+<<<<<<< HEAD
         usePlayerStore.getState().updateStats({
           shenshi: (usePlayerStore.getState().player?.stats.shenshi ?? 0) + 5,
         });
         addLog('你在客栈歇了一夜，气血与神识都恢复了不少。', 'item');
+=======
+        addLog('你在客栈歇了一夜，气血恢复如初。', 'item');
+>>>>>>> 6da646e4e58e870374996db04b7b20524f5ca952
         break;
       case 'gather':
         if (payload.itemId) {

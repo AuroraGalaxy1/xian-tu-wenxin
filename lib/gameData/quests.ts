@@ -75,6 +75,7 @@ export const questsData: Record<string, Quest> = {
     ],
     rewards: { xiuwei: 40, items: [{ itemId: 'ju_ling_dan', count: 1 }] },
   },
+<<<<<<< HEAD
   s3: {
     id: 's3',
     name: '百草园采药',
@@ -129,4 +130,6 @@ export const questsData: Record<string, Quest> = {
       items: [{ itemId: 'bai_cao_ji', count: 1 }],
     },
   },
+=======
+>>>>>>> 6da646e4e58e870374996db04b7b20524f5ca952
 };

@@ -103,6 +103,7 @@ export const enemiesData: Record<string, Enemy> = {
     ],
     sceneId: 'duan_hun_ya',
   },
+<<<<<<< HEAD
 
   /* ===== 百草园 ===== */
   yao_ling: {
@@ -188,6 +189,8 @@ export const enemiesData: Record<string, Enemy> = {
     ],
     sceneId: 'fei_zhai',
   },
+=======
+>>>>>>> 6da646e4e58e870374996db04b7b20524f5ca952
 };
 
 /** 获取场景中的随机敌人（未指定则返回 undefined） */
