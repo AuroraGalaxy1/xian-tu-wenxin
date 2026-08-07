@@ -53,6 +53,36 @@ export const itemsData: Record<string, Item> = {
     price: 80,
     stackable: true,
   },
+  hui_ling_dan: {
+    id: 'hui_ling_dan',
+    name: '回灵丹',
+    type: 'dan',
+    rarity: 'ling',
+    description: '比疗伤丹更胜一筹的恢复丹药，可迅速温养气血。',
+    effect: { type: 'restore_hp', value: 100, desc: '恢复气血 100 点' },
+    price: 60,
+    stackable: true,
+  },
+  zhu_ji_dan: {
+    id: 'zhu_ji_dan',
+    name: '筑基丹',
+    type: 'dan',
+    rarity: 'xuan',
+    description: '汇聚灵材精粹的珍品丹药，服下可大幅增进修为，助人冲击筑基。',
+    effect: { type: 'gain_xiuwei', value: 300, desc: '修为 +300' },
+    price: 200,
+    stackable: true,
+  },
+  jin_dan_po: {
+    id: 'jin_dan_po',
+    name: '金丹破障丹',
+    type: 'dan',
+    rarity: 'xuan',
+    description: '以星魄碎片为主药炼制的珍品丹药，可助修士冲破金丹瓶颈。',
+    effect: { type: 'gain_xiuwei', value: 800, desc: '修为 +800' },
+    price: 350,
+    stackable: true,
+  },
 
   /* ===== 材料 ===== */
   ling_cao: {
@@ -90,6 +120,33 @@ export const itemsData: Record<string, Item> = {
     description: '强大妖兽体内凝结的内丹，蕴含庞大灵力，极为珍贵。',
     price: 80,
     stackable: true,
+  },
+  bai_cao_zhi: {
+    id: 'bai_cao_zhi',
+    name: '百年灵药',
+    type: 'cailiao',
+    rarity: 'xuan',
+    description: '汲取百年灵气的药草，通体流转灵光，是炼制筑基丹的主药。',
+    price: 60,
+    stackable: true,
+  },
+  heiyu: {
+    id: 'heiyu',
+    name: '黑玉',
+    type: 'cailiao',
+    rarity: 'ling',
+    description: '一种泛着幽光的黑色玉石，坊市间时有流通，来路不明。',
+    price: 35,
+    stackable: true,
+  },
+  xing_po_sui_pian: {
+    id: 'xing_po_sui_pian',
+    name: '星魄碎片',
+    type: 'cailiao',
+    rarity: 'xuan',
+    description: '黑风妖体内的古星碎片，流转着幽蓝星光。它似乎在呼应着什么——那是古星陨落时散落此界的残力。',
+    price: 100,
+    stackable: false,
   },
 
   /* ===== 法宝（装备） ===== */
@@ -138,6 +195,17 @@ export const itemsData: Record<string, Item> = {
     price: 100,
     stackable: false,
   },
+  qing_yang_jian: {
+    id: 'qing_yang_jian',
+    name: '青阳剑',
+    type: 'fabao',
+    rarity: 'xuan',
+    description: '青阳宗制式佩剑，剑身流转淡青灵光，锋锐远胜凡铁。',
+    equipSlot: 'weapon',
+    atkBonus: 14,
+    price: 300,
+    stackable: false,
+  },
 
   /* ===== 功法 ===== */
   yin_qi_jue: {
@@ -148,6 +216,16 @@ export const itemsData: Record<string, Item> = {
     description: '最基础的吐纳功法，修习可大幅提升炼化灵气之效。',
     effect: { type: 'gain_xiuwei', value: 200, desc: '修为 +200' },
     price: 90,
+    stackable: false,
+  },
+  bai_cao_ji: {
+    id: 'bai_cao_ji',
+    name: '百草集',
+    type: 'gongfa',
+    rarity: 'ling',
+    description: '药王谷流出的炼丹手札，虽非功法，参悟间却似有灵气灌顶。',
+    effect: { type: 'gain_xiuwei', value: 500, desc: '修为 +500' },
+    price: 250,
     stackable: false,
   },
 
@@ -170,76 +248,15 @@ export const itemsData: Record<string, Item> = {
     price: 20,
     stackable: false,
   },
-<<<<<<< HEAD
-
-  /* ===== 新增丹药 ===== */
-  zhu_ji_dan: {
-    id: 'zhu_ji_dan',
-    name: '筑基丹',
-    type: 'dan',
-    rarity: 'xuan',
-    description: '汇聚灵材精粹的珍品丹药，服下可大幅增进修为，助人冲击筑基。',
-    effect: { type: 'gain_xiuwei', value: 300, desc: '修为 +300' },
-    price: 200,
-    stackable: true,
-  },
-  hui_ling_dan: {
-    id: 'hui_ling_dan',
-    name: '回灵丹',
-    type: 'dan',
+  fei_zhai_ri_ji: {
+    id: 'fei_zhai_ri_ji',
+    name: '残破日记',
+    type: 'za_wu',
     rarity: 'ling',
-    description: '比疗伤丹更胜一筹的恢复丹药，可迅速温养气血。',
-    effect: { type: 'restore_hp', value: 100, desc: '恢复气血 100 点' },
-    price: 60,
-    stackable: true,
-  },
-
-  /* ===== 新增材料 ===== */
-  bai_cao_zhi: {
-    id: 'bai_cao_zhi',
-    name: '百年灵药',
-    type: 'cailiao',
-    rarity: 'xuan',
-    description: '汲取百年灵气的药草，通体流转灵光，是炼制筑基丹的主药。',
-    price: 60,
-    stackable: true,
-  },
-  heiyu: {
-    id: 'heiyu',
-    name: '黑玉',
-    type: 'cailiao',
-    rarity: 'ling',
-    description: '一种泛着幽光的黑色玉石，坊市间时有流通，来路不明。',
-    price: 35,
-    stackable: true,
-  },
-
-  /* ===== 新增法宝 ===== */
-  qing_yang_jian: {
-    id: 'qing_yang_jian',
-    name: '青阳剑',
-    type: 'fabao',
-    rarity: 'xuan',
-    description: '青阳宗制式佩剑，剑身流转淡青灵光，锋锐远胜凡铁。',
-    equipSlot: 'weapon',
-    atkBonus: 14,
-    price: 300,
+    description: '废宅旧主留下的发黄日记，墨迹潦草，反复写着一句话："若我当初再强一些……"。末页字迹颤抖，写着四个字——"血月将至"。',
+    price: 5,
     stackable: false,
   },
-
-  /* ===== 新增功法 ===== */
-  bai_cao_ji: {
-    id: 'bai_cao_ji',
-    name: '百草集',
-    type: 'gongfa',
-    rarity: 'ling',
-    description: '药王谷流出的炼丹手札，虽非功法，参悟间却似有灵气灌顶。',
-    effect: { type: 'gain_xiuwei', value: 500, desc: '修为 +500' },
-    price: 250,
-    stackable: false,
-  },
-=======
->>>>>>> 6da646e4e58e870374996db04b7b20524f5ca952
 };
 
 /** 获取物品信息 */

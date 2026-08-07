@@ -161,14 +161,7 @@ export const loreData: Record<string, LoreEntry> = {
       '溪风镇铁匠铺的掌柜，开脉修士，一手锻造功夫在落星坡数一数二。两个徒弟前些年被断魂崖的黑风妖所伤，至今卧床不起。他对黑风妖恨之入骨，悬赏从未撤下。',
     unlockHint: '铁匠铺的汉子，心里压着对黑风妖的恨。',
   },
-  figure_lin: {
-    id: 'figure_lin',
-    category: 'figure',
-    title: '林清修',
-    content:
-      '落星坡一带有名的散修，为人热忱，常替初入修行的年轻人指点迷津。境界虽只有开脉，但在散修盟里颇有声望，是溪风镇的消息通。',
-    unlockHint: '那位热心的散修，似乎什么都知道一点。',
-  },
+  // figure_lin 已升级为 figure_lin_xiu（含废宅地图线索）
 
   /* ================= 器物 ================= */
   artifact_can_yu: {
@@ -237,6 +230,40 @@ export const loreData: Record<string, LoreEntry> = {
       '落星坡东北的山崖裂口，是古星陨落时遗下的秘境入口。崖壁刻满古老禁制，灵气自裂隙中如雾涌出。青阳宗封锁此地多年，传言秘境深处藏有古星的核心遗物，非金丹境不可入。',
     unlockHint: '那道涌出灵气的山崖裂口，似乎通向什么地方。',
   },
+
+  /* ===== 第一幕补充见闻 ===== */
+  secret_fei_zhai: {
+    id: 'secret_fei_zhai',
+    category: 'secret',
+    title: '废宅旧主',
+    content:
+      '废宅中陨落的修士，曾是山神选中的上一任守护者。他在百年前血月异动时试图加固封印，却被古星残力侵蚀心智，最终封印失败、身死道消。他留下的日记中反复提及"星核"与"封印"——他至死都在懊悔自己没能守住那道防线。',
+    unlockHint: '废宅里的怨灵，生前似乎与山神有关。',
+  },
+  secret_hei_feng: {
+    id: 'secret_hei_feng',
+    category: 'secret',
+    title: '黑风妖真相',
+    content:
+      '黑风妖并非天生妖物，而是百年前被古星残力侵蚀的守山灵兽变异而成。原本温驯的灵兽在接触古星碎片后狂性大发，逃至断魂崖占据一方，百年间妖力渐长，终成落星坡一霸。它体内残存的星魄碎片，正是古星陨落时散落此界的力量残渣。',
+    unlockHint: '断魂崖上的黑风妖，似乎不是寻常妖兽。',
+  },
+  figure_lin_xiu: {
+    id: 'figure_lin_xiu',
+    category: 'figure',
+    title: '林清修',
+    content:
+      '落星坡一带有名的散修，为人热忱，常替初入修行的年轻人指点迷津。境界虽只有开脉，但在散修盟里颇有声望，是溪风镇的消息通。他手中有一份落星坡的旧地图，标注着几处古星残力异常之地——这地图，是从废宅修士的遗物中辗转得来的。',
+    unlockHint: '那位热心的散修，似乎知道什么内情。',
+  },
+  figure_liu_qing: {
+    id: 'figure_liu_qing',
+    category: 'figure',
+    title: '柳青',
+    content:
+      '青阳宗分坛执事，剑修，金丹初境。为人刻板守规，对宗门忠心耿耿，负责镇守落星坡秘境入口。她深知秘境的秘密，但从不对外人多言——青阳宗对秘境的研究，远比表面上看到的要深。',
+    unlockHint: '那位青阳宗的女执事，眼神里藏着心事。',
+  },
 };
 
 /** 获取单条见闻 */
@@ -249,33 +276,37 @@ export const getLoresByCategory = (category: LoreEntry['category']): LoreEntry[]
 /* ================= 解锁映射（场景/对话/物品 → 见闻） ================= */
 
 /** 首次进入某场景解锁的地域见闻 */
-export const sceneLoreMap: Record<string, string> = {
-  po_miao: 'region_luo_xing',
-  shan_gu: 'region_luo_xing',
-  qing_mu_ling: 'region_qing_mu',
-  xi_feng_zhen: 'region_xi_feng',
-  duan_hun_ya: 'region_duan_hun',
-  bai_cao_yuan: 'region_bai_cao',
-  fang_shi: 'region_fang_shi',
-  qing_yang_fen_tan: 'region_qing_yang',
-  fei_zhai: 'region_fei_zhai',
-  mi_jing_ru_kou: 'secret_mi_jing',
+export const sceneLoreMap: Record<string, string[]> = {
+  po_miao: ['region_luo_xing'],
+  shan_gu: ['region_luo_xing'],
+  qing_mu_ling: ['region_qing_mu'],
+  xi_feng_zhen: ['region_xi_feng'],
+  duan_hun_ya: ['region_duan_hun'],
+  bai_cao_yuan: ['region_bai_cao'],
+  fang_shi: ['region_fang_shi'],
+  qing_yang_fen_tan: ['region_qing_yang'],
+  fei_zhai: ['region_fei_zhai'],
+  mi_jing_ru_kou: ['secret_mi_jing'],
 };
 
 /** 与某 NPC 对话解锁的见闻 */
-export const npcLoreMap: Record<string, string> = {
-  xu_bai_lao: 'figure_xu_bai',
-  lao_yao_shi: 'figure_cang_wu',
-  tie_jiang: 'figure_mo_tie',
-  lin_xiu_shi: 'figure_lin',
-  yao_nong: 'region_bai_cao',
-  shuo_shu_ren: 'secret_xue_yue',
-  jie_yin_di_zi: 'faction_qing_yang',
+export const npcLoreMap: Record<string, string[]> = {
+  xu_bai_lao: ['figure_xu_bai'],
+  lao_yao_shi: ['figure_cang_wu'],
+  tie_jiang: ['figure_mo_tie'],
+  lin_xiu_shi: ['figure_lin_xiu'],
+  yao_nong: ['region_bai_cao'],
+  shuo_shu_ren: ['secret_xue_yue'],
+  // 柳青是青阳宗分坛执事，位于 qing_yang_fen_tan 场景
+  // 由接引弟子对话链激活柳青见闻
+  jie_yin_di_zi: ['faction_qing_yang', 'figure_liu_qing'],
 };
 
 /** 首次获得某物品解锁的器物见闻 */
-export const itemLoreMap: Record<string, string> = {
-  yu_jian_sui_pian: 'artifact_yu_jian',
-  po_miao_fu: 'artifact_fu_lu',
-  yao_he: 'artifact_yao_he',
+export const itemLoreMap: Record<string, string[]> = {
+  yu_jian_sui_pian: ['artifact_yu_jian'],
+  po_miao_fu: ['artifact_fu_lu'],
+  yao_he: ['artifact_yao_he'],
+  fei_zhai_ri_ji: ['secret_fei_zhai'],
+  xing_po_sui_pian: ['secret_hei_feng'],
 };

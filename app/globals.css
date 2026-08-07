@@ -1,14 +1,11 @@
 @import "tailwindcss";
 
-<<<<<<< HEAD
-=======
 /* 覆盖 Tailwind 默认衬线字体栈，优先使用系统已安装的清晰中文衬线字体
    （Noto Serif SC / 思源宋体），避免中文字符 fallback 到渲染发虚的默认字体 */
 @theme {
   --font-serif: "Noto Serif SC", "Source Han Serif SC", "Songti SC", "STSong", "SimSun", "KaiTi", Georgia, "Times New Roman", serif;
 }
 
->>>>>>> 6da646e4e58e870374996db04b7b20524f5ca952
 /* Base styles */
 * {
   box-sizing: border-box;
@@ -77,22 +74,6 @@ body::before {
 }
 
 /* Panel styles */
-<<<<<<< HEAD
-.glass-panel {
-  background: rgba(22, 16, 12, 0.88);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  border: 1px solid rgba(201, 160, 78, 0.16);
-  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.03);
-}
-
-.glass-panel-light {
-  background: rgba(24, 18, 14, 0.78);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(139, 122, 94, 0.12);
-  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.22);
-=======
 /* 说明：移除 backdrop-filter 以规避 Windows 浏览器上其导致内部文字渲染模糊的问题，
    改用半透明渐变 + 高光保留玻璃质感 */
 .glass-panel {
@@ -105,7 +86,6 @@ body::before {
   background: linear-gradient(180deg, rgba(32, 25, 19, 0.92), rgba(22, 16, 12, 0.92));
   border: 1px solid rgba(139, 122, 94, 0.12);
   box-shadow: 0 12px 26px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.03);
->>>>>>> 6da646e4e58e870374996db04b7b20524f5ca952
 }
 
 .border-antique {
@@ -248,19 +228,11 @@ body::before {
 
 /* Text decor */
 .text-glow-gold {
-<<<<<<< HEAD
-  text-shadow: 0 0 18px rgba(201, 160, 78, 0.15);
-}
-
-.text-glow-cyan {
-  text-shadow: 0 0 18px rgba(78, 201, 201, 0.15);
-=======
   text-shadow: 0 0 5px rgba(201, 160, 78, 0.32);
 }
 
 .text-glow-cyan {
   text-shadow: 0 0 5px rgba(78, 201, 201, 0.32);
->>>>>>> 6da646e4e58e870374996db04b7b20524f5ca952
 }
 
 /* Animations */

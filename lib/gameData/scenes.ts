@@ -96,12 +96,6 @@ export const scenesData: Record<string, Scene> = {
     exits: [
       { sceneId: 'shan_gu', direction: '西', label: '返回山谷', isLocked: false },
       { sceneId: 'duan_hun_ya', direction: '南', label: '前往断魂崖', isLocked: false },
-<<<<<<< HEAD
-      { sceneId: 'bai_cao_yuan', direction: '东', label: '前往百草园', isLocked: false },
-      { sceneId: 'fang_shi', direction: '南', label: '前往溪风坊市', isLocked: false },
-      { sceneId: 'qing_yang_fen_tan', direction: '东南', label: '前往青阳宗分坛', isLocked: false },
-=======
->>>>>>> 6da646e4e58e870374996db04b7b20524f5ca952
     ],
     npcs: ['lao_yao_shi', 'tie_jiang', 'lin_xiu_shi'],
     items: [],
@@ -131,15 +125,14 @@ export const scenesData: Record<string, Scene> = {
     isUnlocked: false,
     isExplored: false,
   },
-<<<<<<< HEAD
 
   /* ================= 百草园（资源区） ================= */
   bai_cao_yuan: {
     id: 'bai_cao_yuan',
     name: '百草园',
-    description: '溪风镇东侧一片被竹篱圈起的药田，灵药成畦，药香扑鼻。一个老药农正弯腰侍弄药苗，田埂间时有巴掌大的药灵蹦跳而过。',
+    description: '溪风镇东侧的药田，是苍梧药老一手开辟。灵药成畦，常年药香袅袅，园中有一株成了精的百年灵药，化作药灵四处蹦跳。',
     location: { region: '落星坡', x: 560, y: 120 },
-    atmosphere: { lingqi: '充裕', danger: '中', time: '卯时' },
+    atmosphere: { lingqi: '充裕', danger: '中', time: '午时' },
     actions: [
       { id: 'view_detail', label: '查看详情', icon: 'BookOpen', description: '仔细观察这片药田', action: () => {}, type: 'info' },
       { id: 'gather_herb', label: '采摘灵草', icon: 'Leaf', description: '采摘一株灵草', action: () => {}, type: 'gather', payload: { itemId: 'ling_cao' } },
@@ -227,7 +220,7 @@ export const scenesData: Record<string, Scene> = {
     isExplored: false,
   },
 
-  /* ================= 秘境入口（高等级锁定） ================= */
+  /* ================= 秘境入口（金丹解锁） ================= */
   mi_jing_ru_kou: {
     id: 'mi_jing_ru_kou',
     name: '秘境入口',
@@ -247,6 +240,4 @@ export const scenesData: Record<string, Scene> = {
     isUnlocked: false,
     isExplored: false,
   },
-=======
->>>>>>> 6da646e4e58e870374996db04b7b20524f5ca952
 };

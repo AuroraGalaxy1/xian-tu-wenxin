@@ -1,22 +1,14 @@
 'use client';
 
-<<<<<<< HEAD
 import { useState, useEffect } from 'react';
-=======
-import { useState } from 'react';
->>>>>>> 6da646e4e58e870374996db04b7b20524f5ca952
 import { motion } from 'framer-motion';
 import { X, ShoppingBag, ScrollText, MessageCircle } from 'lucide-react';
 import { useUiStore } from '@/stores/uiStore';
 import { usePlayerStore } from '@/stores/playerStore';
-import { useLogStore } from '@/stores/logStore';
-<<<<<<< HEAD
 import { useLoreStore } from '@/stores/loreStore';
+import { useLogStore } from '@/stores/logStore';
 import { npcsData } from '@/lib/gameData/npcs';
 import { npcLoreMap } from '@/lib/gameData/lore';
-=======
-import { npcsData } from '@/lib/gameData/npcs';
->>>>>>> 6da646e4e58e870374996db04b7b20524f5ca952
 import { questsData } from '@/lib/gameData/quests';
 
 export const NpcTalkModal = ({ npcId }: { npcId: string }) => {
@@ -25,15 +17,11 @@ export const NpcTalkModal = ({ npcId }: { npcId: string }) => {
   const [round, setRound] = useState(0);
   const { closeTalk, openShop } = useUiStore();
 
-<<<<<<< HEAD
-  // 与 NPC 交谈解锁人物志见闻
+  // 与 NPC 对话解锁对应人物志/势力/秘闻见闻
   useEffect(() => {
-    const loreId = npcLoreMap[npcId];
-    if (loreId) useLoreStore.getState().unlock(loreId);
+    useLoreStore.getState().unlockMany(npcLoreMap[npcId] ?? []);
   }, [npcId]);
 
-=======
->>>>>>> 6da646e4e58e870374996db04b7b20524f5ca952
   if (!npc || !player) return null;
 
   const dialogue = npc.dialogue;

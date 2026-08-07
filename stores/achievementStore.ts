@@ -85,11 +85,16 @@ export const useAchievementStore = create<AchievementState>()(
   )
 );
 
-// 订阅玩家状态变化，自动评估成就（避免在 playerStore 内触发造成循环依赖）
-usePlayerStore.subscribe(() => {
-  useAchievementStore.getState().evaluate();
+// ===== 安全初始化：只在 playerStore 首次初始化完成后评估一次 =====
+// 避免在模块级 subscribe 导致循环触发
+let initialized = false;
+usePlayerStore.subscribe((state) => {
+  // 只在 player 首次从 null 变为有效值时评估一次
+  if (!initialized && state.player) {
+    initialized = true;
+    // 使用微任务延迟到当前同步链完成后执行
+    queueMicrotask(() => {
+      useAchievementStore.getState().evaluate();
+    });
+  }
 });
-// 模块加载时评估一次，覆盖初始状态即可达成的成就
-setTimeout(() => {
-  useAchievementStore.getState().evaluate();
-}, 0);

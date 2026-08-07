@@ -10,10 +10,6 @@ import { usePlayerStore } from '@/stores/playerStore';
 import { useLogStore } from '@/stores/logStore';
 import { useSceneStore } from '@/stores/sceneStore';
 import { useMapStore } from '@/stores/mapStore';
-<<<<<<< HEAD
-import { useLoreStore } from '@/stores/loreStore';
-=======
->>>>>>> 6da646e4e58e870374996db04b7b20524f5ca952
 import { ModalContainer } from '@/components/modals/ModalContainer';
 
 export default function Home() {
@@ -24,7 +20,9 @@ export default function Home() {
   const { setCurrentLocation } = useMapStore();
 
   useEffect(() => {
-    if (!player) {
+    // 全新存档（本地无持久化数据）时创建角色并写入开场日志；
+    // 本地已有存档时等待 persist 恢复，避免覆盖已有进度
+    if (!player && typeof window !== 'undefined' && !localStorage.getItem('player-storage')) {
       setPlayer({
         id: 'player_001',
         name: '无名修士',
@@ -56,11 +54,6 @@ export default function Home() {
       // 仅在首次创建角色时写入开场日志
       addLog('你从昏迷中醒来，发现自己身处一座破败的山神庙中...', 'special');
       addLog('眉心隐隐发烫，似有什么在呼唤你。', 'normal');
-<<<<<<< HEAD
-      // 解锁初始携带器物的见闻
-      useLoreStore.getState().unlock('artifact_yu_jian');
-=======
->>>>>>> 6da646e4e58e870374996db04b7b20524f5ca952
     }
 
     // 确保当前场景与地图位置已初始化（持久化恢复后 player 可能已存在）

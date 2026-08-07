@@ -1,44 +1,60 @@
 'use client';
 
 import { usePlayerStore } from '@/stores/playerStore';
+import { useSceneStore } from '@/stores/sceneStore';
 import { useUiStore } from '@/stores/uiStore';
+import { useCombatStore } from '@/stores/combatStore';
 import { useLogStore } from '@/stores/logStore';
-<<<<<<< HEAD
+import { getRandomEncounter } from '@/lib/utils/gameUtils';
+import { getRandomEncounterEvent } from '@/lib/gameData/encounters';
 import {
-  BookOpen, Sword, Backpack, Map, Users, Home, Sparkles, Building2, MoreHorizontal, ScrollText
-=======
-import { 
-  BookOpen, Sword, Backpack, Map, Users, Home, Sparkles, Building2, MoreHorizontal
->>>>>>> 6da646e4e58e870374996db04b7b20524f5ca952
+  BookOpen, Sword, Backpack, Map, Users, Home, Sparkles, Building2, ScrollText, MoreHorizontal
 } from 'lucide-react';
 
 export const LeftPanel = () => {
   const player = usePlayerStore((state) => state.player);
+  const currentScene = useSceneStore((state) => state.currentScene);
   if (!player) return null;
 
   const { stats } = player;
 
   const openCultivate = () => useUiStore.getState().setCultivateOpen(true);
   const openBackpack = () => useUiStore.getState().setBackpackOpen(true);
-<<<<<<< HEAD
   const openLore = () => useUiStore.getState().setLoreOpen(true);
-=======
->>>>>>> 6da646e4e58e870374996db04b7b20524f5ca952
   const comingSoon = (name: string) =>
     useLogStore.getState().addLog(`「${name}」尚未开启，敬请期待。`, 'normal');
 
+  // 随机遭遇战斗（以当前场景可能出现的敌人）
+  const startRandomCombat = () => {
+    const sceneId = currentScene?.id ?? player.currentScene;
+    const enemy = getRandomEncounter(sceneId);
+    if (enemy) {
+      useLogStore.getState().addLog(`你主动出击，遭遇了「${enemy.name}」！`, 'danger');
+      useCombatStore.getState().startCombat(enemy);
+    } else {
+      useLogStore.getState().addLog('此地安宁，并无妖兽可寻。', 'normal');
+    }
+  };
+
+  // 随机触发奇遇
+  const triggerEncounter = () => {
+    const enc = getRandomEncounterEvent();
+    if (enc) {
+      useUiStore.getState().openEncounter(enc.id);
+    } else {
+      useLogStore.getState().addLog('你四下张望，今日并无机缘。', 'normal');
+    }
+  };
+
   const navItems = [
     { icon: BookOpen, label: '修炼', color: 'text-[#C9A04E]', onClick: openCultivate },
-    { icon: Sword, label: '战斗', color: 'text-[#C94E4E]', onClick: () => comingSoon('战斗') },
+    { icon: Sword, label: '战斗', color: 'text-[#C94E4E]', onClick: startRandomCombat },
     { icon: Backpack, label: '背包', color: 'text-[#4EC9C9]', onClick: openBackpack },
-<<<<<<< HEAD
-    { icon: ScrollText, label: '见闻', color: 'text-[#9B6EC9]', onClick: openLore },
-=======
->>>>>>> 6da646e4e58e870374996db04b7b20524f5ca952
-    { icon: Map, label: '地图', color: 'text-[#7DDDDD]', onClick: () => comingSoon('地图') },
-    { icon: Users, label: '社交', color: 'text-[#9B6EC9]', onClick: () => comingSoon('社交') },
+    { icon: ScrollText, label: '见闻录', color: 'text-[#7DDDDD]', onClick: openLore },
+    { icon: Sparkles, label: '奇遇', color: 'text-[#C9A04E]', onClick: triggerEncounter },
+    { icon: Map, label: '地图', color: 'text-[#9B6EC9]', onClick: () => useLogStore.getState().addLog('点击右下角的罗盘即可展开地图，选择目的地。', 'special') },
+    { icon: Users, label: '社交', color: 'text-[#8B7A5E]', onClick: () => comingSoon('社交') },
     { icon: Home, label: '洞府', color: 'text-[#E8DCC8]', onClick: () => comingSoon('洞府') },
-    { icon: Sparkles, label: '奇遇', color: 'text-[#C9A04E]', onClick: () => comingSoon('奇遇') },
     { icon: Building2, label: '宗门', color: 'text-[#8B7A5E]', onClick: () => comingSoon('宗门') },
   ];
 

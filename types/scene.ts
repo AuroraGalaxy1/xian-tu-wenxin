@@ -60,3 +60,31 @@ export interface SceneExit {
   isLocked: boolean;
   condition?: () => boolean;
 }
+
+/* ================= 心性抉择 ================= */
+
+/** 抉择可影响的属性 */
+export type ChoiceStatKey =
+  | 'daoxin'
+  | 'lingyun'
+  | 'tipo'
+  | 'shenshi'
+  | 'yinguo'
+  | 'zhinian'
+  | 'xiuwei';
+
+/** 心性抉择选项 */
+export interface ChoiceOption {
+  label: string;            // 选项文案
+  description: string;      // 选项说明（展示给玩家）
+  effects: Partial<Record<ChoiceStatKey, number>>; // 属性增减
+  logMessage?: string;      // 选择后的日志
+}
+
+/** 心性抉择事件 */
+export interface ChoiceEvent {
+  id: string;
+  title: string;
+  description: string;
+  options: ChoiceOption[];
+}

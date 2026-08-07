@@ -9,15 +9,11 @@ import {
   isXiuweiEnough,
 } from '@/lib/utils/gameUtils';
 import { questsData } from '@/lib/gameData/quests';
-<<<<<<< HEAD
-import { loreData, sceneLoreMap, itemLoreMap } from '@/lib/gameData/lore';
+import { sceneLoreMap, itemLoreMap } from '@/lib/gameData/lore';
 import { useLogStore } from '@/stores/logStore';
-import { useMapStore } from '@/stores/mapStore';
 import { useLoreStore } from '@/stores/loreStore';
-=======
-import { useLogStore } from '@/stores/logStore';
 import { useMapStore } from '@/stores/mapStore';
->>>>>>> 6da646e4e58e870374996db04b7b20524f5ca952
+import { useUiStore } from '@/stores/uiStore';
 
 interface PlayerState {
   player: Player | null;
@@ -39,39 +35,10 @@ interface PlayerState {
   evaluateQuests: () => void;
 }
 
-const initialState: Player = {
-  id: 'player_001',
-  name: '无名修士',
-  realm: '凡胎',
-  realmStage: '悟',
-  stats: {
-    daoxin: 67,
-    maxDaoxin: 100,
-    lingyun: 12,
-    maxLingyun: 50,
-    tipo: 22,
-    shenshi: 15,
-    yinguo: 5,
-    zhinian: 12,
-    xiuwei: 1240,
-  },
-  hp: 160,
-  maxHp: 160,
-  lingShi: 100,
-  currentScene: 'po_miao',
-  inventory: ['yu_jian_sui_pian'],
-  skills: [],
-  quests: [],
-  relationships: {},
-  equipment: {},
-  visitedScenes: ['po_miao'],
-  killedEnemies: [],
-};
-
 export const usePlayerStore = create<PlayerState>()(
   persist<PlayerState, [], []>(
     (set, get) => ({
-      player: initialState,
+      player: null,
       
       setPlayer: (player) => set({ player }),
 
@@ -126,16 +93,12 @@ export const usePlayerStore = create<PlayerState>()(
             : null,
         })),
       
-<<<<<<< HEAD
       addItem: (itemId) => {
+        // 首次获得物品解锁对应器物/秘闻见闻
         const p = get().player;
         if (p && !p.inventory.includes(itemId)) {
-          const loreId = itemLoreMap[itemId];
-          if (loreId) useLoreStore.getState().unlock(loreId);
+          useLoreStore.getState().unlockMany(itemLoreMap[itemId] ?? []);
         }
-=======
-      addItem: (itemId) =>
->>>>>>> 6da646e4e58e870374996db04b7b20524f5ca952
         set((state) => ({
           player: state.player
             ? {
@@ -143,12 +106,8 @@ export const usePlayerStore = create<PlayerState>()(
                 inventory: [...state.player.inventory, itemId],
               }
             : null,
-<<<<<<< HEAD
         }));
       },
-=======
-        })),
->>>>>>> 6da646e4e58e870374996db04b7b20524f5ca952
       
       removeItem: (itemId) =>
         set((state) => ({
@@ -225,7 +184,12 @@ export const usePlayerStore = create<PlayerState>()(
 
         // 首次到达新场景时检查任务
         if (!p.visitedScenes.includes(sceneId)) {
-<<<<<<< HEAD
+          // 解锁地域见闻
+          useLoreStore.getState().unlockMany(sceneLoreMap[sceneId] ?? []);
+          // 首次进入废宅触发心性抉择（执念回响）
+          if (sceneId === 'fei_zhai') {
+            useUiStore.getState().openChoice('fei_zhai_zhinian');
+          }
           // 自动接取目标为该场景的任务（主线 + 场景类支线）
           const sceneQuest = Object.values(questsData).find(
             (q) =>
@@ -234,20 +198,6 @@ export const usePlayerStore = create<PlayerState>()(
           if (sceneQuest && !p.quests.some((x) => x.id === sceneQuest.id)) {
             get().addQuest(sceneQuest.id);
           }
-          // 首次到达解锁地域见闻
-          const loreId = sceneLoreMap[sceneId];
-          if (loreId) useLoreStore.getState().unlock(loreId);
-=======
-          // 自动接取目标为该场景的主线任务（保证主线可串联）
-          const mainQuest = Object.values(questsData).find(
-            (q) =>
-              q.type === 'main' &&
-              q.objectives.some((o) => o.type === 'scene_visit' && o.target === sceneId)
-          );
-          if (mainQuest && !p.quests.some((x) => x.id === mainQuest.id)) {
-            get().addQuest(mainQuest.id);
-          }
->>>>>>> 6da646e4e58e870374996db04b7b20524f5ca952
           get().evaluateQuests();
         }
       },
@@ -306,16 +256,13 @@ export const usePlayerStore = create<PlayerState>()(
             .getState()
             .addLog('🗺 你实力精进，断魂崖的禁制随之松动，地图上浮现出新的地点。', 'special');
         }
-<<<<<<< HEAD
-        // 突破金丹后，秘境入口禁制松动解锁
+        // 突破金丹后，秘境入口禁制开启
         if (next.id === 'jin_dan') {
           useMapStore.getState().unlockLocation('mi_jing_ru_kou');
           useLogStore
             .getState()
-            .addLog('🗺 你结丹有成，秘境入口的禁制随之松动，地图上浮现出新的地点。', 'special');
+            .addLog('🗺 金丹既成，秘境入口的古老禁制终于回应了你——落星坡的秘密在等你。', 'special');
         }
-=======
->>>>>>> 6da646e4e58e870374996db04b7b20524f5ca952
         // 结算境界类任务（如 q4 突破筑基）
         get().evaluateQuests();
         // 突破筑基且 q4 完成后，自动接取讨伐黑风妖的主线任务 q5
@@ -389,17 +336,6 @@ export const usePlayerStore = create<PlayerState>()(
                 }
               : null,
           }));
-<<<<<<< HEAD
-          // 完成任务解锁世界/势力见闻
-          const progressLores = Object.values(loreData).filter(
-            (l) => l.category === 'world' || l.category === 'faction'
-          );
-          const lockedLore = progressLores.find(
-            (l) => !useLoreStore.getState().isUnlocked(l.id)
-          );
-          if (lockedLore) useLoreStore.getState().unlock(lockedLore.id);
-=======
->>>>>>> 6da646e4e58e870374996db04b7b20524f5ca952
           const parts: string[] = [];
           if (totalXiuwei) parts.push(`修为+${totalXiuwei}`);
           if (totalLingShi) parts.push(`灵石+${totalLingShi}`);
@@ -410,6 +346,8 @@ export const usePlayerStore = create<PlayerState>()(
     }),
     {
       name: 'player-storage',
+      version: 1,
+      migrate: (persisted) => persisted as PlayerState,
       merge: (persisted, current) => {
         const p =
           persisted && typeof persisted === 'object'

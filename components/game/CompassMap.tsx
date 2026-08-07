@@ -145,13 +145,8 @@ export const CompassMap = () => {
       className={cn(
         'relative select-none',
         isExpanded
-<<<<<<< HEAD
-          ? 'bg-[#0D0A08]/95 backdrop-blur-md border border-[#C9A04E]/30 rounded-2xl shadow-2xl shadow-black/60 corner-decoration'
-          : 'bg-[#0D0A08]/80 backdrop-blur-md border border-[#C9A04E]/30 rounded-full shadow-xl shadow-black/50'
-=======
           ? 'bg-[#0D0A08]/97 border border-[#C9A04E]/30 rounded-2xl shadow-2xl shadow-black/60 corner-decoration'
           : 'bg-[#0D0A08]/95 border border-[#C9A04E]/30 rounded-full shadow-xl shadow-black/50'
->>>>>>> 6da646e4e58e870374996db04b7b20524f5ca952
       )}
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}

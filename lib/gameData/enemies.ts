@@ -100,10 +100,10 @@ export const enemiesData: Record<string, Enemy> = {
       { itemId: 'yao_he', rate: 0.8 },
       { itemId: 'ju_qi_dan', rate: 0.5 },
       { itemId: 'yu_pei', rate: 0.2 },
+      { itemId: 'xing_po_sui_pian', rate: 1 },
     ],
     sceneId: 'duan_hun_ya',
   },
-<<<<<<< HEAD
 
   /* ===== 百草园 ===== */
   yao_ling: {
@@ -115,18 +115,18 @@ export const enemiesData: Record<string, Enemy> = {
     atk: 8,
     def: 3,
     skills: [
-      { id: 'vine', name: '藤蔓缠绕', power: 1, desc: '以藤蔓抽打' },
-      { id: 'spore', name: '药尘迷眼', power: 0.7, desc: '洒出迷魂药尘' },
+      { id: 'vine_wrap', name: '藤蔓缠绕', power: 1, desc: '甩出藤蔓绊人' },
+      { id: 'spore', name: '灵光迸射', power: 1.2, desc: '迸射一片灵光' },
     ],
     xiuweiReward: 25,
     drops: [
-      { itemId: 'ling_cao', rate: 0.6 },
-      { itemId: 'bai_cao_zhi', rate: 0.25 },
+      { itemId: 'ling_cao', rate: 0.5 },
+      { itemId: 'bai_cao_zhi', rate: 0.1 },
     ],
     sceneId: 'bai_cao_yuan',
   },
 
-  /* ===== 坊市外围 ===== */
+  /* ===== 溪风坊市 ===== */
   jie_xiu: {
     id: 'jie_xiu',
     name: '劫修',
@@ -136,14 +136,13 @@ export const enemiesData: Record<string, Enemy> = {
     atk: 12,
     def: 4,
     skills: [
-      { id: 'stab', name: '暗刀', power: 1.3, desc: '阴险的暗刀' },
-      { id: 'snatch', name: '夺宝', power: 0.9, desc: '趁乱夺物' },
+      { id: 'dagger', name: '短刀突刺', power: 1.2, desc: '阴狠的一刺' },
+      { id: 'lunge', name: '夺命一掠', power: 1.4, desc: '亡命突袭' },
     ],
     xiuweiReward: 45,
     drops: [
       { itemId: 'heiyu', rate: 0.4 },
-      { itemId: 'ju_qi_dan', rate: 0.3 },
-      { itemId: 'ling_cao', rate: 0.3 },
+      { itemId: 'liao_shang_dan', rate: 0.2 },
     ],
     sceneId: 'fang_shi',
   },
@@ -158,13 +157,13 @@ export const enemiesData: Record<string, Enemy> = {
     atk: 18,
     def: 10,
     skills: [
-      { id: 'iron_fist', name: '铁拳', power: 1.2, desc: '势大力沉的铁拳' },
-      { id: 'crush', name: '碾碎', power: 1.6, desc: '以整身碾压' },
+      { id: 'iron_fist', name: '玄铁重拳', power: 1.2, desc: '沉重的铁拳' },
+      { id: 'spirit_crash', name: '灵石冲击', power: 1.5, desc: '灌注灵力的冲撞' },
     ],
     xiuweiReward: 90,
     drops: [
-      { itemId: 'qing_mu_ling_cai', rate: 0.5 },
-      { itemId: 'qing_yang_jian', rate: 0.1 },
+      { itemId: 'qing_mu_ling_cai', rate: 0.4 },
+      { itemId: 'yu_pei', rate: 0.1 },
     ],
     sceneId: 'qing_yang_fen_tan',
   },
@@ -179,18 +178,16 @@ export const enemiesData: Record<string, Enemy> = {
     atk: 15,
     def: 6,
     skills: [
-      { id: 'haunt', name: '鬼影缠绕', power: 1.2, desc: '鬼影缠身' },
-      { id: 'wail', name: '夺魂哀嚎', power: 1.5, desc: '摄魂的哀嚎' },
+      { id: 'ghost_fire', name: '幽火噬魂', power: 1.3, desc: '幽蓝鬼火扑面' },
+      { id: 'whisper', name: '摄魂低语', power: 1, desc: '夺人心魄的呜咽' },
     ],
     xiuweiReward: 75,
     drops: [
-      { itemId: 'heiyu', rate: 0.5 },
-      { itemId: 'yao_he', rate: 0.3 },
+      { itemId: 'fei_zhai_ri_ji', rate: 1 },
+      { itemId: 'ling_cao', rate: 0.4 },
     ],
     sceneId: 'fei_zhai',
   },
-=======
->>>>>>> 6da646e4e58e870374996db04b7b20524f5ca952
 };
 
 /** 获取场景中的随机敌人（未指定则返回 undefined） */

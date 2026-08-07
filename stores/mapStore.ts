@@ -75,7 +75,6 @@ const defaultLocations: MapLocation[] = [
     isExplored: false,
     type: 'danger',
   },
-<<<<<<< HEAD
   {
     id: 'bai_cao_yuan',
     name: '百草园',
@@ -114,7 +113,7 @@ const defaultLocations: MapLocation[] = [
     region: '落星坡',
     isUnlocked: true,
     isExplored: false,
-    type: 'secret',
+    type: 'scene',
   },
   {
     id: 'mi_jing_ru_kou',
@@ -126,15 +125,12 @@ const defaultLocations: MapLocation[] = [
     isExplored: false,
     type: 'secret',
   },
-=======
->>>>>>> 6da646e4e58e870374996db04b7b20524f5ca952
 ];
 
 export const useMapStore = create<MapState>()(
   persist(
     (set, get) => ({
       currentLocation: defaultLocations[0],
-<<<<<<< HEAD
       unlockedLocations: [
         'po_miao',
         'shan_gu',
@@ -145,9 +141,6 @@ export const useMapStore = create<MapState>()(
         'qing_yang_fen_tan',
         'fei_zhai',
       ],
-=======
-      unlockedLocations: ['po_miao', 'shan_gu', 'qing_mu_ling', 'xi_feng_zhen'],
->>>>>>> 6da646e4e58e870374996db04b7b20524f5ca952
       exploredLocations: [],
       locations: defaultLocations,
 
@@ -194,30 +187,29 @@ export const useMapStore = create<MapState>()(
     }),
     {
       name: 'map-storage', // localStorage key
-<<<<<<< HEAD
-      // 用最新 defaultLocations 合并旧存档解锁/探索状态，保证新增地点对旧存档生效
       merge: (persisted, current) => {
-        if (!persisted || typeof persisted !== 'object') return current;
-        const p = persisted as Partial<MapState>;
-        const unlocked = p.unlockedLocations ?? current.unlockedLocations;
-        const explored = p.exploredLocations ?? current.exploredLocations;
-        const locations = current.locations.map((loc) => ({
-          ...loc,
-          isUnlocked: unlocked.includes(loc.id) || loc.isUnlocked,
-          isExplored: explored.includes(loc.id),
-        }));
-        const currentLoc =
-          locations.find((l) => l.id === p.currentLocation?.id) ?? locations[0];
+        const p = (persisted ?? {}) as Partial<MapState>;
+        if (!p.locations || p.locations.length === 0) return current;
+        // 以旧档地点为基础，合并新增地点，保证老玩家也能看到新地点
+        const existingIds = new Set(p.locations.map((l) => l.id));
+        const locations = [
+          ...p.locations,
+          ...current.locations.filter((l) => !existingIds.has(l.id)),
+        ];
         return {
           ...current,
-          unlockedLocations: unlocked,
-          exploredLocations: explored,
+          ...p,
           locations,
-          currentLocation: currentLoc,
-        } as MapState;
+          unlockedLocations:
+            p.unlockedLocations ?? current.unlockedLocations,
+          exploredLocations:
+            p.exploredLocations ?? current.exploredLocations,
+          currentLocation:
+            p.currentLocation ??
+            locations.find((l) => l.id === 'po_miao') ??
+            current.currentLocation,
+        };
       },
-=======
->>>>>>> 6da646e4e58e870374996db04b7b20524f5ca952
     }
   )
 );

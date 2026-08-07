@@ -27,10 +27,6 @@ export const npcsData: Record<string, Npc> = {
     dialogue: [
       '“客官，要买些丹药么？溪风镇方圆百里，就数老夫这里的丹药最齐全。”',
       '“修炼一途，丹药为辅。切记不可贪多，根基方是根本。”',
-<<<<<<< HEAD
-      '“说起来，老夫年轻时也在青阳宗当过外门丹师——那是些陈年旧事了。”',
-=======
->>>>>>> 6da646e4e58e870374996db04b7b20524f5ca952
     ],
     shop: [
       { itemId: 'liao_shang_dan', price: 30 },
@@ -49,10 +45,6 @@ export const npcsData: Record<string, Npc> = {
     dialogue: [
       '“买兵刃么？俺这儿的家伙什，都是真材实料。玄铁剑、兽皮甲，砍妖兽一砍一个准。”',
       '“哼，断魂崖那只黑风妖又伤了俺两个徒弟。谁要能除了它，俺免费给他打件好兵器。”',
-<<<<<<< HEAD
-      '“俺听人说，那黑风妖是吸收了古星残力才成精的——难怪这么难缠。”',
-=======
->>>>>>> 6da646e4e58e870374996db04b7b20524f5ca952
     ],
     shop: [
       { itemId: 'tie_jian', price: 150 },
@@ -86,7 +78,6 @@ export const npcsData: Record<string, Npc> = {
       '“你要采药就往深处走，但切记日落前离开。天黑之后，那是妖兽的天下。”',
     ],
   },
-<<<<<<< HEAD
 
   /* ===== 百草园 ===== */
   yao_nong: {
@@ -151,6 +142,4 @@ export const npcsData: Record<string, Npc> = {
     ],
     questId: 's5',
   },
-=======
->>>>>>> 6da646e4e58e870374996db04b7b20524f5ca952
 };
