@@ -130,7 +130,7 @@ export const CenterPanel = () => {
         <h2 className="text-xl font-bold text-[#E8DCC8] tracking-wide">
           {currentScene.name}
         </h2>
-        <span className="ml-auto text-[10px] text-[#8B7A5E]/50 tracking-wider">
+        <span className="ml-auto text-xs text-[#A99A80]/70 tracking-wider">
           {currentScene.location?.region || '未知'}
         </span>
       </div>
@@ -139,11 +139,11 @@ export const CenterPanel = () => {
 
       {/* 场景描述 - 增加古风边框 */}
       <div className="border-antique rounded-3xl p-6 bg-[#0A0806]/60 glass-panel">
-        <div className="text-sm text-[#D9CCB2] leading-relaxed space-y-2">
+        <div className="text-base text-[#D9CCB2] leading-relaxed space-y-2">
           <p>{currentScene.description}</p>
         </div>
         
-        <div className="flex flex-wrap gap-4 text-xs text-[#8B7A5E] pt-3 mt-3 border-t border-[#8B7A5E]/10">
+        <div className="flex flex-wrap gap-4 text-sm text-[#A99A80] pt-3 mt-3 border-t border-[#8B7A5E]/10">
           <span>🧭 方位：{currentScene.location?.region || '未知'}</span>
           <span>⚡ 灵气：{currentScene.atmosphere?.lingqi || '未知'}</span>
           <span>⏰ 时辰：{currentScene.atmosphere?.time || '未知'}</span>
@@ -162,7 +162,7 @@ export const CenterPanel = () => {
 
       {/* 动态提示 */}
       <div className="mt-5 p-3 rounded-lg border border-[#C9A04E]/15 bg-[#C9A04E]/5">
-        <p className="text-xs text-[#C9A04E]/80 flex items-center gap-2">
+        <p className="text-sm text-[#C9A04E]/80 flex items-center gap-2">
           <span className="text-[#C9A04E]">✦</span>
           提示：探查四周可发现隐藏线索，打坐调息可获得修为
         </p>

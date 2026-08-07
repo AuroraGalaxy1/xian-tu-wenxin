@@ -32,7 +32,7 @@ export const BackpackModal = () => {
 
   return (
     <motion.div
-      className="glass-panel border-antique-thick rounded-2xl p-5 text-[#E5D8B5] relative"
+      className="glass-panel border-antique-thick rounded-2xl p-5 text-[#F0E8D8] relative"
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 16 }}
@@ -87,13 +87,13 @@ export const BackpackModal = () => {
                 <div className="flex items-start justify-between">
                   <span className="text-lg leading-none">{TYPE_EMOJI[item.type] ?? '📦'}</span>
                   {e.count > 1 && (
-                    <span className="text-[10px] text-[#8B7A5E] bg-[#0A0806]/60 rounded px-1">×{e.count}</span>
+                    <span className="text-xs text-[#8B7A5E] bg-[#0A0806]/60 rounded px-1">×{e.count}</span>
                   )}
                 </div>
                 <div className="text-xs mt-1.5 text-[#D4C9B8] group-hover:text-[#C9A04E] transition-colors">
                   {item.name}
                 </div>
-                <div className={`text-[10px] ${rarity.color}`}>{rarity.label} · {ITEM_TYPE_LABEL[item.type]}</div>
+                <div className={`text-xs ${rarity.color}`}>{rarity.label} · {ITEM_TYPE_LABEL[item.type]}</div>
               </button>
             );
           })}

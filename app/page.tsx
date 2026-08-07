@@ -10,6 +10,8 @@ import { usePlayerStore } from '@/stores/playerStore';
 import { useLogStore } from '@/stores/logStore';
 import { useSceneStore } from '@/stores/sceneStore';
 import { useMapStore } from '@/stores/mapStore';
+import { useCheckinStore } from '@/stores/checkinStore';
+import { useUiStore } from '@/stores/uiStore';
 import { ModalContainer } from '@/components/modals/ModalContainer';
 
 export default function Home() {
@@ -18,6 +20,8 @@ export default function Home() {
   const { addLog } = useLogStore();
   const { setCurrentScene } = useSceneStore();
   const { setCurrentLocation } = useMapStore();
+  const { hasCheckedInToday } = useCheckinStore();
+  const { setCheckinOpen } = useUiStore();
 
   useEffect(() => {
     // 全新存档（本地无持久化数据）时创建角色并写入开场日志；
@@ -61,7 +65,12 @@ export default function Home() {
       setCurrentScene('po_miao');
       setCurrentLocation('po_miao');
     }
-  }, [player, currentScene, setPlayer, setCurrentScene, setCurrentLocation, addLog]);
+
+    // 每日签到检测：玩家已加载且今日未签到时弹出
+    if (player && !hasCheckedInToday()) {
+      setCheckinOpen(true);
+    }
+  }, [player, currentScene, setPlayer, setCurrentScene, setCurrentLocation, addLog, hasCheckedInToday, setCheckinOpen]);
 
   if (!player) {
     return (
@@ -72,7 +81,7 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-parchment text-[#E5D8B5] font-serif">
+    <div className="min-h-screen bg-parchment text-[#F0E8D8] font-serif">
       <TopBar />
       <div className="flex h-[calc(100vh-88px)]">
         <LeftPanel />

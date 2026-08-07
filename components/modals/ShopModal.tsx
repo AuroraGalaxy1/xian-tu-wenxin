@@ -20,7 +20,7 @@ export const ShopModal = ({ npcId }: { npcId: string }) => {
 
   return (
     <motion.div
-      className="glass-panel border-antique-thick rounded-2xl p-5 text-[#E5D8B5] relative"
+      className="glass-panel border-antique-thick rounded-2xl p-5 text-[#F0E8D8] relative"
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 16 }}
@@ -52,9 +52,9 @@ export const ShopModal = ({ npcId }: { npcId: string }) => {
             >
               <div>
                 <div className="text-sm text-[#D4C9B8]">
-                  {item.name} <span className={`text-[10px] ml-1 ${rarity.color}`}>{rarity.label}</span>
+                  {item.name} <span className={`text-xs ml-1 ${rarity.color}`}>{rarity.label}</span>
                 </div>
-                <div className="text-[11px] text-[#8B7A5E]">
+                <div className="text-xs text-[#8B7A5E]">
                   {ITEM_TYPE_LABEL[item.type]}
                   {item.effect?.desc ? ` · ${item.effect.desc}` : ''}
                 </div>

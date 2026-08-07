@@ -189,7 +189,7 @@ export const CompassMap = () => {
             <span
               key={d}
               className={cn(
-                'absolute text-[11px] font-medium',
+                'absolute text-xs font-medium',
                 i === 0 ? 'text-[#C9A04E]' : 'text-[#8B7A5E]'
               )}
               style={{
@@ -232,21 +232,21 @@ export const CompassMap = () => {
           {/* 中央信息 */}
           <div className="w-16 h-16 rounded-full bg-[#1A1410] border border-[#C9A04E]/40 flex flex-col items-center justify-center z-10 shadow-lg shadow-black/50">
             <Navigation className="w-5 h-5 text-[#C9A04E]" />
-            <span className="text-[9px] text-[#E8DCC8] mt-1 leading-none">
+            <span className="text-xs text-[#E8DCC8] mt-1 leading-none">
               {currentLocation?.name.slice(0, 5) || '未知'}
             </span>
           </div>
 
           {/* 目标方位信息 */}
           {targetLocation && currentLocation && (
-            <div className="absolute bottom-2 left-1/2 -translate-x-1/2 z-10 flex items-center gap-1 text-[9px] text-[#C9A04E] whitespace-nowrap">
+            <div className="absolute bottom-2 left-1/2 -translate-x-1/2 z-10 flex items-center gap-1 text-xs text-[#C9A04E] whitespace-nowrap">
               <Crosshair className="w-3 h-3" />
               {targetLocation.name} · {calcDirection(currentLocation, targetLocation)} {calcDistance(currentLocation, targetLocation)}里
             </div>
           )}
 
           {!targetLocation && (
-            <div className="absolute bottom-2 left-1/2 -translate-x-1/2 z-10 text-[9px] text-[#8B7A5E]/60 whitespace-nowrap">
+            <div className="absolute bottom-2 left-1/2 -translate-x-1/2 z-10 text-xs text-[#8B7A5E]/60 whitespace-nowrap">
               点击展开罗盘
             </div>
           )}
@@ -386,7 +386,7 @@ export const CompassMap = () => {
                           {/* 地点名称 */}
                           <span
                             className={cn(
-                              'absolute -bottom-4 text-[10px] whitespace-nowrap pointer-events-none',
+                              'absolute -bottom-4 text-xs whitespace-nowrap pointer-events-none',
                               isCurrent ? 'text-[#C9A04E] font-medium' : isTarget ? 'text-[#9B6EC9]' : 'text-[#8B7A5E]'
                             )}
                           >
@@ -395,7 +395,7 @@ export const CompassMap = () => {
 
                           {/* 未解锁标记 */}
                           {!unlocked && (
-                            <span className="absolute -bottom-4 text-[9px] text-[#8B7A5E]/50">🔒</span>
+                            <span className="absolute -bottom-4 text-xs text-[#8B7A5E]/50">🔒</span>
                           )}
                         </div>
                       </div>
@@ -407,7 +407,7 @@ export const CompassMap = () => {
           </div>
 
           {/* 底部信息栏 */}
-          <div className="px-3 py-2 border-t border-[#C9A04E]/15 bg-[#0D0A08]/90 rounded-b-2xl flex items-center justify-between text-[10px] text-[#8B7A5E]">
+          <div className="px-3 py-2 border-t border-[#C9A04E]/15 bg-[#0D0A08]/90 rounded-b-2xl flex items-center justify-between text-xs text-[#8B7A5E]">
             <span>缩放 {zoom}% · 已探索 {locations.filter((l) => l.isExplored).length}/{locations.length}</span>
             {targetLocation && currentLocation ? (
               <span className="text-[#C9A04E] flex items-center gap-1">

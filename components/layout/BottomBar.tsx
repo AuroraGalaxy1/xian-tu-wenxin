@@ -15,7 +15,7 @@ export const BottomBar = () => {
   }, []);
 
   return (
-    <footer className="h-10 px-6 flex items-center justify-between border-t border-[#C9A04E]/15 bg-[#0D0A08]/90 text-[10px] text-[#9B8B6C]/70 glass-panel-light">
+    <footer className="h-10 px-6 flex items-center justify-between border-t border-[#C9A04E]/15 bg-[#0D0A08]/90 text-xs text-[#9B8B6C]/70 glass-panel-light">
       <div className="flex items-center gap-6">
         <span className="flex items-center gap-1.5">
           <span className="w-1.5 h-1.5 rounded-full bg-[#4EC9C9] animate-pulse" />

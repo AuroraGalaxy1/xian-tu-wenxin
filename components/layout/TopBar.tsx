@@ -29,7 +29,7 @@ export const TopBar = () => {
           <span className="text-[#8B7A5E] text-xs">
             {player?.realmStage || '悟'}
           </span>
-          <span className="ml-2 px-2 py-0.5 text-[10px] text-[#4EC9C9] bg-[#4EC9C9]/10 rounded border border-[#4EC9C9]/20">
+          <span className="ml-2 px-2 py-0.5 text-xs text-[#4EC9C9] bg-[#4EC9C9]/10 rounded border border-[#4EC9C9]/20">
             ⚡ 灵气充裕
           </span>
         </div>
@@ -40,7 +40,7 @@ export const TopBar = () => {
         <Bell className="w-4 h-4 text-[#8B7A5E] hover:text-[#C9A04E] cursor-pointer transition-colors" />
         <MessageCircle className="w-4 h-4 text-[#8B7A5E] hover:text-[#C9A04E] cursor-pointer transition-colors" />
         <Settings className="w-4 h-4 text-[#8B7A5E] hover:text-[#C9A04E] cursor-pointer transition-colors" />
-        <span className="text-[10px] text-[#8B7A5E]/50 tracking-wider border-l border-[#8B7A5E]/20 pl-4">
+        <span className="text-xs text-[#8B7A5E]/50 tracking-wider border-l border-[#8B7A5E]/20 pl-4">
           末道 · 九洲
         </span>
       </div>

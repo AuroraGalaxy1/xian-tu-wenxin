@@ -40,7 +40,7 @@ export const ItemDetailModal = () => {
 
   return (
     <motion.div
-      className="glass-panel border-antique-thick rounded-2xl p-6 text-[#E5D8B5] relative max-w-sm mx-auto"
+      className="glass-panel border-antique-thick rounded-2xl p-6 text-[#F0E8D8] relative max-w-sm mx-auto"
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.95 }}
@@ -55,12 +55,12 @@ export const ItemDetailModal = () => {
       <div className="flex items-center justify-between mb-1">
         <h4 className={`text-lg font-bold ${rarity.color}`}>{item.name}</h4>
         {isEquipped && (
-          <span className="text-[10px] px-2 py-0.5 rounded bg-[#4EC9C9]/10 text-[#4EC9C9] border border-[#4EC9C9]/20">
+          <span className="text-xs px-2 py-0.5 rounded bg-[#4EC9C9]/10 text-[#4EC9C9] border border-[#4EC9C9]/20">
             已装备
           </span>
         )}
       </div>
-      <div className="text-[11px] text-[#8B7A5E] mb-3">
+      <div className="text-xs text-[#8B7A5E] mb-3">
         {rarity.label} · {ITEM_TYPE_LABEL[item.type]}
         {item.price > 0 && ` · 价值 ${item.price} 灵石`}
       </div>

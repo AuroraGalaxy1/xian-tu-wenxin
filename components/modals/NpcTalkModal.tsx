@@ -40,7 +40,7 @@ export const NpcTalkModal = ({ npcId }: { npcId: string }) => {
 
   return (
     <motion.div
-      className="glass-panel border-antique-thick rounded-2xl p-6 text-[#E5D8B5] relative max-w-lg mx-auto"
+      className="glass-panel border-antique-thick rounded-2xl p-6 text-[#F0E8D8] relative max-w-lg mx-auto"
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 16 }}
@@ -58,7 +58,7 @@ export const NpcTalkModal = ({ npcId }: { npcId: string }) => {
         </div>
         <div>
           <div className="font-medium">{npc.name}</div>
-          <div className="text-[11px] text-[#8B7A5E]">{npc.title} · {npc.realm}</div>
+          <div className="text-xs text-[#8B7A5E]">{npc.title} · {npc.realm}</div>
         </div>
       </div>
       <div className="divider-antique mb-3" />
@@ -70,7 +70,7 @@ export const NpcTalkModal = ({ npcId }: { npcId: string }) => {
       {dialogue.length > 1 && (
         <button
           onClick={() => setRound((r) => r + 1)}
-          className="text-[11px] text-[#8B7A5E] hover:text-[#C9A04E] mb-3"
+          className="text-xs text-[#8B7A5E] hover:text-[#C9A04E] mb-3"
         >
           ▸ 继续听他说…
         </button>

@@ -23,7 +23,11 @@ html, body {
 
 body {
   font-family: 'Noto Serif SC', 'Georgia', 'KaiTi', serif;
-  color: #E5D8B5;
+  color: #F0E8D8;
+  /* 优化中文小字号渲染：开启抗锯齿与清晰纹理，避免文字发虚/模糊 */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
   background: radial-gradient(circle at top left, rgba(201, 160, 78, 0.08), transparent 18%),
     radial-gradient(circle at bottom right, rgba(78, 201, 201, 0.04), transparent 18%),
     #090704;
@@ -137,11 +141,11 @@ body::before {
   position: relative;
   background: rgba(34, 28, 22, 0.84);
   border: 1px solid rgba(139, 122, 94, 0.18);
-  color: #E5D8B5;
-  padding: 10px 16px;
+  color: #F0E8D8;
+  padding: 12px 18px;
   border-radius: 14px;
   font-family: inherit;
-  font-size: 13px;
+  font-size: 14px;
   cursor: pointer;
   transition: all 0.22s ease;
 }

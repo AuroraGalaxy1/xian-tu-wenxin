@@ -59,14 +59,14 @@ export const LeftPanel = () => {
   ];
 
   return (
-    <aside className="w-56 border-r border-[#8B7A5E]/15 p-4 bg-[#0A0806] flex flex-col gap-4 overflow-y-auto">
+    <aside className="w-64 border-r border-[#8B7A5E]/15 p-4 bg-[#0A0806] flex flex-col gap-4 overflow-y-auto">
       {/* 修行状态 */}
       <div className="glass-panel-light rounded-lg p-4 space-y-3 corner-decoration">
         <div className="flex items-center justify-between">
-          <span className="text-[10px] text-[#8B7A5E] tracking-widest uppercase">
+          <span className="text-xs text-[#A99A80] tracking-widest uppercase">
             ◈ 修行状态
           </span>
-          <span className="text-[8px] text-[#8B7A5E]/50">境界·{player.realm}</span>
+          <span className="text-xs text-[#A99A80]/80">境界·{player.realm}</span>
         </div>
         
         <div className="divider-antique" />
@@ -106,21 +106,21 @@ export const LeftPanel = () => {
         {/* 四维属性 */}
         <div className="grid grid-cols-2 gap-x-2 gap-y-1 pt-1">
           <div className="flex justify-between text-xs border-b border-[#8B7A5E]/5 pb-0.5">
-            <span className="text-[#8B7A5E]">体魄</span>
+            <span className="text-[#A99A80]">体魄</span>
             <span className="text-[#D4C9B8] font-medium">{stats.tipo}</span>
           </div>
           <div className="flex justify-between text-xs border-b border-[#8B7A5E]/5 pb-0.5">
-            <span className="text-[#8B7A5E]">神识</span>
+            <span className="text-[#A99A80]">神识</span>
             <span className="text-[#D4C9B8] font-medium">{stats.shenshi}</span>
           </div>
           <div className="flex justify-between text-xs pt-0.5">
-            <span className="text-[#8B7A5E]">因果</span>
+            <span className="text-[#A99A80]">因果</span>
             <span className={`font-medium ${stats.yinguo >= 0 ? 'text-[#4EC9C9]' : 'text-[#C94E4E]'}`}>
               {stats.yinguo >= 0 ? '+' : ''}{stats.yinguo}
             </span>
           </div>
           <div className="flex justify-between text-xs pt-0.5">
-            <span className="text-[#8B7A5E]">执念</span>
+            <span className="text-[#A99A80]">执念</span>
             <span className="text-[#D4C9B8] font-medium">{stats.zhinian}</span>
           </div>
         </div>
@@ -128,7 +128,7 @@ export const LeftPanel = () => {
 
       {/* 快捷功能 */}
       <div className="glass-panel-light rounded-lg p-4 space-y-2">
-        <span className="text-[10px] text-[#8B7A5E] tracking-widest uppercase">
+        <span className="text-xs text-[#A99A80] tracking-widest uppercase">
           ◈ 快捷功能
         </span>
         <div className="divider-antique" />
@@ -154,7 +154,7 @@ export const LeftPanel = () => {
 
       {/* 快捷道具 */}
       <div className="glass-panel-light rounded-lg p-4 space-y-2">
-        <span className="text-[10px] text-[#8B7A5E] tracking-widest uppercase">
+        <span className="text-xs text-[#A99A80] tracking-widest uppercase">
           ◈ 快捷道具
         </span>
         <div className="divider-antique" />

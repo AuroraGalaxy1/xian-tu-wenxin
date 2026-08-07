@@ -17,7 +17,7 @@ export const CombatModal = () => {
 
   return (
     <motion.div
-      className="glass-panel border-antique-thick rounded-2xl p-6 text-[#E5D8B5] relative"
+      className="glass-panel border-antique-thick rounded-2xl p-6 text-[#F0E8D8] relative"
       initial={{ opacity: 0, scale: 0.96 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.96 }}
@@ -29,12 +29,12 @@ export const CombatModal = () => {
       <div className="border-antique rounded-xl p-4 bg-[#0A0806]/50 mb-4">
         <div className="flex items-center justify-between mb-1">
           <span className="text-[#E8A84E] font-medium">{s.enemy.name}</span>
-          <span className="text-[10px] text-[#8B7A5E]">{s.enemy.realm}</span>
+          <span className="text-xs text-[#8B7A5E]">{s.enemy.realm}</span>
         </div>
         <div className="progress-bar-track mb-2">
           <div className="progress-bar-fill" style={{ width: `${enemyHpPct}%`, background: 'linear-gradient(90deg,#E86A6A,#C94E4E)' }} />
         </div>
-        <div className="flex justify-between text-[10px] text-[#8B7A5E]/60">
+        <div className="flex justify-between text-xs text-[#8B7A5E]/60">
           <span>{s.enemyHp}/{s.enemyMaxHp}</span>
           <span>攻 {s.enemy.atk} · 防 {s.enemy.def}</span>
         </div>
@@ -44,12 +44,12 @@ export const CombatModal = () => {
       <div className="border-antique rounded-xl p-4 bg-[#0A0806]/50 mb-4">
         <div className="flex items-center justify-between mb-1">
           <span className="text-[#4EC9C9] font-medium">你 · 无名修士</span>
-          <span className="text-[10px] text-[#8B7A5E]">攻 {s.playerAtk} · 防 {s.playerDef}</span>
+          <span className="text-xs text-[#8B7A5E]">攻 {s.playerAtk} · 防 {s.playerDef}</span>
         </div>
         <div className="progress-bar-track mb-1">
           <div className="progress-bar-fill" style={{ width: `${playerHpPct}%`, background: 'linear-gradient(90deg,#4EC9C9,#2E9E9E)' }} />
         </div>
-        <div className="flex justify-between text-[10px] text-[#8B7A5E]/60">
+        <div className="flex justify-between text-xs text-[#8B7A5E]/60">
           <span>{s.playerHp}/{s.playerMaxHp}</span>
           <span>{s.defending ? '🛡 防御中' : '气血'}</span>
         </div>
@@ -109,7 +109,7 @@ export const CombatModal = () => {
         {s.log.map((l) => (
           <div
             key={l.id}
-            className={`text-[11px] leading-snug ${
+            className={`text-xs leading-snug ${
               l.type === 'player'
                 ? 'text-[#D4C9B8]'
                 : l.type === 'enemy'

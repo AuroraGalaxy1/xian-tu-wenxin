@@ -42,7 +42,7 @@ export const ChoiceModal = () => {
 
   return (
     <motion.div
-      className="glass-panel border-antique-thick rounded-2xl p-6 text-[#E5D8B5] relative max-w-xl mx-auto"
+      className="glass-panel border-antique-thick rounded-2xl p-6 text-[#F0E8D8] relative max-w-xl mx-auto"
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.95 }}
@@ -60,7 +60,7 @@ export const ChoiceModal = () => {
         </div>
         <div>
           <div className="font-medium text-[#E8DCC8]">{choice.title}</div>
-          <div className="text-[11px] text-[#8B7A5E]">心性抉择 · 一念之间</div>
+          <div className="text-xs text-[#8B7A5E]">心性抉择 · 一念之间</div>
         </div>
       </div>
       <div className="divider-antique mb-4" />
@@ -81,7 +81,7 @@ export const ChoiceModal = () => {
             <div className="text-sm font-medium text-[#E8DCC8] group-hover:text-[#C9A04E] transition-colors">
               {option.label}
             </div>
-            <div className="text-[11px] text-[#8B7A5E] mt-1 leading-relaxed">{option.description}</div>
+            <div className="text-xs text-[#8B7A5E] mt-1 leading-relaxed">{option.description}</div>
             <div className="flex flex-wrap gap-2 mt-2">
               {Object.entries(option.effects).map(([key, val]) => {
                 const value = val as number;
@@ -97,7 +97,7 @@ export const ChoiceModal = () => {
                 const sign = value >= 0 ? '+' : '';
                 const color = value >= 0 ? 'text-[#4EC9C9]' : 'text-[#C94E4E]';
                 return (
-                  <span key={key} className={`text-[10px] ${color} border border-current/20 rounded px-1.5 py-0.5`}>
+                  <span key={key} className={`text-xs ${color} border border-current/20 rounded px-1.5 py-0.5`}>
                     {labelMap[key] || key} {sign}{value}
                   </span>
                 );

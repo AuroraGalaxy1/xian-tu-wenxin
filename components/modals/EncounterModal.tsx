@@ -87,7 +87,7 @@ export const EncounterModal = () => {
 
   return (
     <motion.div
-      className="glass-panel border-antique-thick rounded-2xl p-6 text-[#E5D8B5] relative max-w-lg mx-auto"
+      className="glass-panel border-antique-thick rounded-2xl p-6 text-[#F0E8D8] relative max-w-lg mx-auto"
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.95 }}

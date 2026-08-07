@@ -88,7 +88,7 @@ export const SceneButtons = ({ actions, onAction }: SceneButtonsProps) => {
               ${action.id === 'leave' && !isDisabled ? 'text-[#C9A04E]' : ''}
               ${action.id === 'explore' && !isDisabled ? 'text-[#9B6EC9]' : ''}
             `} />
-            <span className="text-xs text-[#D4C9B8]">{action.label}</span>
+            <span className="text-sm text-[#D4C9B8]">{action.label}</span>
           </button>
         );
       })}

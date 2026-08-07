@@ -32,7 +32,7 @@ export const AchievementPanel = () => {
                   {done ? '🏆' : '○'} {ach.name}
                 </span>
                 {ach.reward && (
-                  <span className="text-[9px] text-[#8B7A5E]/70">
+                  <span className="text-xs text-[#8B7A5E]/70">
                     {[
                       ach.reward.xiuwei ? `修为+${ach.reward.xiuwei}` : '',
                       ach.reward.lingShi ? `灵石+${ach.reward.lingShi}` : '',
@@ -43,7 +43,7 @@ export const AchievementPanel = () => {
                   </span>
                 )}
               </div>
-              <p className="text-[11px] text-[#8B7A5E] leading-relaxed">{ach.description}</p>
+              <p className="text-xs text-[#8B7A5E] leading-relaxed">{ach.description}</p>
             </div>
           );
         })}

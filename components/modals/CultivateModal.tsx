@@ -76,7 +76,7 @@ export const CultivateModal = () => {
 
   return (
     <motion.div
-      className="glass-panel border-antique-thick rounded-2xl p-6 text-[#E5D8B5] relative"
+      className="glass-panel border-antique-thick rounded-2xl p-6 text-[#F0E8D8] relative"
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 16 }}
@@ -109,7 +109,7 @@ export const CultivateModal = () => {
         <div className="progress-bar-track">
           <div className="progress-bar-fill gold" style={{ width: `${pct}%` }} />
         </div>
-        <div className="flex justify-between text-[10px] text-[#8B7A5E]/60 mt-1">
+        <div className="flex justify-between text-xs text-[#8B7A5E]/60 mt-1">
           <span>灵气：{lingqi}</span>
           <span>打坐 +{medGain} 修为</span>
         </div>
@@ -120,17 +120,17 @@ export const CultivateModal = () => {
         <button onClick={meditate} className="btn-antique flex flex-col items-center gap-1 py-3">
           <Flame className="w-5 h-5 text-[#C9A04E]" />
           <span className="text-xs">打坐调息</span>
-          <span className="text-[10px] text-[#8B7A5E]">+{medGain} 修为</span>
+          <span className="text-xs text-[#8B7A5E]">+{medGain} 修为</span>
         </button>
         <button onClick={cultivateDaoxin} className="btn-antique flex flex-col items-center gap-1 py-3">
           <Brain className="w-5 h-5 text-[#9B6EC9]" />
           <span className="text-xs">参悟道心</span>
-          <span className="text-[10px] text-[#8B7A5E]">+{cultGain} 道心 · -20 修为</span>
+          <span className="text-xs text-[#8B7A5E]">+{cultGain} 道心 · -20 修为</span>
         </button>
         <button onClick={cultivateLingyun} className="btn-antique flex flex-col items-center gap-1 py-3">
           <Droplets className="w-5 h-5 text-[#4EC9C9]" />
           <span className="text-xs">凝练灵蕴</span>
-          <span className="text-[10px] text-[#8B7A5E]">+{cultGain} 灵蕴 · -25 修为</span>
+          <span className="text-xs text-[#8B7A5E]">+{cultGain} 灵蕴 · -25 修为</span>
         </button>
       </div>
 
@@ -145,7 +145,7 @@ export const CultivateModal = () => {
         {next && (
           <p className="text-xs text-[#8B7A5E]/80 leading-relaxed mb-3">{next.breakthrough.desc}</p>
         )}
-        <ul className="text-[11px] text-[#8B7A5E] space-y-0.5 mb-3">
+        <ul className="text-xs text-[#8B7A5E] space-y-0.5 mb-3">
           {hints.map((h) => (
             <li key={h} className="flex items-center gap-1">
               <span className={h === '万事俱备，可以突破' ? 'text-[#4EC9C9]' : ''}>{h}</span>

@@ -58,17 +58,17 @@ export const TaskPanel = () => {
   return (
     <div className="glass-panel-light rounded-lg p-3">
       <div className="flex items-center justify-between mb-2">
-        <span className="text-[10px] text-[#8B7A5E] tracking-widest uppercase">
+        <span className="text-xs text-[#A99A80] tracking-widest uppercase">
           ◈ 任务指引
         </span>
-        <span className="text-[8px] text-[#8B7A5E]/50">
+        <span className="text-xs text-[#A99A80]/70">
           {activeQuests.length} 进行中{completedCount > 0 ? ` · ${completedCount} 完成` : ''}
         </span>
       </div>
       <div className="divider-antique" />
       <div className="mt-2 space-y-2">
         {activeQuests.length === 0 ? (
-          <div className="text-[11px] text-[#8B7A5E]/50 text-center py-3">
+          <div className="text-xs text-[#A99A80]/70 text-center py-3">
             {player.quests.length === 0
               ? '尚无任务。与场景中的人物交谈，或前往新的地方。'
               : '暂无进行中的任务'}
@@ -88,7 +88,7 @@ export const TaskPanel = () => {
                   {data.objectives.map((obj, i) => {
                     const { text, done } = objectiveText(obj, player);
                     return (
-                      <div key={i} className={`text-[10px] pl-4 ${done ? 'text-[#4EC9C9]' : 'text-[#8B7A5E]/70'}`}>
+                      <div key={i} className={`text-xs pl-4 ${done ? 'text-[#4EC9C9]' : 'text-[#A99A80]/80'}`}>
                         {done ? '✓' : '·'} {text}
                       </div>
                     );

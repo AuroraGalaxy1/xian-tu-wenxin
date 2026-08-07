@@ -28,7 +28,7 @@ export const LoreModal = () => {
 
   return (
     <motion.div
-      className="glass-panel border-antique-thick rounded-2xl p-5 text-[#E5D8B5] relative w-full max-w-xl"
+      className="glass-panel border-antique-thick rounded-2xl p-5 text-[#F0E8D8] relative w-full max-w-xl"
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 16 }}
@@ -122,11 +122,11 @@ export const LoreModal = () => {
                 <span className={`text-sm font-medium ${unlocked ? 'text-[#D4C9B8]' : 'text-[#8B7A5E]/60'}`}>
                   {unlocked ? entry.title : '？？？'}
                 </span>
-                <span className="text-[9px] text-[#8B7A5E]/60 px-1.5 py-0.5 rounded bg-[#0A0806]/60">
+                <span className="text-xs text-[#8B7A5E]/60 px-1.5 py-0.5 rounded bg-[#0A0806]/60">
                   {LORE_CATEGORY_LABEL[entry.category]}
                 </span>
               </div>
-              <p className={`text-[11px] leading-relaxed ${unlocked ? 'text-[#C9BFA0]' : 'text-[#8B7A5E]/70 italic'}`}>
+              <p className={`text-xs leading-relaxed ${unlocked ? 'text-[#C9BFA0]' : 'text-[#8B7A5E]/70 italic'}`}>
                 {unlocked ? entry.content : entry.unlockHint}
               </p>
             </div>

@@ -16,15 +16,15 @@ export const PlayerList = () => {
   return (
     <div className="glass-panel-light rounded-lg p-3">
       <div className="flex items-center justify-between mb-2">
-        <span className="text-[10px] text-[#8B7A5E] tracking-widest uppercase">
+        <span className="text-xs text-[#A99A80] tracking-widest uppercase">
           ◈ 此处人物
         </span>
-        <span className="text-[8px] text-[#8B7A5E]/50">{npcs.length} 位</span>
+        <span className="text-xs text-[#A99A80]/70">{npcs.length} 位</span>
       </div>
       <div className="divider-antique" />
       <div className="mt-2 space-y-1.5">
         {npcs.length === 0 ? (
-          <div className="text-[11px] text-[#8B7A5E]/40 text-center py-3">
+          <div className="text-xs text-[#8B7A5E]/40 text-center py-3">
             四下无人
           </div>
         ) : (
@@ -37,7 +37,7 @@ export const PlayerList = () => {
               <div className="flex items-center gap-2">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#4EC9C9]" />
                 <span className="text-[#D4C9B8] group-hover:text-[#C9A04E]">{npc.name}</span>
-                <span className="text-[#8B7A5E]/50 text-[10px]">· {npc.title}</span>
+                <span className="text-[#A99A80]/70 text-xs">· {npc.title}</span>
               </div>
               <MessageCircle className="w-3 h-3 text-[#8B7A5E] group-hover:text-[#C9A04E]" />
             </button>
