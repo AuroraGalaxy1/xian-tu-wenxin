@@ -1,8 +1,8 @@
-// 修仙境界体系类型定义
+// 仙侠境界体系类型定义（内景次第·十二境）
 
 export interface Realm {
-  id: string; // 'fan_tai' | 'kai_mai' | ...
-  name: string; // 凡胎
+  id: string; // 'gan_qi' | 'tong_mai' | ...
+  name: string; // 感气
   index: number; // 0 起始的序号
   /** 突破到该境界所需的累计修为 */
   xiuweiRequired: number;

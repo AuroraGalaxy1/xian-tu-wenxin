@@ -30,7 +30,7 @@ export default function Home() {
       setPlayer({
         id: 'player_001',
         name: '无名修士',
-        realm: '凡胎',
+        realm: '感气',
         realmStage: '悟',
         stats: {
           daoxin: 67,

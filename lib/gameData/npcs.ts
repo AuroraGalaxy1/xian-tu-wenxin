@@ -22,7 +22,7 @@ export const npcsData: Record<string, Npc> = {
     id: 'lao_yao_shi',
     name: '苍梧药老',
     title: '丹药铺掌柜',
-    realm: '筑基',
+    realm: '凝液',
     sceneId: 'xi_feng_zhen',
     dialogue: [
       '“客官，要买些丹药么？溪风镇方圆百里，就数老夫这里的丹药最齐全。”',
@@ -40,7 +40,7 @@ export const npcsData: Record<string, Npc> = {
     id: 'tie_jiang',
     name: '墨铁匠',
     title: '铁匠铺掌柜',
-    realm: '开脉',
+    realm: '通脉',
     sceneId: 'xi_feng_zhen',
     dialogue: [
       '“买兵刃么？俺这儿的家伙什，都是真材实料。玄铁剑、兽皮甲，砍妖兽一砍一个准。”',
@@ -57,11 +57,11 @@ export const npcsData: Record<string, Npc> = {
     id: 'lin_xiu_shi',
     name: '林清修',
     title: '散修',
-    realm: '开脉',
+    realm: '通脉',
     sceneId: 'xi_feng_zhen',
     dialogue: [
       '“这位道友有礼了。我观你根基尚浅，却已能走到溪风镇，实属不易。”',
-      '“断魂崖的黑风妖肆虐多年，镇上悬赏已久。你若能筑得道基，倒可去一试。”',
+      '“断魂崖的黑风妖肆虐多年，镇上悬赏已久。你若能凝液化府，倒可去一试。”',
     ],
     questId: 'q4',
   },
@@ -71,7 +71,7 @@ export const npcsData: Record<string, Npc> = {
     id: 'cai_yao_ren',
     name: '采药老人',
     title: '采药人',
-    realm: '凡胎',
+    realm: '感气',
     sceneId: 'qing_mu_ling',
     dialogue: [
       '“小娃娃，这青木岭可不好走。林子里有野猪，还有一头独眼山妖狼。”',
@@ -84,7 +84,7 @@ export const npcsData: Record<string, Npc> = {
     id: 'yao_nong',
     name: '药农老周',
     title: '百草园园丁',
-    realm: '凡胎',
+    realm: '感气',
     sceneId: 'bai_cao_yuan',
     dialogue: [
       '“这片园子是苍梧药老的产业，老夫替他照看。你若要采药，别动那些成了精的百年灵药。”',
@@ -98,7 +98,7 @@ export const npcsData: Record<string, Npc> = {
     id: 'fang_shi_shang_ren',
     name: '吴掌柜',
     title: '坊市商人',
-    realm: '开脉',
+    realm: '通脉',
     sceneId: 'fang_shi',
     dialogue: [
       '“客官，看看货？俺这儿的东西，虽不敢说有多稀罕，但童叟无欺。”',
@@ -117,7 +117,7 @@ export const npcsData: Record<string, Npc> = {
     id: 'shuo_shu_ren',
     name: '说书人',
     title: '坊市说书人',
-    realm: '凡胎',
+    realm: '感气',
     sceneId: 'fang_shi',
     dialogue: [
       '“列位看官，今儿个咱们讲一讲这落星坡的来历——话说上古年间，一颗古星自天外坠落……”',
@@ -133,12 +133,12 @@ export const npcsData: Record<string, Npc> = {
     id: 'jie_yin_di_zi',
     name: '柳青',
     title: '青阳宗接引弟子',
-    realm: '筑基',
+    realm: '凝液',
     sceneId: 'qing_yang_fen_tan',
     dialogue: [
       '“此乃青阳宗分坛。道友若无要事，请勿擅入。”',
       '“我宗以剑道立派，除妖卫道乃分内之事。你若想入宗，先过护坛傀儡一试。”',
-      '“落星坡的秘境入口，我宗已设禁制多年。非金丹境，进去只是送死。”',
+      '“落星坡的秘境入口，我宗已设禁制多年。非玉府境，进去只是送死。”',
     ],
     questId: 's5',
   },

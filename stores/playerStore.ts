@@ -249,25 +249,25 @@ export const usePlayerStore = create<PlayerState>()(
         useLogStore
           .getState()
           .addLog(`✨ 天光乍破，你成功突破至「${next.name}」境界！`, 'special');
-        // 突破筑基后，断魂崖禁制松动解锁
-        if (next.id === 'zhu_ji') {
+        // 突破凝液后，断魂崖禁制松动解锁
+        if (next.id === 'ning_ye') {
           useMapStore.getState().unlockLocation('duan_hun_ya');
           useLogStore
             .getState()
             .addLog('🗺 你实力精进，断魂崖的禁制随之松动，地图上浮现出新的地点。', 'special');
         }
-        // 突破金丹后，秘境入口禁制开启
-        if (next.id === 'jin_dan') {
+        // 突破玉府后，秘境入口禁制开启
+        if (next.id === 'yu_fu') {
           useMapStore.getState().unlockLocation('mi_jing_ru_kou');
           useLogStore
             .getState()
-            .addLog('🗺 金丹既成，秘境入口的古老禁制终于回应了你——落星坡的秘密在等你。', 'special');
+            .addLog('🗺 玉府既成，秘境入口的古老禁制终于回应了你——落星坡的秘密在等你。', 'special');
         }
-        // 结算境界类任务（如 q4 突破筑基）
+        // 结算境界类任务（如 q4 突破凝液）
         get().evaluateQuests();
-        // 突破筑基且 q4 完成后，自动接取讨伐黑风妖的主线任务 q5
+        // 突破凝液且 q4 完成后，自动接取讨伐黑风妖的主线任务 q5
         const pAfter = get().player;
-        if (pAfter && pAfter.realm === '筑基') {
+        if (pAfter && pAfter.realm === '凝液') {
           const q4Done = pAfter.quests.some(
             (x) => x.id === 'q4' && x.status === 'completed'
           );

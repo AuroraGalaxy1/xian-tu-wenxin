@@ -5,7 +5,7 @@ export const enemiesData: Record<string, Enemy> = {
   shan_hu: {
     id: 'shan_hu',
     name: '月影灵狐',
-    realm: '凡胎',
+    realm: '感气',
     description: '一只通体雪白的灵狐，双目含魅，身形极快。它盘踞在灵脉交汇处，警惕地打量着你。',
     hp: 45,
     atk: 9,
@@ -25,7 +25,7 @@ export const enemiesData: Record<string, Enemy> = {
   ye_zhu: {
     id: 'ye_zhu',
     name: '黑鬃野猪',
-    realm: '开脉',
+    realm: '通脉',
     description: '一头皮糙肉厚的黑鬃野猪，獠牙如刃，在林间横冲直撞，见到生人便红着眼冲来。',
     hp: 55,
     atk: 10,
@@ -45,7 +45,7 @@ export const enemiesData: Record<string, Enemy> = {
   shan_yao_lang: {
     id: 'shan_yao_lang',
     name: '山妖狼',
-    realm: '开脉',
+    realm: '通脉',
     description: '一只独眼的山妖狼，皮毛灰黑，眼中泛着幽绿的光。它是青木岭一带最凶悍的猎手。',
     hp: 60,
     atk: 12,
@@ -65,7 +65,7 @@ export const enemiesData: Record<string, Enemy> = {
   gui_ying: {
     id: 'gui_ying',
     name: '鬼影蝠',
-    realm: '筑基',
+    realm: '凝液',
     description: '断魂崖下成群结队的鬼影蝠，翼展如墨，叫声凄厉，专食活人精血。',
     hp: 80,
     atk: 16,
@@ -85,7 +85,7 @@ export const enemiesData: Record<string, Enemy> = {
   hei_feng_yao: {
     id: 'hei_feng_yao',
     name: '黑风妖',
-    realm: '筑基·巅峰',
+    realm: '凝液·巅峰',
     description: '断魂崖的霸主，一头三丈高的黑风妖，周身缠绕着肉眼可见的黑色妖气。它镇守此地已逾百年，败尽无数来犯修士。',
     hp: 200,
     atk: 24,
@@ -109,7 +109,7 @@ export const enemiesData: Record<string, Enemy> = {
   yao_ling: {
     id: 'yao_ling',
     name: '药灵',
-    realm: '凡胎',
+    realm: '感气',
     description: '一株成了精的灵药，化作巴掌大的翠绿小人，在药田间蹦跳。它守护着百年灵药，靠近者皆被藤蔓缠住。',
     hp: 40,
     atk: 8,
@@ -130,7 +130,7 @@ export const enemiesData: Record<string, Enemy> = {
   jie_xiu: {
     id: 'jie_xiu',
     name: '劫修',
-    realm: '开脉',
+    realm: '通脉',
     description: '一个在坊市外围打劫落单散修的家伙，眼神阴鸷，手里攥着把染血的短刀。',
     hp: 50,
     atk: 12,
@@ -151,7 +151,7 @@ export const enemiesData: Record<string, Enemy> = {
   shi_lian_kui_lei: {
     id: 'shi_lian_kui_lei',
     name: '试炼傀儡',
-    realm: '筑基',
+    realm: '凝液',
     description: '青阳宗以玄铁与灵石铸成的护坛傀儡，力大无穷，不知疲倦。弟子入门，皆需在它手下走过三招。',
     hp: 90,
     atk: 18,
@@ -172,7 +172,7 @@ export const enemiesData: Record<string, Enemy> = {
   yuan_ling: {
     id: 'yuan_ling',
     name: '怨灵',
-    realm: '筑基',
+    realm: '凝液',
     description: '废宅中盘踞的怨灵，曾是那位陨落修士未散的执念所化。幽蓝鬼火中，它发出呜咽般的低语，摄人心魄。',
     hp: 70,
     atk: 15,

@@ -35,11 +35,11 @@ export const questsData: Record<string, Quest> = {
   },
   q4: {
     id: 'q4',
-    name: '筑就道基',
+    name: '凝液化府',
     type: 'main',
-    description: '林清修提醒你，断魂崖的黑风妖肆虐多年。要除妖，需先突破至筑基境界。',
+    description: '林清修提醒你，断魂崖的黑风妖肆虐多年。要除妖，需先凝液化府，突破至凝液境界。',
     objectives: [
-      { type: 'realm', target: 'zhu_ji', desc: '突破至筑基境界' },
+      { type: 'realm', target: 'ning_ye', desc: '突破至凝液境界' },
     ],
     rewards: { xiuwei: 100, items: [{ itemId: 'ju_qi_dan', count: 3 }] },
   },
@@ -47,7 +47,7 @@ export const questsData: Record<string, Quest> = {
     id: 'q5',
     name: '斩妖除魔',
     type: 'main',
-    description: '断魂崖的黑风妖是落星坡一大祸害。突破筑基后，前往断魂崖将其斩杀，为民除害。',
+    description: '断魂崖的黑风妖是落星坡一大祸害。凝液化府后，前往断魂崖将其斩杀，为民除害。',
     objectives: [
       { type: 'kill_enemy', target: 'hei_feng_yao', desc: '斩杀黑风妖' },
     ],

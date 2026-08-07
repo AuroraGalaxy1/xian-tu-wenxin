@@ -220,11 +220,11 @@ export const scenesData: Record<string, Scene> = {
     isExplored: false,
   },
 
-  /* ================= 秘境入口（金丹解锁） ================= */
+  /* ================= 秘境入口（玉府解锁） ================= */
   mi_jing_ru_kou: {
     id: 'mi_jing_ru_kou',
     name: '秘境入口',
-    description: '一道山崖裂口横陈眼前，灵气如雾般自裂隙涌出，崖壁刻满古老禁制符文。传言此地通往古星陨落时遗下的秘境，非金丹境不可擅入。',
+    description: '一道山崖裂口横陈眼前，灵气如雾般自裂隙涌出，崖壁刻满古老禁制符文。传言此地通往古星陨落时遗下的秘境，非玉府境不可擅入。',
     location: { region: '落星坡', x: 620, y: 60 },
     atmosphere: { lingqi: '暴走', danger: '极危', time: '子时' },
     actions: [

@@ -23,7 +23,7 @@ export const TopBar = () => {
         
         <div className="flex items-center gap-3">
           <span className="text-[#C9A04E] text-sm font-medium">
-            {player?.realm || '凡胎'}
+            {player?.realm || '感气'}
           </span>
           <span className="text-[#8B7A5E] text-xs">·</span>
           <span className="text-[#8B7A5E] text-xs">

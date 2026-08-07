@@ -48,17 +48,17 @@ export const achievementsData: Record<string, Achievement> = {
   a6: {
     id: 'a6',
     name: '第一次突破',
-    description: '突破至开脉境界。',
+    description: '突破至通脉境界。',
     type: 'breakthrough',
-    target: 'kai_mai',
+    target: 'tong_mai',
     reward: { lingShi: 100 },
   },
   a7: {
     id: 'a7',
-    name: '筑基有成',
-    description: '突破至筑基境界，筑下道基。',
+    name: '凝液有成',
+    description: '突破至凝液境界，精髓化液。',
     type: 'breakthrough',
-    target: 'zhu_ji',
+    target: 'ning_ye',
     reward: { items: ['ju_qi_dan', 'ju_qi_dan', 'ju_qi_dan'] },
   },
   a8: {
