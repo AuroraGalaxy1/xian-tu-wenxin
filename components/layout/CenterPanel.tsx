@@ -1,5 +1,6 @@
 'use client';
 
+import { useMemo } from 'react';
 import { useSceneStore } from '@/stores/sceneStore';
 import { useLogStore } from '@/stores/logStore';
 import { usePlayerStore } from '@/stores/playerStore';
@@ -18,6 +19,11 @@ export const CenterPanel = () => {
   const currentScene = useSceneStore((state) => state.currentScene);
   const { addLog } = useLogStore();
   const player = usePlayerStore((state) => state.player);
+  const getCurrentQuestHint = usePlayerStore((state) => state.getCurrentQuestHint);
+  const questHint = useMemo(
+    () => getCurrentQuestHint(),
+    [getCurrentQuestHint, player?.currentScene, player?.quests]
+  );
 
   /** 探查四周：消耗神识，可能遭遇妖兽 */
   const handleExplore = () => {
@@ -161,12 +167,22 @@ export const CenterPanel = () => {
       </div>
 
       {/* 动态提示 */}
-      <div className="mt-5 p-3 rounded-lg border border-[#C9A04E]/15 bg-[#C9A04E]/5">
-        <p className="text-sm text-[#C9A04E]/80 flex items-center gap-2">
-          <span className="text-[#C9A04E]">✦</span>
-          提示：探查四周可发现隐藏线索，打坐调息可获得修为
-        </p>
-      </div>
+      {questHint ? (
+        <div className="mt-5 p-3 rounded-lg border border-[#C9A04E]/15 bg-[#C9A04E]/5">
+          <p className="text-sm text-[#C9A04E]/80 flex items-center gap-2">
+            <span className="text-[#C9A04E]">✦</span>
+            <span className="text-[#8B7A5E]/60 text-xs">【{questHint.questName}】</span>
+            {questHint.text}
+          </p>
+        </div>
+      ) : (
+        <div className="mt-5 p-3 rounded-lg border border-[#8B7A5E]/10 bg-[#8B7A5E]/5">
+          <p className="text-sm text-[#8B7A5E]/60 flex items-center gap-2">
+            <span className="text-[#8B7A5E]">✦</span>
+            探查四周可发现隐藏线索，打坐调息可获得修为
+          </p>
+        </div>
+      )}
 
       {/* 罗盘 */}
       <div className="absolute bottom-5 right-5 z-10">

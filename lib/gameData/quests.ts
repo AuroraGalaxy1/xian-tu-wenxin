@@ -12,6 +12,9 @@ export const questsData: Record<string, Quest> = {
       { type: 'scene_visit', target: 'shan_gu', desc: '抵达灵脉交汇之眼' },
     ],
     rewards: { xiuwei: 50, lingShi: 20 },
+    hints: [
+      { sceneId: 'po_miao', text: '循着玉简碎片的指引，前往东南方向的山谷' },
+    ],
   },
   q2: {
     id: 'q2',
@@ -22,6 +25,9 @@ export const questsData: Record<string, Quest> = {
       { type: 'scene_visit', target: 'qing_mu_ling', desc: '抵达青木岭' },
     ],
     rewards: { xiuwei: 60, items: [{ itemId: 'liao_shang_dan', count: 2 }] },
+    hints: [
+      { sceneId: 'shan_gu', text: '山谷灵气浓郁，可前往青木岭一探究竟' },
+    ],
   },
   q3: {
     id: 'q3',
@@ -32,6 +38,9 @@ export const questsData: Record<string, Quest> = {
       { type: 'scene_visit', target: 'xi_feng_zhen', desc: '抵达溪风镇' },
     ],
     rewards: { xiuwei: 80, lingShi: 50 },
+    hints: [
+      { sceneId: 'qing_mu_ling', text: '向东而行，前往溪风镇打探消息、补充补给' },
+    ],
   },
   q4: {
     id: 'q4',
@@ -42,6 +51,9 @@ export const questsData: Record<string, Quest> = {
       { type: 'realm', target: 'ning_ye', desc: '突破至凝液境界' },
     ],
     rewards: { xiuwei: 100, items: [{ itemId: 'ju_qi_dan', count: 3 }] },
+    hints: [
+      { sceneId: 'xi_feng_zhen', text: '需先凝液化府方可除妖。不妨打坐修炼或去丹药铺购置丹药' },
+    ],
   },
   q5: {
     id: 'q5',
@@ -52,6 +64,11 @@ export const questsData: Record<string, Quest> = {
       { type: 'kill_enemy', target: 'hei_feng_yao', desc: '斩杀黑风妖' },
     ],
     rewards: { xiuwei: 300, lingShi: 200, items: [{ itemId: 'tie_jian', count: 1 }] },
+    hints: [
+      { sceneId: 'xi_feng_zhen', text: '断魂崖已开启，前往断魂崖讨伐黑风妖' },
+      { sceneId: 'qing_mu_ling', text: '穿过山林，前往断魂崖讨伐黑风妖' },
+      { sceneId: 'duan_hun_ya', text: '直面黑风妖，将其斩杀！' },
+    ],
   },
 
   /* ===== 支线 ===== */

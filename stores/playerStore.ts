@@ -33,6 +33,7 @@ interface PlayerState {
   recordKill: (enemyId: string) => void;
   tryBreakthrough: () => { success: boolean; message: string };
   evaluateQuests: () => void;
+  getCurrentQuestHint: () => { text: string; questId: string; questName: string } | null;
 }
 
 export const usePlayerStore = create<PlayerState>()(
@@ -282,6 +283,35 @@ export const usePlayerStore = create<PlayerState>()(
         return { success: true, message: `你成功突破至「${next.name}」！` };
       },
 
+      getCurrentQuestHint: () => {
+        const p = get().player;
+        if (!p) return null;
+        const currentScene = p.currentScene;
+
+        // 按主线优先排序活跃任务
+        const activeQuests = p.quests
+          .filter((q) => q.status === 'active')
+          .sort((a, b) => {
+            const dataA = questsData[a.id];
+            const dataB = questsData[b.id];
+            if (!dataA || !dataB) return 0;
+            if (dataA.type !== dataB.type) {
+              return dataA.type === 'main' ? -1 : 1;
+            }
+            return a.id.localeCompare(b.id);
+          });
+
+        for (const q of activeQuests) {
+          const data = questsData[q.id];
+          if (!data?.hints) continue;
+          const hint = data.hints.find((h) => h.sceneId === currentScene);
+          if (hint) {
+            return { text: hint.text, questId: q.id, questName: data.name };
+          }
+        }
+        return null;
+      },
+
       evaluateQuests: () => {
         const p = get().player;
         if (!p) return;
@@ -336,11 +366,22 @@ export const usePlayerStore = create<PlayerState>()(
                 }
               : null,
           }));
+          // 找出刚完成的任务名，逐条输出
+          const completedNames = newQuests
+            .filter((q, i) => q.status === 'completed' && p.quests[i]?.status !== 'completed')
+            .map((q) => questsData[q.id]?.name ?? q.id)
+            .filter(Boolean);
+          for (const name of completedNames) {
+            useLogStore.getState().addLog(`✦ 任务完成：「${name}」`, 'special');
+          }
+          // 奖励汇总
           const parts: string[] = [];
           if (totalXiuwei) parts.push(`修为+${totalXiuwei}`);
           if (totalLingShi) parts.push(`灵石+${totalLingShi}`);
           if (pendingItems.length) parts.push(`获得 ${pendingItems.length} 件物品`);
-          useLogStore.getState().addLog(`🎯 任务完成！${parts.join('，')}`, 'special');
+          if (parts.length) {
+            useLogStore.getState().addLog(`奖励：${parts.join('，')}`, 'item');
+          }
         }
       },
     }),

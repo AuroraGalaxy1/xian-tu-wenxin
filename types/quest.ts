@@ -13,6 +13,12 @@ export interface QuestObjective {
   desc: string;
 }
 
+export interface QuestHint {
+  sceneId: string;
+  priority?: number;
+  text: string;
+}
+
 export interface QuestReward {
   xiuwei?: number;
   lingShi?: number;
@@ -26,4 +32,5 @@ export interface Quest {
   description: string;
   objectives: QuestObjective[];
   rewards: QuestReward;
+  hints?: QuestHint[];
 }

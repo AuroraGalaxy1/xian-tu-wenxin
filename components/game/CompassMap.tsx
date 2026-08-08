@@ -20,6 +20,7 @@ import type { LucideIcon } from 'lucide-react';
 import { useMapStore, MapLocation } from '@/stores/mapStore';
 import { useSceneStore } from '@/stores/sceneStore';
 import { usePlayerStore } from '@/stores/playerStore';
+import { questsData } from '@/lib/gameData/quests';
 import { cn } from '@/lib/utils/cn';
 
 // 地点类型图标映射
@@ -96,6 +97,7 @@ export const CompassMap = () => {
   const [targetId, setTargetId] = useState<string | null>(null);
 
   const currentScene = useSceneStore((state) => state.currentScene);
+  const player = usePlayerStore((state) => state.player);
   const {
     locations,
     currentLocation,
@@ -120,15 +122,33 @@ export const CompassMap = () => {
   const isUnlocked = (id: string) =>
     locations.find((l) => l.id === id)?.isUnlocked || unlockedSet.has(id);
 
-  // 使用 useMemo 缓存罗盘目标计算
+  // 任务目标地点：从活跃任务中找第一个未完成的 scene_visit 目标
+  const questTargetLocation = useMemo(() => {
+    if (!player) return null;
+    const activeQuests = player.quests.filter((q) => q.status === 'active');
+    for (const q of activeQuests) {
+      const data = questsData[q.id];
+      if (!data) continue;
+      for (const obj of data.objectives) {
+        if (obj.type === 'scene_visit' && !player.visitedScenes.includes(obj.target)) {
+          const loc = locations.find((l) => l.id === obj.target);
+          if (loc && isUnlocked(loc.id)) return loc;
+        }
+      }
+    }
+    return null;
+  }, [player?.quests, player?.visitedScenes, locations, unlockedLocations, isUnlocked]);
+
+  // 使用 useMemo 缓存罗盘目标计算（手动选中 targetId 优先，其次任务目标，最后最近距离）
   const targetLocation = useMemo(() => {
     if (targetId) return locations.find((l) => l.id === targetId) ?? null;
+    if (questTargetLocation) return questTargetLocation;
     if (!currentLocation) return null;
     const candidates = locations
       .filter((l) => isUnlocked(l.id) && l.id !== currentLocation.id);
     if (candidates.length === 0) return null;
     return [...candidates].sort((a, b) => calcDistance(currentLocation, a) - calcDistance(currentLocation, b))[0];
-  }, [locations, targetId, currentLocation, unlockedLocations, isUnlocked]);
+  }, [locations, targetId, currentLocation, unlockedLocations, isUnlocked, questTargetLocation]);
 
   // 指针角度：数学角 0=东、顺时针为正 → CSS rotate 需 +90（指针默认朝北）
   const targetAngle = useMemo(() => {
