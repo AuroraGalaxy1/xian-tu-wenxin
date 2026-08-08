@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import {
   Plus,
@@ -14,6 +14,7 @@ import {
   Leaf,
   Sparkles,
   Crosshair,
+  Lock,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { useMapStore, MapLocation } from '@/stores/mapStore';
@@ -36,6 +37,53 @@ const DIRS = ['东', '东南', '南', '西南', '西', '西北', '北', '东北'
 // 地图逻辑尺寸
 const MAP_W = 500;
 const MAP_H = 400;
+
+// ─── 纯工具函数（模块级，避免每次渲染重新创建） ───
+
+/** 计算两点间的方位（八方向） */
+const calcDirection = (from: MapLocation, to: MapLocation): string => {
+  const dx = to.x - from.x;
+  const dy = to.y - from.y;
+  if (dx === 0 && dy === 0) return '原地';
+  const angle = (Math.atan2(dy, dx) * 180) / Math.PI;
+  const idx = Math.round((((angle % 360) + 360) % 360) / 45) % 8;
+  return DIRS[idx];
+};
+
+/** 计算两点间距离（单位：里） */
+const calcDistance = (from: MapLocation, to: MapLocation): number => {
+  const dx = to.x - from.x;
+  const dy = to.y - from.y;
+  return Math.max(1, Math.round(Math.sqrt(dx * dx + dy * dy) / 8));
+};
+
+/** 最小生成树（Prim 算法）—— 计算已解锁地点之间的虚线连接 */
+const calcMST = (unlockedLocs: MapLocation[]): [MapLocation, MapLocation][] => {
+  if (unlockedLocs.length < 2) return [];
+  const visited = new Set<string>();
+  const edges: [MapLocation, MapLocation][] = [];
+  visited.add(unlockedLocs[0].id);
+  while (visited.size < unlockedLocs.length) {
+    let minDist = Infinity;
+    let minEdge: [MapLocation, MapLocation] | null = null;
+    for (const vLoc of unlockedLocs) {
+      if (!visited.has(vLoc.id)) continue;
+      for (const uLoc of unlockedLocs) {
+        if (visited.has(uLoc.id)) continue;
+        const dist = Math.hypot(uLoc.x - vLoc.x, uLoc.y - vLoc.y);
+        if (dist < minDist) {
+          minDist = dist;
+          minEdge = [vLoc, uLoc];
+        }
+      }
+    }
+    if (minEdge) {
+      edges.push(minEdge);
+      visited.add(minEdge[1].id);
+    }
+  }
+  return edges;
+};
 
 export const CompassMap = () => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -64,43 +112,37 @@ export const CompassMap = () => {
     }
   }, [currentScene, locations, currentLocation, setCurrentLocation]);
 
+  // 用 Set 加速 isUnlocked 查找
+  const unlockedSet = useMemo(
+    () => new Set(unlockedLocations),
+    [unlockedLocations]
+  );
   const isUnlocked = (id: string) =>
-    locations.find((l) => l.id === id)?.isUnlocked || unlockedLocations.includes(id);
+    locations.find((l) => l.id === id)?.isUnlocked || unlockedSet.has(id);
 
-  // 计算两点间的方位（八方向）
-  const calcDirection = (from: MapLocation, to: MapLocation): string => {
-    const dx = to.x - from.x;
-    const dy = to.y - from.y;
-    if (dx === 0 && dy === 0) return '原地';
-    const angle = (Math.atan2(dy, dx) * 180) / Math.PI;
-    const idx = Math.round((((angle % 360) + 360) % 360) / 45) % 8;
-    return DIRS[idx];
-  };
-
-  // 计算两点间距离（单位：里）
-  const calcDistance = (from: MapLocation, to: MapLocation): number => {
-    const dx = to.x - from.x;
-    const dy = to.y - from.y;
-    return Math.max(1, Math.round(Math.sqrt(dx * dx + dy * dy) / 8));
-  };
-
-  // 当前罗盘目标：优先手动锁定，否则取最近的一个已解锁地点
-  const targetLocation = (() => {
+  // 使用 useMemo 缓存罗盘目标计算
+  const targetLocation = useMemo(() => {
     if (targetId) return locations.find((l) => l.id === targetId) ?? null;
     if (!currentLocation) return null;
     const candidates = locations
       .filter((l) => isUnlocked(l.id) && l.id !== currentLocation.id);
     if (candidates.length === 0) return null;
-    return candidates.sort((a, b) => calcDistance(currentLocation, a) - calcDistance(currentLocation, b))[0];
-  })();
+    return [...candidates].sort((a, b) => calcDistance(currentLocation, a) - calcDistance(currentLocation, b))[0];
+  }, [locations, targetId, currentLocation, unlockedLocations, isUnlocked]);
 
   // 指针角度：数学角 0=东、顺时针为正 → CSS rotate 需 +90（指针默认朝北）
-  const targetAngle = (() => {
+  const targetAngle = useMemo(() => {
     if (!currentLocation || !targetLocation) return 0;
     const dx = targetLocation.x - currentLocation.x;
     const dy = targetLocation.y - currentLocation.y;
     return (Math.atan2(dy, dx) * 180) / Math.PI + 90;
-  })();
+  }, [currentLocation, targetLocation]);
+
+  // 使用 useMemo 缓存 MST 边
+  const mstEdges = useMemo(() => {
+    const unlockedLocs = locations.filter(l => isUnlocked(l.id));
+    return calcMST(unlockedLocs);
+  }, [locations, unlockedLocations, isUnlocked]);
 
   // 控件
   const handleZoomIn = () => setZoom((prev) => Math.min(200, prev + 25));
@@ -138,7 +180,18 @@ export const CompassMap = () => {
     }
   };
 
-  if (!isVisible) return null;
+  if (!isVisible) {
+    // 关闭后保留一个隐藏的重新打开入口（右下角小罗盘图标）
+    return (
+      <button
+        onClick={() => setIsVisible(true)}
+        className="w-10 h-10 rounded-full bg-[#0D0A08]/95 border border-[#C9A04E]/30 shadow-xl shadow-black/50 flex items-center justify-center hover:border-[#C9A04E]/70 transition-colors"
+        title="重新打开罗盘"
+      >
+        <Navigation className="w-4 h-4 text-[#C9A04E]" />
+      </button>
+    );
+  }
 
   return (
     <motion.div
@@ -322,6 +375,29 @@ export const CompassMap = () => {
                     </div>
                   )}
 
+                  {/* 已解锁地点之间的 MST 虚线连接 */}
+                  {mstEdges.map(([from, to]) => {
+                    const dx = to.x - from.x;
+                    const dy = to.y - from.y;
+                    const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+                    const length = Math.hypot(dx, dy);
+                    return (
+                      <div
+                        key={`mst-${from.id}-${to.id}`}
+                        className="absolute pointer-events-none z-5"
+                        style={{
+                          left: `${(from.x / MAP_W) * 100}%`,
+                          top: `${(from.y / MAP_H) * 100}%`,
+                          width: `${(length / MAP_W) * 100}%`,
+                          transformOrigin: 'left center',
+                          transform: `rotate(${angle}deg)`,
+                        }}
+                      >
+                        <div className="w-full h-px border-t border-dashed border-[#8B7A5E]/40" />
+                      </div>
+                    );
+                  })}
+
                   {/* 地点标记 */}
                   {locations.map((location) => {
                     const isCurrent = location.id === currentLocation?.id;
@@ -395,7 +471,9 @@ export const CompassMap = () => {
 
                           {/* 未解锁标记 */}
                           {!unlocked && (
-                            <span className="absolute -bottom-4 text-xs text-[#8B7A5E]/50">🔒</span>
+                            <span className="absolute -bottom-4 text-xs text-[#8B7A5E]/50 flex items-center gap-0.5">
+                              <Lock className="w-2.5 h-2.5" />
+                            </span>
                           )}
                         </div>
                       </div>
