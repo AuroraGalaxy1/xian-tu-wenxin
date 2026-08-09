@@ -12,11 +12,11 @@ import {
 } from 'lucide-react';
 
 export const LeftPanel = () => {
-  const player = usePlayerStore((state) => state.player);
-  const currentScene = useSceneStore((state) => state.currentScene);
-  if (!player) return null;
-
-  const { stats } = player;
+  const realm = usePlayerStore((state) => state.player?.realm);
+  const playerSceneId = usePlayerStore((state) => state.player?.currentScene);
+  const stats = usePlayerStore((state) => state.player?.stats);
+  const currentSceneId = useSceneStore((state) => state.currentScene?.id);
+  if (!realm || !stats) return null;
 
   const openCultivate = () => useUiStore.getState().setCultivateOpen(true);
   const openBackpack = () => useUiStore.getState().setBackpackOpen(true);
@@ -26,7 +26,7 @@ export const LeftPanel = () => {
 
   // 随机遭遇战斗（以当前场景可能出现的敌人）
   const startRandomCombat = () => {
-    const sceneId = currentScene?.id ?? player.currentScene;
+    const sceneId = currentSceneId ?? playerSceneId ?? 'po_miao';
     const enemy = getRandomEncounter(sceneId);
     if (enemy) {
       useLogStore.getState().addLog(`你主动出击，遭遇了「${enemy.name}」！`, 'danger');
@@ -66,7 +66,7 @@ export const LeftPanel = () => {
           <span className="text-xs text-[#A99A80] tracking-widest uppercase">
             ◈ 修行状态
           </span>
-          <span className="text-xs text-[#A99A80]/80">境界·{player.realm}</span>
+          <span className="text-xs text-[#A99A80]/80">境界·{realm}</span>
         </div>
         
         <div className="divider-antique" />

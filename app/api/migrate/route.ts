@@ -1,6 +1,47 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
+/** zustand persist 旧数据可能是 { state: ... } 包装，也可能是直接对象 */
+function unwrap(raw: unknown): Record<string, any> {
+  const obj = raw as Record<string, any>;
+  if (obj && typeof obj === 'object' && 'state' in obj && obj.state) {
+    return obj.state;
+  }
+  return obj ?? {};
+}
+
+/** 旧嵌套 Player → 新扁平 PlayerRow（与 playerStore.toRow 结构一致） */
+function flattenPlayer(state: Record<string, any>) {
+  const p = state.player && typeof state.player === 'object' ? state.player : state;
+  const stats = p.stats && typeof p.stats === 'object' ? p.stats : {};
+  return {
+    id: p.id ?? 'player_001',
+    name: p.name ?? '无名修士',
+    realm: p.realm ?? '感气',
+    realmStage: p.realmStage ?? '悟',
+    daoxin: stats.daoxin ?? 0,
+    maxDaoxin: stats.maxDaoxin ?? 100,
+    lingyun: stats.lingyun ?? 0,
+    maxLingyun: stats.maxLingyun ?? 50,
+    tipo: stats.tipo ?? 0,
+    shenshi: stats.shenshi ?? 0,
+    yinguo: stats.yinguo ?? 0,
+    zhinian: stats.zhinian ?? 0,
+    xiuwei: stats.xiuwei ?? 0,
+    hp: p.hp ?? 100,
+    maxHp: p.maxHp ?? 100,
+    lingShi: p.lingShi ?? 0,
+    currentScene: p.currentScene ?? 'po_miao',
+    inventory: JSON.stringify(p.inventory ?? []),
+    skills: JSON.stringify(p.skills ?? []),
+    quests: JSON.stringify(p.quests ?? []),
+    relationships: JSON.stringify(p.relationships ?? {}),
+    equipment: JSON.stringify(p.equipment ?? {}),
+    visitedScenes: JSON.stringify(p.visitedScenes ?? []),
+    killedEnemies: JSON.stringify(p.killedEnemies ?? []),
+  };
+}
+
 export async function POST(req: Request) {
   try {
     const body = await req.json();
@@ -8,65 +49,100 @@ export async function POST(req: Request) {
 
     // player-storage
     if (body['player-storage']) {
-      const state = body['player-storage'].state || body['player-storage'];
+      const state = unwrap(body['player-storage']);
+      const row = flattenPlayer(state);
       await prisma.player.upsert({
-        where: { id: 'player_001' },
-        update: state,
-        create: { ...state, id: 'player_001' },
+        where: { id: row.id },
+        update: row,
+        create: row,
       });
       results['player-storage'] = true;
     }
 
     // map-storage
     if (body['map-storage']) {
-      const state = body['map-storage'].state || body['map-storage'];
+      const state = unwrap(body['map-storage']);
+      const currentLocationId =
+        state.currentLocation?.id ?? state.currentLocationId ?? 'po_miao';
+      const unlocked = Array.isArray(state.unlockedLocations)
+        ? state.unlockedLocations
+        : Array.isArray(state.locations)
+          ? state.locations.filter((l: any) => l.isUnlocked).map((l: any) => l.id)
+          : [];
+      const explored = Array.isArray(state.exploredLocations)
+        ? state.exploredLocations
+        : Array.isArray(state.locations)
+          ? state.locations.filter((l: any) => l.isExplored).map((l: any) => l.id)
+          : [];
+      const row = {
+        currentLocationId,
+        unlockedLocations: JSON.stringify(unlocked),
+        exploredLocations: JSON.stringify(explored),
+      };
       await prisma.mapState.upsert({
         where: { id: 'default' },
-        update: state,
-        create: { ...state, id: 'default' },
+        update: row,
+        create: { ...row, id: 'default' },
       });
       results['map-storage'] = true;
     }
 
     // checkin-storage
     if (body['checkin-storage']) {
-      const state = body['checkin-storage'].state || body['checkin-storage'];
+      const state = unwrap(body['checkin-storage']);
+      const row = {
+        lastCheckinDate: state.lastCheckinDate ?? null,
+        consecutiveDays: state.consecutiveDays ?? 0,
+      };
       await prisma.checkin.upsert({
         where: { id: 'default' },
-        update: state,
-        create: { ...state, id: 'default' },
+        update: row,
+        create: { ...row, id: 'default' },
       });
       results['checkin-storage'] = true;
     }
 
     // achievement-storage
     if (body['achievement-storage']) {
-      const state = body['achievement-storage'].state || body['achievement-storage'];
+      const state = unwrap(body['achievement-storage']);
+      const row = {
+        unlockedIds: JSON.stringify(Array.isArray(state.unlockedIds) ? state.unlockedIds : []),
+      };
       await prisma.achievement.upsert({
         where: { id: 'default' },
-        update: state,
-        create: { ...state, id: 'default' },
+        update: row,
+        create: { ...row, id: 'default' },
       });
       results['achievement-storage'] = true;
     }
 
     // lore-storage
     if (body['lore-storage']) {
-      const state = body['lore-storage'].state || body['lore-storage'];
+      const state = unwrap(body['lore-storage']);
+      const row = {
+        unlockedIds: JSON.stringify(Array.isArray(state.unlockedIds) ? state.unlockedIds : []),
+      };
       await prisma.lore.upsert({
         where: { id: 'default' },
-        update: state,
-        create: { ...state, id: 'default' },
+        update: row,
+        create: { ...row, id: 'default' },
       });
       results['lore-storage'] = true;
     }
 
     // log-storage
     if (body['log-storage']) {
-      const state = body['log-storage'].state || body['log-storage'];
+      const state = unwrap(body['log-storage']);
       if (state.logs && Array.isArray(state.logs)) {
         for (const log of state.logs) {
-          await prisma.gameLog.create({ data: log });
+          await prisma.gameLog.create({
+            data: {
+              id: log.id,
+              timestamp: log.timestamp ?? '',
+              content: log.content ?? '',
+              type: log.type ?? 'normal',
+            },
+          });
         }
       }
       results['log-storage'] = true;
@@ -74,11 +150,14 @@ export async function POST(req: Request) {
 
     // tutorial-storage
     if (body['tutorial-storage']) {
-      const state = body['tutorial-storage'].state || body['tutorial-storage'];
+      const state = unwrap(body['tutorial-storage']);
+      const row = {
+        tutorialCompleted: Boolean(state.tutorialCompleted),
+      };
       await prisma.tutorial.upsert({
         where: { id: 'default' },
-        update: state,
-        create: { ...state, id: 'default' },
+        update: row,
+        create: { ...row, id: 'default' },
       });
       results['tutorial-storage'] = true;
     }

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import {
   Plus,
@@ -119,8 +119,9 @@ export const CompassMap = () => {
     () => new Set(unlockedLocations),
     [unlockedLocations]
   );
-  const isUnlocked = (id: string) =>
-    locations.find((l) => l.id === id)?.isUnlocked || unlockedSet.has(id);
+  const isUnlocked = useCallback((id: string) =>
+    locations.find((l) => l.id === id)?.isUnlocked || unlockedSet.has(id),
+  [locations, unlockedSet]);
 
   // 任务目标地点：从活跃任务中找第一个未完成的 scene_visit 目标
   const questTargetLocation = useMemo(() => {
@@ -137,7 +138,7 @@ export const CompassMap = () => {
       }
     }
     return null;
-  }, [player?.quests, player?.visitedScenes, locations, unlockedLocations, isUnlocked]);
+  }, [player?.quests, player?.visitedScenes, locations, isUnlocked]);
 
   // 使用 useMemo 缓存罗盘目标计算（手动选中 targetId 优先，其次任务目标，最后最近距离）
   const targetLocation = useMemo(() => {
@@ -148,7 +149,7 @@ export const CompassMap = () => {
       .filter((l) => isUnlocked(l.id) && l.id !== currentLocation.id);
     if (candidates.length === 0) return null;
     return [...candidates].sort((a, b) => calcDistance(currentLocation, a) - calcDistance(currentLocation, b))[0];
-  }, [locations, targetId, currentLocation, unlockedLocations, isUnlocked, questTargetLocation]);
+  }, [locations, targetId, currentLocation, isUnlocked, questTargetLocation]);
 
   // 指针角度：数学角 0=东、顺时针为正 → CSS rotate 需 +90（指针默认朝北）
   const targetAngle = useMemo(() => {
@@ -162,7 +163,7 @@ export const CompassMap = () => {
   const mstEdges = useMemo(() => {
     const unlockedLocs = locations.filter(l => isUnlocked(l.id));
     return calcMST(unlockedLocs);
-  }, [locations, unlockedLocations, isUnlocked]);
+  }, [locations, isUnlocked]);
 
   // 控件
   const handleZoomIn = () => setZoom((prev) => Math.min(200, prev + 25));

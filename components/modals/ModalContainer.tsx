@@ -48,7 +48,7 @@ export const ModalContainer = () => {
     <AnimatePresence>
       {hasAny && (
         <motion.div
-          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 md:p-8"
+          className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4 md:p-8"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}

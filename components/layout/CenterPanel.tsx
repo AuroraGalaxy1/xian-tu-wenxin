@@ -18,21 +18,23 @@ import { itemsData } from '@/lib/gameData/items';
 export const CenterPanel = () => {
   const currentScene = useSceneStore((state) => state.currentScene);
   const { addLog } = useLogStore();
-  const player = usePlayerStore((state) => state.player);
+  const currentSceneId = usePlayerStore((state) => state.player?.currentScene);
+  const quests = usePlayerStore((state) => state.player?.quests);
   const getCurrentQuestHint = usePlayerStore((state) => state.getCurrentQuestHint);
   const questHint = useMemo(
     () => getCurrentQuestHint(),
-    [getCurrentQuestHint, player?.currentScene, player?.quests]
+    [getCurrentQuestHint, currentSceneId, quests]
   );
 
   /** 探查四周：消耗神识，可能遭遇妖兽 */
   const handleExplore = () => {
-    if (!player || !currentScene) return;
-    if (player.stats.shenshi < 5) {
+    const p = usePlayerStore.getState().player;
+    if (!p || !currentScene) return;
+    if (p.stats.shenshi < 5) {
       addLog('你的神识不足，无法探查。', 'normal');
       return;
     }
-    usePlayerStore.getState().updateStats({ shenshi: player.stats.shenshi - 2 });
+    usePlayerStore.getState().updateStats({ shenshi: p.stats.shenshi - 2 });
     // 25% 概率触发奇遇
     if (Math.random() < 0.25) {
       const enc = getRandomEncounterEvent();
@@ -117,7 +119,7 @@ export const CenterPanel = () => {
     }
   };
 
-  if (!currentScene || !player) {
+  if (!currentScene || !currentSceneId) {
     return (
       <main className="flex-1 p-8 overflow-y-auto bg-[#0A0806] flex items-center justify-center">
         <div className="text-[#8B7A5E] animate-breathe">加载中...</div>

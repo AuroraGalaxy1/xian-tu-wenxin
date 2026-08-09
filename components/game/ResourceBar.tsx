@@ -6,13 +6,17 @@ import { getNextRealmRequirement } from '@/lib/utils/gameUtils';
 
 /** 玩家气血/修为/灵石状态条（挂于中央面板顶部） */
 export const ResourceBar = () => {
-  const player = usePlayerStore((s) => s.player);
-  if (!player) return null;
+  const hp = usePlayerStore((s) => s.player?.hp);
+  const maxHp = usePlayerStore((s) => s.player?.maxHp);
+  const realm = usePlayerStore((s) => s.player?.realm);
+  const lingShi = usePlayerStore((s) => s.player?.lingShi);
+  const xiuwei = usePlayerStore((s) => s.player?.stats.xiuwei);
+  if (hp === undefined || !realm) return null;
 
-  const hpPct = Math.min(100, (player.hp / player.maxHp) * 100);
-  const req = getNextRealmRequirement(player);
-  const xiuPct = req ? Math.min(100, (player.stats.xiuwei / req) * 100) : 100;
-  const realmIdx = getRealmIndex(player.realm);
+  const hpPct = Math.min(100, (hp / (maxHp ?? 1)) * 100);
+  const req = getNextRealmRequirement({ realm } as any);
+  const xiuPct = req ? Math.min(100, ((xiuwei ?? 0) / req) * 100) : 100;
+  const realmIdx = getRealmIndex(realm);
 
   return (
     <div className="flex items-center gap-5 mb-4 px-1 flex-wrap">
@@ -29,7 +33,7 @@ export const ResourceBar = () => {
           />
         </div>
         <span className="text-sm text-[#8B7A5E] whitespace-nowrap">
-          {player.hp}/{player.maxHp}
+          {hp}/{maxHp}
         </span>
       </div>
 
@@ -40,7 +44,7 @@ export const ResourceBar = () => {
           <div className="progress-bar-fill gold" style={{ width: `${xiuPct}%` }} />
         </div>
         <span className="text-sm text-[#8B7A5E] whitespace-nowrap">
-          {player.stats.xiuwei}
+          {xiuwei ?? 0}
           {req !== null ? `/${req}` : '/MAX'}
         </span>
       </div>
@@ -48,11 +52,11 @@ export const ResourceBar = () => {
       {/* 灵石 */}
       <div className="flex items-center gap-1.5 text-sm text-[#4EC9C9]">
         <span>💎</span>
-        <span>{player.lingShi}</span>
+        <span>{lingShi}</span>
       </div>
 
       <div className="text-sm text-[#A99A80]/80">
-        {player.realm} · {realmIdx} 境
+        {realm} · {realmIdx} 境
       </div>
     </div>
   );

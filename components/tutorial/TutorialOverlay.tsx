@@ -97,13 +97,20 @@ export const TutorialOverlay = () => {
     return () => clearTimeout(timeout);
   }, [step]);
 
-  // 窗口尺寸变化时重新定位
+  // 窗口尺寸变化时重新定位（防抖）
   useEffect(() => {
+    let timer: ReturnType<typeof setTimeout> | null = null;
     const onResize = () => {
-      if (step) setRect(getTargetRect(step.target));
+      if (timer) clearTimeout(timer);
+      timer = setTimeout(() => {
+        if (step) setRect(getTargetRect(step.target));
+      }, 150);
     };
     window.addEventListener('resize', onResize);
-    return () => window.removeEventListener('resize', onResize);
+    return () => {
+      window.removeEventListener('resize', onResize);
+      if (timer) clearTimeout(timer);
+    };
   }, [step]);
 
   // Escape 键跳过
@@ -155,13 +162,14 @@ export const TutorialOverlay = () => {
       {/* 高亮聚光灯：用巨大阴影遮挡除目标外的区域 */}
       {rect && (
         <div
-          className="absolute rounded-lg border-2 border-[#C9A04E] z-10 transition-all duration-300"
+          className="absolute rounded-lg border-2 border-[#C9A04E] z-10"
           style={{
             left: rect.left - 8,
             top: rect.top - 8,
             width: rect.width + 16,
             height: rect.height + 16,
             boxShadow: '0 0 0 9999px rgba(10,8,6,0.85)',
+            transition: 'left 0.3s ease, top 0.3s ease, width 0.3s ease, height 0.3s ease',
           }}
         />
       )}

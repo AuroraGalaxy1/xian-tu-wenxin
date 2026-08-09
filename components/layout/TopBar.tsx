@@ -4,7 +4,8 @@ import { usePlayerStore } from '@/stores/playerStore';
 import { Bell, MessageCircle, Settings } from 'lucide-react';
 
 export const TopBar = () => {
-  const player = usePlayerStore((state) => state.player);
+  const realm = usePlayerStore((state) => state.player?.realm);
+  const realmStage = usePlayerStore((state) => state.player?.realmStage);
 
   return (
     <header className="h-14 px-6 flex items-center justify-between bg-[#0D0A08]/95 border-b border-[#C9A04E]/20 glass-panel-light">
@@ -23,11 +24,11 @@ export const TopBar = () => {
         
         <div className="flex items-center gap-3">
           <span className="text-[#C9A04E] text-sm font-medium">
-            {player?.realm || '感气'}
+            {realm || '感气'}
           </span>
           <span className="text-[#8B7A5E] text-xs">·</span>
           <span className="text-[#8B7A5E] text-xs">
-            {player?.realmStage || '悟'}
+            {realmStage || '悟'}
           </span>
           <span className="ml-2 px-2 py-0.5 text-xs text-[#4EC9C9] bg-[#4EC9C9]/10 rounded border border-[#4EC9C9]/20">
             ⚡ 灵气充裕

@@ -33,15 +33,6 @@ body {
     #090704;
 }
 
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  background-image: radial-gradient(circle at 25% 20%, rgba(255, 255, 255, 0.03), transparent 14%),
-    radial-gradient(circle at 80% 70%, rgba(232, 220, 200, 0.02), transparent 16%);
-}
-
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
@@ -61,20 +52,14 @@ body::before {
   background: rgba(201, 160, 78, 0.72);
 }
 
-/* Background texture */
+/* Background texture — 去掉 repeating-linear-gradient（像素级重复图案在 Windows 上绘制昂贵），
+   保留两个径向渐变营造整体的空间氛围 */
 .bg-parchment {
   background-color: #0e0b08;
   background-image:
     radial-gradient(circle at 15% 20%, rgba(184, 155, 90, 0.18), transparent 28%),
     radial-gradient(circle at 78% 30%, rgba(90, 125, 111, 0.1), transparent 22%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.02) 0%, transparent 12%),
-    repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 2px,
-      rgba(139, 122, 94, 0.02) 2px,
-      rgba(139, 122, 94, 0.02) 3px
-    );
+    linear-gradient(180deg, rgba(255, 255, 255, 0.02) 0%, transparent 12%);
 }
 
 /* Panel styles */

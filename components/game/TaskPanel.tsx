@@ -16,7 +16,7 @@ const STATUS_META: Record<string, { icon: string; color: string }> = {
 /** 目标进度展示文案 */
 function objectiveText(
   obj: { type: string; target: string; amount?: number; desc: string },
-  player: ReturnType<typeof usePlayerStore.getState>['player'],
+  player: Player,
 ): { text: string; done: boolean; progress?: number } {
   if (!player) return { text: obj.desc, done: false };
   switch (obj.type) {
@@ -56,13 +56,19 @@ function objectiveText(
 }
 
 export const TaskPanel = () => {
-  const player = usePlayerStore((state) => state.player);
+  const quests = usePlayerStore((state) => state.player?.quests);
+  const currentScene = usePlayerStore((state) => state.player?.currentScene);
+  const visitedScenes = usePlayerStore((state) => state.player?.visitedScenes);
+  const killedEnemies = usePlayerStore((state) => state.player?.killedEnemies);
+  const inventory = usePlayerStore((state) => state.player?.inventory);
+  const realm = usePlayerStore((state) => state.player?.realm);
+  const xiuwei = usePlayerStore((state) => state.player?.stats.xiuwei);
   const getCurrentQuestHint = usePlayerStore((state) => state.getCurrentQuestHint);
-  if (!player) return null;
+  if (!quests) return null;
 
-  const activeQuests = player.quests.filter((q) => q.status === 'active');
-  const completedCount = player.quests.filter((q) => q.status === 'completed').length;
-  const questHint = useMemo(() => getCurrentQuestHint(), [getCurrentQuestHint, player.quests, player.currentScene]);
+  const activeQuests = quests.filter((q) => q.status === 'active');
+  const completedCount = quests.filter((q) => q.status === 'completed').length;
+  const questHint = useMemo(() => getCurrentQuestHint(), [getCurrentQuestHint, quests, currentScene]);
   const sortedActiveQuests = useMemo(() => {
     return [...activeQuests].sort((a, b) => {
       const dataA = questsData[a.id];
@@ -74,6 +80,35 @@ export const TaskPanel = () => {
       return a.id.localeCompare(b.id);
     });
   }, [activeQuests]);
+
+  const playerView: Player = {
+    id: 'player_001',
+    name: '',
+    realm: realm ?? '',
+    realmStage: '',
+    stats: {
+      daoxin: 0,
+      maxDaoxin: 0,
+      lingyun: 0,
+      maxLingyun: 0,
+      tipo: 0,
+      shenshi: 0,
+      yinguo: 0,
+      zhinian: 0,
+      xiuwei: xiuwei ?? 0,
+    },
+    hp: 0,
+    maxHp: 0,
+    lingShi: 0,
+    currentScene: currentScene ?? '',
+    inventory: inventory ?? [],
+    skills: [],
+    quests,
+    relationships: {},
+    equipment: {},
+    visitedScenes: visitedScenes ?? [],
+    killedEnemies: killedEnemies ?? [],
+  };
 
   return (
     <div className="glass-panel-light rounded-lg p-3">
@@ -89,7 +124,7 @@ export const TaskPanel = () => {
       <div className="mt-2 space-y-2">
         {activeQuests.length === 0 ? (
           <div className="text-xs text-[#A99A80]/70 text-center py-3">
-            {player.quests.length === 0
+            {quests.length === 0
               ? '尚无任务。与场景中的人物交谈，或前往新的地方。'
               : '暂无进行中的任务'}
           </div>
@@ -112,7 +147,7 @@ export const TaskPanel = () => {
                 </div>
                 <div className="mt-1 space-y-0.5">
                   {data.objectives.map((obj, i) => {
-                    const { text, done, progress } = objectiveText(obj, player);
+                    const { text, done, progress } = objectiveText(obj, playerView);
                     return (
                       <div key={i}>
                         <div className={`text-xs pl-4 ${done ? 'text-[#4EC9C9]' : 'text-[#A99A80]/80'}`}>
