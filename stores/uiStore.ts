@@ -14,6 +14,8 @@ interface UiState {
   choiceId: string | null;
   /** 每日签到弹窗 */
   checkinOpen: boolean;
+  /** 新手指引弹窗 */
+  tutorialOpen: boolean;
   /** 当前打开商铺的 NPC id */
   shopNpcId: string | null;
   /** 当前对话的 NPC id */
@@ -22,6 +24,8 @@ interface UiState {
   itemDetail: { itemId: string; context: ItemDetailContext } | null;
   setCheckinOpen: (v: boolean) => void;
   closeCheckin: () => void;
+  setTutorialOpen: (v: boolean) => void;
+  closeTutorial: () => void;
   setBackpackOpen: (v: boolean) => void;
   setCultivateOpen: (v: boolean) => void;
   setLoreOpen: (v: boolean) => void;
@@ -49,8 +53,11 @@ export const useUiStore = create<UiState>()((set) => ({
   itemDetail: null,
 
   checkinOpen: false,
+  tutorialOpen: false,
   setCheckinOpen: (v) => set({ checkinOpen: v }),
   closeCheckin: () => set({ checkinOpen: false }),
+  setTutorialOpen: (v) => set({ tutorialOpen: v }),
+  closeTutorial: () => set({ tutorialOpen: false }),
   setBackpackOpen: (v) => set({ backpackOpen: v }),
   setCultivateOpen: (v) => set({ cultivateOpen: v }),
   setLoreOpen: (v) => set({ loreOpen: v }),
@@ -70,6 +77,7 @@ export const useUiStore = create<UiState>()((set) => ({
       cultivateOpen: false,
       loreOpen: false,
       checkinOpen: false,
+      tutorialOpen: false,
       encounterId: null,
       choiceId: null,
       shopNpcId: null,

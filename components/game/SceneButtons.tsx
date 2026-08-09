@@ -74,6 +74,11 @@ export const SceneButtons = ({ actions, onAction }: SceneButtonsProps) => {
             key={action.id}
             onClick={() => onAction(action)}
             disabled={isDisabled}
+            {...(action.id === 'meditate'
+              ? { 'data-tutorial': 'meditate' }
+              : action.id === 'explore'
+                ? { 'data-tutorial': 'explore' }
+                : {})}
             className={`
               ${btnClass}
               flex flex-col items-center gap-1.5 p-4 rounded-lg

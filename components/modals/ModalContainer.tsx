@@ -13,6 +13,7 @@ import { NpcTalkModal } from './NpcTalkModal';
 import { ChoiceModal } from './ChoiceModal';
 import { ShopModal } from './ShopModal';
 import { CheckinModal } from './CheckinModal';
+import { TutorialModal } from './TutorialModal';
 
 export const ModalContainer = () => {
   const {
@@ -20,6 +21,7 @@ export const ModalContainer = () => {
     cultivateOpen,
     loreOpen,
     checkinOpen,
+    tutorialOpen,
     encounterId,
     choiceId,
     shopNpcId,
@@ -34,6 +36,7 @@ export const ModalContainer = () => {
     cultivateOpen ||
     combatOpen ||
     checkinOpen ||
+    tutorialOpen ||
     loreOpen ||
     !!encounterId ||
     !!choiceId ||
@@ -65,6 +68,7 @@ export const ModalContainer = () => {
             {talkNpcId && <NpcTalkModal npcId={talkNpcId} />}
             {shopNpcId && <ShopModal npcId={shopNpcId} />}
             {checkinOpen && <CheckinModal />}
+            {tutorialOpen && <TutorialModal />}
           </div>
         </motion.div>
       )}

@@ -1,29 +1,11 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
-import { MapLocation } from '@/types/map';
+import { api } from '@/lib/api';
+import { debounce } from '@/lib/debounce';
+import type { MapLocation } from '@/types/map';
 
-// 兼容旧引用：re-export 类型，CompassMap 等组件仍可从本 store 导入
 export type { MapLocation } from '@/types/map';
 
-export interface MapState {
-  // 当前位置
-  currentLocation: MapLocation | null;
-  // 已解锁的地点列表
-  unlockedLocations: string[];
-  // 已探索的地点列表
-  exploredLocations: string[];
-  // 所有地点数据
-  locations: MapLocation[];
-  
-  // Actions
-  setCurrentLocation: (locationId: string) => void;
-  unlockLocation: (locationId: string) => void;
-  exploreLocation: (locationId: string) => void;
-  getLocation: (locationId: string) => MapLocation | undefined;
-  getLocationsByRegion: (region: string) => MapLocation[];
-}
-
-// 初始地图数据
+// 初始地图数据（静态，不进数据库）
 const defaultLocations: MapLocation[] = [
   {
     id: 'po_miao',
@@ -127,89 +109,125 @@ const defaultLocations: MapLocation[] = [
   },
 ];
 
-export const useMapStore = create<MapState>()(
-  persist(
-    (set, get) => ({
-      currentLocation: defaultLocations[0],
-      unlockedLocations: [
-        'po_miao',
-        'shan_gu',
-        'qing_mu_ling',
-        'xi_feng_zhen',
-        'bai_cao_yuan',
-        'fang_shi',
-        'qing_yang_fen_tan',
-        'fei_zhai',
-      ],
-      exploredLocations: [],
-      locations: defaultLocations,
+/** 将静态 locations 与追踪标志合并 */
+function buildLocations(
+  unlocked: string[],
+  explored: string[],
+  currentId: string | null,
+): { locations: MapLocation[]; currentLocation: MapLocation | null } {
+  const locations = defaultLocations.map((loc) => ({
+    ...loc,
+    isUnlocked: unlocked.includes(loc.id),
+    isExplored: explored.includes(loc.id),
+  }));
+  const currentLocation =
+    locations.find((l) => l.id === currentId) ?? locations[0];
+  return { locations, currentLocation };
+}
 
-      setCurrentLocation: (locationId) => {
-        const location = get().locations.find(l => l.id === locationId);
-        if (location) {
-          set({ currentLocation: location });
-          // 同时解锁该地点
-          get().unlockLocation(locationId);
-        }
-      },
+interface MapState {
+  currentLocation: MapLocation | null;
+  unlockedLocations: string[];
+  exploredLocations: string[];
+  locations: MapLocation[];
+  isLoading: boolean;
 
-      unlockLocation: (locationId) => {
-        set((state) => {
-          if (state.unlockedLocations.includes(locationId)) return state;
-          return {
-            unlockedLocations: [...state.unlockedLocations, locationId],
-            locations: state.locations.map(loc =>
-              loc.id === locationId ? { ...loc, isUnlocked: true } : loc
-            ),
-          };
-        });
-      },
+  setCurrentLocation: (locationId: string) => void;
+  unlockLocation: (locationId: string) => void;
+  exploreLocation: (locationId: string) => void;
+  getLocation: (locationId: string) => MapLocation | undefined;
+  getLocationsByRegion: (region: string) => MapLocation[];
+  loadMap: () => Promise<void>;
+  _save: () => void;
+}
 
-      exploreLocation: (locationId) => {
-        set((state) => {
-          if (state.exploredLocations.includes(locationId)) return state;
-          return {
-            exploredLocations: [...state.exploredLocations, locationId],
-            locations: state.locations.map(loc =>
-              loc.id === locationId ? { ...loc, isExplored: true } : loc
-            ),
-          };
-        });
-      },
+export const useMapStore = create<MapState>()((set, get) => ({
+  currentLocation: defaultLocations[0],
+  unlockedLocations: [
+    'po_miao', 'shan_gu', 'qing_mu_ling', 'xi_feng_zhen',
+    'bai_cao_yuan', 'fang_shi', 'qing_yang_fen_tan', 'fei_zhai',
+  ],
+  exploredLocations: [],
+  locations: defaultLocations,
+  isLoading: true,
 
-      getLocation: (locationId) => {
-        return get().locations.find(l => l.id === locationId);
-      },
-
-      getLocationsByRegion: (region) => {
-        return get().locations.filter(l => l.region === region);
-      },
-    }),
-    {
-      name: 'map-storage', // localStorage key
-      merge: (persisted, current) => {
-        const p = (persisted ?? {}) as Partial<MapState>;
-        if (!p.locations || p.locations.length === 0) return current;
-        // 以旧档地点为基础，合并新增地点，保证老玩家也能看到新地点
-        const existingIds = new Set(p.locations.map((l) => l.id));
-        const locations = [
-          ...p.locations,
-          ...current.locations.filter((l) => !existingIds.has(l.id)),
-        ];
-        return {
-          ...current,
-          ...p,
-          locations,
-          unlockedLocations:
-            p.unlockedLocations ?? current.unlockedLocations,
-          exploredLocations:
-            p.exploredLocations ?? current.exploredLocations,
-          currentLocation:
-            p.currentLocation ??
-            locations.find((l) => l.id === 'po_miao') ??
-            current.currentLocation,
-        };
-      },
+  loadMap: async () => {
+    set({ isLoading: true });
+    const data = await api.get<{
+      currentLocationId: string;
+      unlockedLocations: string;
+      exploredLocations: string;
+    }>('/map');
+    if (data) {
+      const unlocked = JSON.parse(data.unlockedLocations || '[]');
+      const explored = JSON.parse(data.exploredLocations || '[]');
+      const { locations, currentLocation } = buildLocations(
+        unlocked,
+        explored,
+        data.currentLocationId,
+      );
+      set({
+        unlockedLocations: unlocked,
+        exploredLocations: explored,
+        locations,
+        currentLocation,
+        isLoading: false,
+      });
+    } else {
+      // 首次加载，写入默认数据
+      set({ isLoading: false });
+      get()._save();
     }
-  )
-);
+  },
+
+  _save: debounce(async () => {
+    const { unlockedLocations, exploredLocations, currentLocation } = get();
+    await api.put('/map', {
+      currentLocationId: currentLocation?.id ?? 'po_miao',
+      unlockedLocations: JSON.stringify(unlockedLocations),
+      exploredLocations: JSON.stringify(exploredLocations),
+    });
+  }, 500),
+
+  setCurrentLocation: (locationId) => {
+    const location = get().locations.find((l) => l.id === locationId);
+    if (location) {
+      set({ currentLocation: location });
+      get().unlockLocation(locationId);
+    }
+  },
+
+  unlockLocation: (locationId) => {
+    set((state) => {
+      if (state.unlockedLocations.includes(locationId)) return state;
+      return {
+        unlockedLocations: [...state.unlockedLocations, locationId],
+        locations: state.locations.map((loc) =>
+          loc.id === locationId ? { ...loc, isUnlocked: true } : loc,
+        ),
+      };
+    });
+    get()._save();
+  },
+
+  exploreLocation: (locationId) => {
+    set((state) => {
+      if (state.exploredLocations.includes(locationId)) return state;
+      return {
+        exploredLocations: [...state.exploredLocations, locationId],
+        locations: state.locations.map((loc) =>
+          loc.id === locationId ? { ...loc, isExplored: true } : loc,
+        ),
+      };
+    });
+    get()._save();
+  },
+
+  getLocation: (locationId) => {
+    return get().locations.find((l) => l.id === locationId);
+  },
+
+  getLocationsByRegion: (region) => {
+    return get().locations.filter((l) => l.region === region);
+  },
+}));

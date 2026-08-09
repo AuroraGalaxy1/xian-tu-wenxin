@@ -1,6 +1,7 @@
 // 成就系统：自动评估 + 奖励
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { api } from '@/lib/api';
+import { debounce } from '@/lib/debounce';
 import { usePlayerStore } from '@/stores/playerStore';
 import { useMapStore } from '@/stores/mapStore';
 import { useLogStore } from '@/stores/logStore';
@@ -43,56 +44,66 @@ export function isAchievementMet(ach: Achievement, player: Player): boolean {
 
 interface AchievementState {
   unlockedIds: string[];
+  isLoading: boolean;
+
   evaluate: () => void;
   isUnlocked: (id: string) => boolean;
+  loadAchievement: () => Promise<void>;
+  _save: () => void;
 }
 
-export const useAchievementStore = create<AchievementState>()(
-  persist<AchievementState, [], []>(
-    (set, get) => ({
-      unlockedIds: [],
-      isUnlocked: (id) => get().unlockedIds.includes(id),
-      evaluate: () => {
-        const p = usePlayerStore.getState().player;
-        if (!p) return;
-        const newly: Achievement[] = [];
-        // 逐个原子解锁，防止重入/并发导致重复发放奖励
-        for (const ach of Object.values(achievementsData)) {
-          if (get().isUnlocked(ach.id)) continue;
-          if (isAchievementMet(ach, p)) {
-            newly.push(ach);
-            set((s) => ({ unlockedIds: [...s.unlockedIds, ach.id] }));
-          }
-        }
-        if (newly.length === 0) return;
-        // 发放奖励 + 日志
-        const ps = usePlayerStore.getState();
-        for (const ach of newly) {
-          if (ach.reward) {
-            if (ach.reward.xiuwei) ps.gainXiuwei(ach.reward.xiuwei);
-            if (ach.reward.lingShi) ps.gainLingShi(ach.reward.lingShi);
-            ach.reward.items?.forEach((i) => ps.addItem(i));
-          }
-          useLogStore
-            .getState()
-            .addLog(`🏆 达成成就「${ach.name}」！`, 'special');
-        }
-      },
-    }),
-    {
-      name: 'achievement-storage',
+export const useAchievementStore = create<AchievementState>()((set, get) => ({
+  unlockedIds: [],
+  isLoading: true,
+
+  loadAchievement: async () => {
+    set({ isLoading: true });
+    const data = await api.get<{ unlockedIds: string }>('/achievement');
+    if (data) {
+      const ids = JSON.parse(data.unlockedIds || '[]');
+      set({ unlockedIds: ids, isLoading: false });
+    } else {
+      set({ isLoading: false });
     }
-  )
-);
+  },
+
+  _save: debounce(async () => {
+    const { unlockedIds } = get();
+    await api.put('/achievement', { unlockedIds: JSON.stringify(unlockedIds) });
+  }, 500),
+
+  isUnlocked: (id) => get().unlockedIds.includes(id),
+
+  evaluate: () => {
+    const p = usePlayerStore.getState().player;
+    if (!p) return;
+    const newly: Achievement[] = [];
+    for (const ach of Object.values(achievementsData)) {
+      if (get().isUnlocked(ach.id)) continue;
+      if (isAchievementMet(ach, p)) {
+        newly.push(ach);
+        set((s) => ({ unlockedIds: [...s.unlockedIds, ach.id] }));
+      }
+    }
+    if (newly.length === 0) return;
+    const ps = usePlayerStore.getState();
+    for (const ach of newly) {
+      if (ach.reward) {
+        if (ach.reward.xiuwei) ps.gainXiuwei(ach.reward.xiuwei);
+        if (ach.reward.lingShi) ps.gainLingShi(ach.reward.lingShi);
+        ach.reward.items?.forEach((i) => ps.addItem(i));
+      }
+      useLogStore.getState().addLog(`🏆 达成成就「${ach.name}」！`, 'special');
+    }
+    get()._save();
+  },
+}));
 
 // ===== 安全初始化：只在 playerStore 首次初始化完成后评估一次 =====
-// 避免在模块级 subscribe 导致循环触发
 let initialized = false;
 usePlayerStore.subscribe((state) => {
-  // 只在 player 首次从 null 变为有效值时评估一次
   if (!initialized && state.player) {
     initialized = true;
-    // 使用微任务延迟到当前同步链完成后执行
     queueMicrotask(() => {
       useAchievementStore.getState().evaluate();
     });

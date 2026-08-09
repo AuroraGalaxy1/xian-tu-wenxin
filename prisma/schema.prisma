@@ -1,0 +1,92 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+// 核心玩家数据
+model Player {
+  id            String   @id @default("player_001")
+  name          String   @default("无名修士")
+  realm         String   @default("感气")
+  realmStage    String   @default("悟")
+  daoxin        Int      @default(67)
+  maxDaoxin     Int      @default(100)
+  lingyun       Int      @default(12)
+  maxLingyun    Int      @default(50)
+  tipo          Int      @default(22)
+  shenshi       Int      @default(15)
+  yinguo        Int      @default(5)
+  zhinian       Int      @default(12)
+  xiuwei        Int      @default(1240)
+  hp            Int      @default(160)
+  maxHp         Int      @default(160)
+  lingShi       Int      @default(100)
+  currentScene  String   @default("po_miao")
+  inventory     String   @default("[]")       // JSON: string[]
+  skills        String   @default("[]")       // JSON: string[]
+  quests        String   @default("[]")       // JSON: {id,status}[]
+  relationships String   @default("{}")       // JSON: {[npcId]: number}
+  equipment     String   @default("{}")       // JSON: {weapon?,armor?,accessory?}
+  visitedScenes String   @default("[]")       // JSON: string[]
+  killedEnemies String   @default("[]")       // JSON: string[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+// 地图状态
+model MapState {
+  id                String   @id @default("default")
+  currentLocationId String   @default("po_miao")
+  unlockedLocations String   @default("[]")   // JSON: string[]
+  exploredLocations String   @default("[]")   // JSON: string[]
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+// 每日签到
+model Checkin {
+  id              String   @id @default("default")
+  lastCheckinDate String?                       // "YYYY-MM-DD" or null
+  consecutiveDays Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+// 成就解锁
+model Achievement {
+  id          String   @id @default("default")
+  unlockedIds String   @default("[]")          // JSON: string[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// 见闻解锁
+model Lore {
+  id          String   @id @default("default")
+  unlockedIds String   @default("[]")          // JSON: string[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// 游戏日志（多行记录）
+model GameLog {
+  id        String   @id @default(cuid())
+  timestamp String   // "HH:MM" display string
+  content   String
+  type      String   @default("normal")
+  createdAt DateTime @default(now())
+}
+
+// 新手指引状态
+model Tutorial {
+  id                String   @id @default("default")
+  tutorialCompleted Boolean  @default(false)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}

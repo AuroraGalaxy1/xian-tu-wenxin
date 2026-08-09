@@ -159,9 +159,9 @@ export const CenterPanel = () => {
       </div>
 
       {/* 场景按钮 */}
-      <div className="mt-6">
-        <SceneButtons 
-          actions={currentScene.actions} 
+      <div className="mt-6" data-tutorial="explore">
+        <SceneButtons
+          actions={currentScene.actions}
           onAction={handleAction}
         />
       </div>

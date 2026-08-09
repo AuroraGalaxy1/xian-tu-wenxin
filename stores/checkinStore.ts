@@ -1,6 +1,7 @@
 // 每日签到系统
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { api } from '@/lib/api';
+import { debounce } from '@/lib/debounce';
 
 export interface CheckinReward {
   day: number;
@@ -100,85 +101,87 @@ function getYesterdayStr(): string {
 interface CheckinState {
   lastCheckinDate: string | null;
   consecutiveDays: number;
+  isLoading: boolean;
+
   hasCheckedInToday: () => boolean;
   getTodayReward: () => CheckinReward;
   checkin: () => CheckinReward | null;
+  loadCheckin: () => Promise<void>;
+  _save: () => void;
 }
 
-export const useCheckinStore = create<CheckinState>()(
-  persist<CheckinState, [], []>(
-    (set, get) => ({
-      lastCheckinDate: null,
-      consecutiveDays: 0,
+export const useCheckinStore = create<CheckinState>()((set, get) => ({
+  lastCheckinDate: null,
+  consecutiveDays: 0,
+  isLoading: true,
 
-      hasCheckedInToday: () => {
-        return get().lastCheckinDate === getTodayStr();
-      },
-
-      getTodayReward: () => {
-        const { lastCheckinDate, consecutiveDays } = get();
-        const today = getTodayStr();
-        const yesterday = getYesterdayStr();
-
-        if (lastCheckinDate === today) {
-          // 今天已签到，展示已获得的奖励
-          return CHECKIN_REWARDS[((consecutiveDays - 1) + 7) % 7];
-        }
-
-        if (lastCheckinDate === yesterday) {
-          // 连续签到
-          return CHECKIN_REWARDS[consecutiveDays % 7];
-        }
-
-        // 断签或首次签到
-        return CHECKIN_REWARDS[0];
-      },
-
-      checkin: () => {
-        const { lastCheckinDate, consecutiveDays } = get();
-        const today = getTodayStr();
-        const yesterday = getYesterdayStr();
-
-        if (lastCheckinDate === today) {
-          return null; // 今天已签到
-        }
-
-        let newStreak: number;
-        if (lastCheckinDate === yesterday) {
-          newStreak = consecutiveDays + 1;
-        } else {
-          newStreak = 1;
-        }
-
-        // 7天一轮回
-        if (newStreak > 7) newStreak = 1;
-
-        const reward = CHECKIN_REWARDS[newStreak - 1];
-
-        // 更新状态
-        set({
-          lastCheckinDate: today,
-          consecutiveDays: newStreak,
-        });
-
-        return reward;
-      },
-    }),
-    {
-      name: 'checkin-storage',
-      version: 1,
-      migrate: (persisted) => persisted as CheckinState,
-      merge: (persisted, current) => {
-        if (persisted && typeof persisted === 'object') {
-          const p = persisted as { lastCheckinDate?: string; consecutiveDays?: number };
-          return {
-            ...current,
-            lastCheckinDate: p.lastCheckinDate ?? null,
-            consecutiveDays: p.consecutiveDays ?? 0,
-          };
-        }
-        return current;
-      },
+  loadCheckin: async () => {
+    set({ isLoading: true });
+    const data = await api.get<{ lastCheckinDate: string | null; consecutiveDays: number }>(
+      '/checkin'
+    );
+    if (data) {
+      set({
+        lastCheckinDate: data.lastCheckinDate ?? null,
+        consecutiveDays: data.consecutiveDays ?? 0,
+        isLoading: false,
+      });
+    } else {
+      set({ isLoading: false });
     }
-  )
-);
+  },
+
+  _save: debounce(async () => {
+    const { lastCheckinDate, consecutiveDays } = get();
+    await api.put('/checkin', { lastCheckinDate, consecutiveDays });
+  }, 500),
+
+  hasCheckedInToday: () => {
+    return get().lastCheckinDate === getTodayStr();
+  },
+
+  getTodayReward: () => {
+    const { lastCheckinDate, consecutiveDays } = get();
+    const today = getTodayStr();
+    const yesterday = getYesterdayStr();
+
+    if (lastCheckinDate === today) {
+      return CHECKIN_REWARDS[((consecutiveDays - 1) + 7) % 7];
+    }
+
+    if (lastCheckinDate === yesterday) {
+      return CHECKIN_REWARDS[consecutiveDays % 7];
+    }
+
+    return CHECKIN_REWARDS[0];
+  },
+
+  checkin: () => {
+    const { lastCheckinDate, consecutiveDays } = get();
+    const today = getTodayStr();
+    const yesterday = getYesterdayStr();
+
+    if (lastCheckinDate === today) {
+      return null;
+    }
+
+    let newStreak: number;
+    if (lastCheckinDate === yesterday) {
+      newStreak = consecutiveDays + 1;
+    } else {
+      newStreak = 1;
+    }
+
+    if (newStreak > 7) newStreak = 1;
+
+    const reward = CHECKIN_REWARDS[newStreak - 1];
+
+    set({
+      lastCheckinDate: today,
+      consecutiveDays: newStreak,
+    });
+    get()._save();
+
+    return reward;
+  },
+}));

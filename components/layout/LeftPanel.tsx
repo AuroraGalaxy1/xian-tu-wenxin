@@ -137,6 +137,7 @@ export const LeftPanel = () => {
             <button
               key={index}
               onClick={item.onClick}
+              {...(item.label === '修炼' ? { 'data-tutorial': 'cultivate' } : item.label === '背包' ? { 'data-tutorial': 'backpack' } : {})}
               className="flex items-center gap-2 px-2 py-1.5 rounded bg-[#0A0806]/50 hover:bg-[#1A1410] transition-all duration-200 group"
             >
               <item.icon className={`w-3.5 h-3.5 ${item.color} group-hover:scale-110 transition-transform`} />

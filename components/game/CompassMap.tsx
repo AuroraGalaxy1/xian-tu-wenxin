@@ -215,6 +215,7 @@ export const CompassMap = () => {
 
   return (
     <motion.div
+      data-tutorial="compass"
       className={cn(
         'relative select-none',
         isExpanded
