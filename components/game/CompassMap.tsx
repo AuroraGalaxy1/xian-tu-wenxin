@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { motion } from 'framer-motion';
 import {
   Plus,
@@ -106,13 +106,18 @@ export const CompassMap = () => {
     exploreLocation,
   } = useMapStore();
 
-  // 同步场景和地图
+  // 同步场景和地图（使用 ref 防止循环）
+  const syncingRef = useRef(false);
   useEffect(() => {
+    if (syncingRef.current) return;
     if (currentScene && currentLocation?.id !== currentScene.id) {
+      syncingRef.current = true;
       const sceneLocation = locations.find((l) => l.id === currentScene.id);
       if (sceneLocation) setCurrentLocation(sceneLocation.id);
+      // 下一帧释放锁，避免同一轮同步循环
+      requestAnimationFrame(() => { syncingRef.current = false; });
     }
-  }, [currentScene, locations, currentLocation, setCurrentLocation]);
+  }, [currentScene, currentLocation, setCurrentLocation]);
 
   // 用 Set 加速 isUnlocked 查找
   const unlockedSet = useMemo(
@@ -444,12 +449,12 @@ export const CompassMap = () => {
                         title={`${location.name}${unlocked ? '' : '（未解锁）'}`}
                       >
                         {isCurrent && (
-                          <div className="absolute inset-0 -m-3">
+                          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
                             <div className="w-8 h-8 rounded-full border-2 border-[#C9A04E] animate-pulse-ring" />
                           </div>
                         )}
                         {isTarget && (
-                          <div className="absolute inset-0 -m-3">
+                          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
                             <div className="w-8 h-8 rounded-full border border-[#9B6EC9] animate-pulse-ring" />
                           </div>
                         )}

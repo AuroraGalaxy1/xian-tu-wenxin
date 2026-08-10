@@ -100,6 +100,8 @@ export const useAchievementStore = create<AchievementState>()((set, get) => ({
 }));
 
 // ===== 安全初始化：只在 playerStore 首次初始化完成后评估一次 =====
+// 注意：此 subscriber 仅触发一次（initialized 守卫），
+// 不会导致循环，因为 evaluate() 中奖励调用不触发此 subscriber
 let initialized = false;
 usePlayerStore.subscribe((state) => {
   if (!initialized && state.player) {

@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { TopBar } from '@/components/layout/TopBar';
 import { LeftPanel } from '@/components/layout/LeftPanel';
 import { CenterPanel } from '@/components/layout/CenterPanel';
@@ -88,80 +88,58 @@ async function migrateFromLocalStorage() {
 }
 
 export default function Home() {
-  const { player, setPlayer, loadPlayer } = usePlayerStore();
+  const player = usePlayerStore((s) => s.player);
   const currentScene = useSceneStore((state) => state.currentScene);
-  const { addLog, loadLogs } = useLogStore();
+  const { addLog } = useLogStore();
   const { setCurrentScene } = useSceneStore();
-  const { setCurrentLocation, loadMap } = useMapStore();
-  const { hasCheckedInToday, loadCheckin } = useCheckinStore();
+  const { setCurrentLocation } = useMapStore();
+  const { hasCheckedInToday } = useCheckinStore();
   const { setCheckinOpen, setTutorialOpen, tutorialOpen } = useUiStore();
-  const { tutorialCompleted, tutorialPhase, startTutorial, loadTutorial } =
-    useTutorialStore();
-  const { loadLore } = useLoreStore();
-  const { loadAchievement } = useAchievementStore();
+  const { tutorialCompleted, tutorialPhase, startTutorial } = useTutorialStore();
 
-  // 初始化：从 API 加载所有持久化数据
+  // 标记是否已完成初始化，防止重复执行
+  const initRef = useRef(false);
+
+  // 初始化：从 API 加载所有持久化数据（仅执行一次）
   useEffect(() => {
+    if (initRef.current) return;
+    initRef.current = true;
+
     let cancelled = false;
     (async () => {
-      // 数据迁移（redis 旧 localStorage 数据）
-      const migrated = await migrateFromLocalStorage();
+      // 数据迁移（旧 localStorage 数据）
+      await migrateFromLocalStorage();
 
       // 并行加载所有 store
       await Promise.all([
-        loadPlayer(),
-        loadMap(),
-        loadCheckin(),
-        loadTutorial(),
-        loadLore(),
-        loadAchievement(),
-        loadLogs(),
+        usePlayerStore.getState().loadPlayer(),
+        useMapStore.getState().loadMap(),
+        useCheckinStore.getState().loadCheckin(),
+        useTutorialStore.getState().loadTutorial(),
+        useLoreStore.getState().loadLore(),
+        useAchievementStore.getState().loadAchievement(),
+        useLogStore.getState().loadLogs(),
       ]);
 
       if (cancelled) return;
 
       // 无玩家数据 → 创建默认角色
       if (!usePlayerStore.getState().player) {
-        setPlayer(DEFAULT_PLAYER);
-        addLog('你从昏迷中醒来，发现自己身处一座破败的山神庙中...', 'special');
-        addLog('眉心隐隐发烫，似有什么在呼唤你。', 'normal');
+        usePlayerStore.getState().setPlayer(DEFAULT_PLAYER);
+        useLogStore.getState().addLog('你从昏迷中醒来，发现自己身处一座破败的山神庙中...', 'special');
+        useLogStore.getState().addLog('眉心隐隐发烫，似有什么在呼唤你。', 'normal');
+      }
+
+      // 同步场景显示：用玩家存档中的 currentScene 更新 sceneStore
+      const loadedPlayer = usePlayerStore.getState().player;
+      if (loadedPlayer) {
+        setCurrentScene(loadedPlayer.currentScene);
       }
     })();
     return () => {
       cancelled = true;
     };
-  }, [loadPlayer, loadMap, loadCheckin, loadTutorial, loadLore, loadAchievement, loadLogs, setPlayer, addLog]);
-
-  // 确保当前场景与地图位置已初始化
-  useEffect(() => {
-    if (!currentScene) {
-      setCurrentScene('po_miao');
-      setCurrentLocation('po_miao');
-    }
-  }, [currentScene, setCurrentScene, setCurrentLocation]);
-
-  // 新手指引：玩家已创建且首次进入（未完成引导）时，弹出引导弹窗
-  useEffect(() => {
-    if (player && !tutorialCompleted && tutorialPhase === null) {
-      startTutorial();
-    }
-  }, [player, tutorialCompleted, tutorialPhase, startTutorial]);
-
-  // 同步 tutorialPhase 与 tutorialOpen
-  useEffect(() => {
-    if (tutorialPhase === 'modal') {
-      setTutorialOpen(true);
-    } else {
-      setTutorialOpen(false);
-    }
-  }, [tutorialPhase, setTutorialOpen]);
-
-  // 签到检测：教程完成后才弹出签到
-  useEffect(() => {
-    if (player && tutorialCompleted && !hasCheckedInToday()) {
-      setCheckinOpen(true);
-    }
-  }, [player, tutorialCompleted, hasCheckedInToday, setCheckinOpen]);
+  }, []);
 
   if (!player) {
     return (
