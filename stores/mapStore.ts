@@ -56,6 +56,7 @@ const defaultLocations: MapLocation[] = [
     isUnlocked: false,
     isExplored: false,
     type: 'danger',
+    unlockHint: '修为精进突破至「凝液境」后开启',
   },
   {
     id: 'bai_cao_yuan',
@@ -106,6 +107,7 @@ const defaultLocations: MapLocation[] = [
     isUnlocked: false,
     isExplored: false,
     type: 'secret',
+    unlockHint: '修为精进突破至「玉府境」后开启',
   },
 ];
 

@@ -11,4 +11,6 @@ export interface MapLocation {
   isUnlocked: boolean;
   isExplored: boolean;
   type: MapLocationType;
+  /** 解锁条件提示（未解锁时点击展示） */
+  unlockHint?: string;
 }
