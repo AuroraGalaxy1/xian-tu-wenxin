@@ -231,7 +231,7 @@ export const CompassMap = () => {
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.3 }}
-      style={{ width: isExpanded ? 300 : 150, height: isExpanded ? 380 : 150 }}
+      style={{ width: isExpanded ? 340 : 150, height: isExpanded ? 440 : 150 }}
     >
       {/* 关闭按钮 */}
       <button
@@ -362,24 +362,24 @@ export const CompassMap = () => {
 
           {/* 地图内容 */}
           <div
-            className="relative flex-1 overflow-hidden"
-            onMouseDown={handleDragStart}
-            onMouseMove={handleDragMove}
-            onMouseUp={handleDragEnd}
-            onMouseLeave={handleDragEnd}
-          >
-            <div
-              className="absolute inset-0 transition-transform duration-300"
-              style={{
-                transform: `scale(${zoom / 75}) translate(${dragOffset.x}px, ${dragOffset.y}px)`,
-                transformOrigin: 'center',
-              }}
+              className="relative flex-1 overflow-hidden bg-[#1A1410]"
+              onMouseDown={handleDragStart}
+              onMouseMove={handleDragMove}
+              onMouseUp={handleDragEnd}
+              onMouseLeave={handleDragEnd}
             >
-              <div className="w-full h-full p-3">
-                <div className="w-full h-full rounded-xl bg-[#1A1410] relative overflow-hidden border border-[#8B7A5E]/15">
-                  {/* 网格 */}
+              <div
+                className="absolute inset-0 transition-transform duration-300"
+                style={{
+                  transform: `scale(${zoom / 75}) translate(${dragOffset.x}px, ${dragOffset.y}px)`,
+                  transformOrigin: 'center',
+                }}
+              >
+                <div className="w-full h-full">
+                  <div className="w-full h-full rounded-xl bg-[#1A1410] relative">
+                  {/* 网格（单独 overflow-hidden，避免裁切地点名称） */}
                   <div
-                    className="absolute inset-0 opacity-10"
+                    className="absolute inset-0 overflow-hidden opacity-10"
                     style={{
                       backgroundImage: 'radial-gradient(circle, #8B7A5E 1px, transparent 1px)',
                       backgroundSize: '20px 20px',
@@ -486,10 +486,15 @@ export const CompassMap = () => {
                             />
                           </div>
 
-                          {/* 地点名称 */}
+                          {/* 地点名称（靠近左右边界时向内收缩，避免被地图裁切） */}
                           <span
                             className={cn(
                               'absolute -bottom-4 text-xs whitespace-nowrap pointer-events-none',
+                              location.x > MAP_W * 0.78
+                                ? 'right-0 translate-x-1/2'
+                                : location.x < MAP_W * 0.22
+                                  ? 'left-0 -translate-x-1/2'
+                                  : 'left-1/2 -translate-x-1/2',
                               isCurrent ? 'text-[#C9A04E] font-medium' : isTarget ? 'text-[#9B6EC9]' : 'text-[#8B7A5E]'
                             )}
                           >
