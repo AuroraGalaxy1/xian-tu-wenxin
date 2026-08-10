@@ -86,6 +86,20 @@ const calcMST = (unlockedLocs: MapLocation[]): [MapLocation, MapLocation][] => {
   return edges;
 };
 
+/** 归一化坐标中的角度（度），用于屏幕连线旋转（含容器宽高比修正） */
+const calcScreenAngle = (from: MapLocation, to: MapLocation, aspect: number): number => {
+  const dx = (to.x - from.x) / MAP_W;
+  const dy = (to.y - from.y) / MAP_H * aspect;
+  return Math.atan2(dy, dx) * 180 / Math.PI;
+};
+
+/** 归一化坐标中的距离，用于连线宽度（含容器宽高比修正） */
+const calcScreenWidthPct = (from: MapLocation, to: MapLocation, aspect: number): number => {
+  const dx = (to.x - from.x) / MAP_W;
+  const dy = (to.y - from.y) / MAP_H * aspect;
+  return Math.hypot(dx, dy) * 100;
+};
+
 export const CompassMap = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [zoom, setZoom] = useState(75);
@@ -95,6 +109,9 @@ export const CompassMap = () => {
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   // 罗盘锁定的目标地点
   const [targetId, setTargetId] = useState<string | null>(null);
+  // 地图容器宽高比（用于修正连线角度/长度）
+  const mapAreaRef = useRef<HTMLDivElement>(null);
+  const [mapAspect, setMapAspect] = useState(MAP_H / MAP_W); // 默认 0.8
 
   const currentScene = useSceneStore((state) => state.currentScene);
   const player = usePlayerStore((state) => state.player);
@@ -118,6 +135,20 @@ export const CompassMap = () => {
       requestAnimationFrame(() => { syncingRef.current = false; });
     }
   }, [currentScene, currentLocation, setCurrentLocation]);
+
+  // 测量地图容器宽高比，修正连线角度/长度
+  useEffect(() => {
+    const el = mapAreaRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver(([entry]) => {
+      const { width, height } = entry.contentRect;
+      if (width > 0 && height > 0) {
+        setMapAspect(height / width);
+      }
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
 
   // 用 Set 加速 isUnlocked 查找
   const unlockedSet = useMemo(
@@ -362,6 +393,7 @@ export const CompassMap = () => {
 
           {/* 地图内容 */}
           <div
+              ref={mapAreaRef}
               className="relative flex-1 overflow-hidden bg-[#1A1410]"
               onMouseDown={handleDragStart}
               onMouseMove={handleDragMove}
@@ -393,9 +425,9 @@ export const CompassMap = () => {
                       style={{
                         left: `${(currentLocation.x / MAP_W) * 100}%`,
                         top: `${(currentLocation.y / MAP_H) * 100}%`,
-                        width: `${(Math.hypot(targetLocation.x - currentLocation.x, targetLocation.y - currentLocation.y) / MAP_W) * 100}%`,
+                        width: `${calcScreenWidthPct(currentLocation, targetLocation, mapAspect)}%`,
                         transformOrigin: 'left center',
-                        transform: `rotate(${targetAngle - 90}deg)`,
+                        transform: `rotate(${calcScreenAngle(currentLocation, targetLocation, mapAspect)}deg)`,
                       }}
                     >
                       <div className="w-full h-px border-t border-dashed border-[#C9A04E]/50" />
@@ -404,10 +436,6 @@ export const CompassMap = () => {
 
                   {/* 已解锁地点之间的 MST 虚线连接 */}
                   {mstEdges.map(([from, to]) => {
-                    const dx = to.x - from.x;
-                    const dy = to.y - from.y;
-                    const angle = Math.atan2(dy, dx) * 180 / Math.PI;
-                    const length = Math.hypot(dx, dy);
                     return (
                       <div
                         key={`mst-${from.id}-${to.id}`}
@@ -415,9 +443,9 @@ export const CompassMap = () => {
                         style={{
                           left: `${(from.x / MAP_W) * 100}%`,
                           top: `${(from.y / MAP_H) * 100}%`,
-                          width: `${(length / MAP_W) * 100}%`,
+                          width: `${calcScreenWidthPct(from, to, mapAspect)}%`,
                           transformOrigin: 'left center',
-                          transform: `rotate(${angle}deg)`,
+                          transform: `rotate(${calcScreenAngle(from, to, mapAspect)}deg)`,
                         }}
                       >
                         <div className="w-full h-px border-t border-dashed border-[#8B7A5E]/40" />
@@ -486,15 +514,15 @@ export const CompassMap = () => {
                             />
                           </div>
 
-                          {/* 地点名称（靠近左右边界时向内收缩，避免被地图裁切） */}
+                          {/* 地点名称（靠近右边界时向左延伸，靠近左边界时向右延伸，避免被地图裁切） */}
                           <span
                             className={cn(
                               'absolute -bottom-4 text-xs whitespace-nowrap pointer-events-none',
                               location.x > MAP_W * 0.78
-                                ? 'right-0 translate-x-1/2'
+                                ? 'right-0' // 名称在图标左侧
                                 : location.x < MAP_W * 0.22
-                                  ? 'left-0 -translate-x-1/2'
-                                  : 'left-1/2 -translate-x-1/2',
+                                  ? 'left-0' // 名称在图标右侧
+                                  : 'left-1/2 -translate-x-1/2', // 名称居中
                               isCurrent ? 'text-[#C9A04E] font-medium' : isTarget ? 'text-[#9B6EC9]' : 'text-[#8B7A5E]'
                             )}
                           >
