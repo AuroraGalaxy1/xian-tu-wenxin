@@ -1,39 +1,28 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useState } from 'react';
+import { usePlayerStore } from '@/stores/playerStore';
+import { useAchievementStore } from '@/stores/achievementStore';
+import { Trophy } from 'lucide-react';
 
-/**
- * 底部状态栏：在线人数 / 延迟为模拟数据。
- * 用 ref 直接更新 DOM，避免每 5 秒触发一次 React 重渲染。
- */
 export const BottomBar = () => {
-  const onlineRef = useRef<HTMLSpanElement>(null);
-  const delayRef = useRef<HTMLSpanElement>(null);
+  const [timeStr, setTimeStr] = useState('');
+  const realm = usePlayerStore((state) => state.player?.realm);
+  const realmStage = usePlayerStore((state) => state.player?.realmStage);
+  const achievementCount = useAchievementStore((state) => state.unlockedIds.length);
+  const quests = usePlayerStore((state) => state.player?.quests);
+  const activeQuests = quests?.filter((q) => q.status === 'active').length ?? 0;
+  const completedQuests = quests?.filter((q) => q.status === 'completed').length ?? 0;
 
   useEffect(() => {
-    let online = 12384;
-    let delay = 23;
-
-    const updateOnline = () => {
-      online = Math.max(10000, online + Math.floor(Math.random() * 10 - 5));
-      if (onlineRef.current) onlineRef.current.textContent = online.toLocaleString();
+    const updateTime = () => {
+      const now = new Date();
+      const h = String(now.getHours()).padStart(2, '0');
+      const m = String(now.getMinutes()).padStart(2, '0');
+      setTimeStr(`辰时 · ${h}:${m}`);
     };
-    const updateDelay = () => {
-      delay = Math.max(10, Math.min(100, delay + Math.floor(Math.random() * 6 - 3)));
-      if (delayRef.current) {
-        delayRef.current.textContent = `${delay}ms`;
-        delayRef.current.className =
-          delay < 30 ? 'text-[#4EC9C9]' : delay < 60 ? 'text-[#C9A04E]' : 'text-[#C94E4E]';
-      }
-    };
-
-    // 立即更新一次 + 每 5 秒更新
-    updateOnline();
-    updateDelay();
-    const interval = setInterval(() => {
-      updateOnline();
-      updateDelay();
-    }, 5000);
+    updateTime();
+    const interval = setInterval(updateTime, 30000);
     return () => clearInterval(interval);
   }, []);
 
@@ -42,12 +31,19 @@ export const BottomBar = () => {
       <div className="flex items-center gap-6">
         <span className="flex items-center gap-1.5">
           <span className="w-1.5 h-1.5 rounded-full bg-[#4EC9C9] animate-pulse" />
-          <span ref={onlineRef}>12,384</span> 人在线
+          {timeStr || '辰时'}
         </span>
         <span className="text-[#8B7A5E]/30">|</span>
-        <span>服务器 · 九洲·落星坡</span>
+        <span>境界 · {realm || '感气'} · {realmStage || '悟'}</span>
         <span className="text-[#8B7A5E]/30">|</span>
-        <span ref={delayRef} className="text-[#4EC9C9]">23ms</span>
+        <span className="flex items-center gap-1">
+          <Trophy className="w-3 h-3 text-[#C9A04E]" />
+          成就 {achievementCount}
+        </span>
+        <span className="text-[#8B7A5E]/30">|</span>
+        <span>
+          任务 {activeQuests} 进行中{completedQuests > 0 ? ` · ${completedQuests} 完成` : ''}
+        </span>
       </div>
       <div className="flex items-center gap-4">
         <span className="tracking-wider">v0.1.0</span>

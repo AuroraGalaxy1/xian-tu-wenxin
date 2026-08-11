@@ -9,6 +9,7 @@ import { useUiStore } from '@/stores/uiStore';
 import { SceneButtons } from '@/components/game/SceneButtons';
 import { CompassMap } from '@/components/game/CompassMap';
 import { ResourceBar } from '@/components/game/ResourceBar';
+import { LogPanel } from '@/components/game/LogPanel';
 import { SceneAction } from '@/types/scene';
 import { getRandomEncounter } from '@/lib/utils/gameUtils';
 import { getRandomEncounterEvent } from '@/lib/gameData/encounters';
@@ -185,6 +186,11 @@ export const CenterPanel = () => {
           </p>
         </div>
       )}
+
+      {/* 日志记录 */}
+      <div className="mt-5">
+        <LogPanel />
+      </div>
 
       {/* 罗盘 */}
       <div className="absolute bottom-5 right-5 z-10">
