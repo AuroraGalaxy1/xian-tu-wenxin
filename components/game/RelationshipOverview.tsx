@@ -23,7 +23,22 @@ export const RelationshipOverview = () => {
         .slice(0, 5)
     : [];
 
-  if (known.length === 0) return null;
+  if (known.length === 0) {
+    return (
+      <div className="glass-panel-light rounded-lg p-3">
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-xs text-[#A99A80] tracking-widest uppercase">
+            ◈ 羁绊
+          </span>
+          <span className="text-xs text-[#A99A80]/70">0 位故人</span>
+        </div>
+        <div className="divider-antique" />
+        <div className="mt-2 text-xs text-[#8B7A5E]/50 text-center py-3 border border-dashed border-[#8B7A5E]/10 rounded">
+          尚未结识任何人，与场景中的人物交谈可增进羁绊
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="glass-panel-light rounded-lg p-3">

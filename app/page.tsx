@@ -165,7 +165,7 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-parchment text-[#F0E8D8] font-serif">
+    <div className="min-h-screen bg-parchment text-[#F0E8D8] font-sans">
       <TopBar />
       <div className="flex h-[calc(100vh-88px)]">
         <LeftPanel />

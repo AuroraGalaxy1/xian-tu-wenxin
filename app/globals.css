@@ -3,7 +3,7 @@
 /* 覆盖 Tailwind 默认衬线字体栈，优先使用系统已安装的清晰中文衬线字体
    （Noto Serif SC / 思源宋体），避免中文字符 fallback 到渲染发虚的默认字体 */
 @theme {
-  --font-serif: "Noto Serif SC", "Source Han Serif SC", "Songti SC", "STSong", "SimSun", "KaiTi", Georgia, "Times New Roman", serif;
+  --font-sans: var(--font-noto-sans-sc), "Noto Sans SC", "Source Han Sans SC", "Microsoft YaHei", "PingFang SC", "Hiragino Sans GB", "WenQuanYi Micro Hei", "Segoe UI", Arial, sans-serif;
 }
 
 /* Base styles */
@@ -22,7 +22,7 @@ html, body {
 }
 
 body {
-  font-family: 'Noto Serif SC', 'Georgia', 'KaiTi', serif;
+  font-family: var(--font-noto-sans-sc), 'Noto Sans SC', 'Microsoft YaHei', 'PingFang SC', 'Segoe UI', Arial, sans-serif;
   color: #F0E8D8;
   /* 优化中文小字号渲染：开启抗锯齿与清晰纹理，避免文字发虚/模糊 */
   -webkit-font-smoothing: antialiased;
