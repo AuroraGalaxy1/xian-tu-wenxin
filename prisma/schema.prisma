@@ -9,9 +9,20 @@ datasource db {
   provider = "sqlite"
 }
 
+// 用户认证
+model User {
+  id           String   @id @default(cuid())
+  username     String   @unique
+  passwordHash String
+  sessionToken String?  @unique
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
 // 核心玩家数据
 model Player {
-  id            String   @id @default("player_001")
+  id            String   @id @default(cuid())
+  userId        String   @unique
   name          String   @default("无名修士")
   realm         String   @default("感气")
   realmStage    String   @default("悟")
@@ -41,7 +52,8 @@ model Player {
 
 // 地图状态
 model MapState {
-  id                String   @id @default("default")
+  id                String   @id @default(cuid())
+  userId            String   @unique
   currentLocationId String   @default("po_miao")
   unlockedLocations String   @default("[]")   // JSON: string[]
   exploredLocations String   @default("[]")   // JSON: string[]
@@ -51,7 +63,8 @@ model MapState {
 
 // 每日签到
 model Checkin {
-  id              String   @id @default("default")
+  id              String   @id @default(cuid())
+  userId          String   @unique
   lastCheckinDate String?                       // "YYYY-MM-DD" or null
   consecutiveDays Int      @default(0)
   createdAt       DateTime @default(now())
@@ -60,7 +73,8 @@ model Checkin {
 
 // 成就解锁
 model Achievement {
-  id          String   @id @default("default")
+  id          String   @id @default(cuid())
+  userId      String   @unique
   unlockedIds String   @default("[]")          // JSON: string[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -68,7 +82,8 @@ model Achievement {
 
 // 见闻解锁
 model Lore {
-  id          String   @id @default("default")
+  id          String   @id @default(cuid())
+  userId      String   @unique
   unlockedIds String   @default("[]")          // JSON: string[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -77,6 +92,7 @@ model Lore {
 // 游戏日志（多行记录）
 model GameLog {
   id        String   @id @default(cuid())
+  userId    String
   timestamp String   // "HH:MM" display string
   content   String
   type      String   @default("normal")
@@ -85,7 +101,8 @@ model GameLog {
 
 // 新手指引状态
 model Tutorial {
-  id                String   @id @default("default")
+  id                String   @id @default(cuid())
+  userId            String   @unique
   tutorialCompleted Boolean  @default(false)
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt

@@ -328,6 +328,9 @@ export const usePlayerStore = create<PlayerState>()((set, get) => ({
       if (sceneId === 'fei_zhai') {
         useUiStore.getState().openChoice('fei_zhai_zhinian');
       }
+      if (sceneId === 'po_miao' && !p.quests.some((x) => x.id === 'q0')) {
+        get().addQuest('q0');
+      }
       const sceneQuest = Object.values(questsData).find(
         (q) =>
           q.objectives.some((o) => o.type === 'scene_visit' && o.target === sceneId)
@@ -513,6 +516,27 @@ export const usePlayerStore = create<PlayerState>()((set, get) => ({
       if (pendingItems.length) parts.push(`获得 ${pendingItems.length} 件物品`);
       if (parts.length) {
         useLogStore.getState().addLog(`奖励：${parts.join('，')}`, 'item');
+      }
+      // 任务完成 → 解锁特定地点
+      const questUnlockMap: Record<string, string> = {
+        q0: 'shan_gu',
+      };
+      for (const q of newQuests) {
+        const prevQ = p.quests.find((x) => x.id === q.id);
+        if (
+          q.status === 'completed' &&
+          prevQ?.status !== 'completed' &&
+          questUnlockMap[q.id]
+        ) {
+          const locId = questUnlockMap[q.id];
+          useMapStore.getState().unlockLocation(locId);
+          const loc = useMapStore.getState().locations.find((l) => l.id === locId);
+          if (loc) {
+            useLogStore
+              .getState()
+              .addLog(`🗺 残玉共鸣，${loc.name}的位置在地图上显现！`, 'special');
+          }
+        }
       }
       get()._save();
     }

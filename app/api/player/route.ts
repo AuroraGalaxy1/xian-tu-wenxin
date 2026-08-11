@@ -1,19 +1,25 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { getUserFromRequest } from '@/lib/auth';
 
-const PLAYER_ID = 'player_001';
+export async function GET(request: Request) {
+  const user = await getUserFromRequest(request);
+  if (!user) return NextResponse.json({ error: '未登录' }, { status: 401 });
 
-export async function GET() {
-  const player = await prisma.player.findUnique({ where: { id: PLAYER_ID } });
+  const player = await prisma.player.findUnique({ where: { userId: user.id } });
   return NextResponse.json(player);
 }
 
-export async function PUT(req: Request) {
-  const body = await req.json();
+export async function PUT(request: Request) {
+  const user = await getUserFromRequest(request);
+  if (!user) return NextResponse.json({ error: '未登录' }, { status: 401 });
+
+  const body = await request.json();
+  const { id, ...data } = body;
   const player = await prisma.player.upsert({
-    where: { id: PLAYER_ID },
-    update: body,
-    create: { ...body, id: PLAYER_ID },
+    where: { userId: user.id },
+    update: data,
+    create: { ...data, userId: user.id },
   });
   return NextResponse.json(player);
 }

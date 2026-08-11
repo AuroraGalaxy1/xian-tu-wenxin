@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 import { TopBar } from '@/components/layout/TopBar';
 import { LeftPanel } from '@/components/layout/LeftPanel';
 import { CenterPanel } from '@/components/layout/CenterPanel';
@@ -15,6 +16,7 @@ import { useUiStore } from '@/stores/uiStore';
 import { useTutorialStore } from '@/stores/tutorialStore';
 import { useLoreStore } from '@/stores/loreStore';
 import { useAchievementStore } from '@/stores/achievementStore';
+import { useAuthStore } from '@/stores/authStore';
 import { ModalContainer } from '@/components/modals/ModalContainer';
 import { TutorialOverlay } from '@/components/tutorial/TutorialOverlay';
 import { api } from '@/lib/api';
@@ -88,6 +90,7 @@ async function migrateFromLocalStorage() {
 }
 
 export default function Home() {
+  const router = useRouter();
   const player = usePlayerStore((s) => s.player);
   const currentScene = useSceneStore((state) => state.currentScene);
   const { addLog } = useLogStore();
@@ -96,18 +99,30 @@ export default function Home() {
   const { hasCheckedInToday } = useCheckinStore();
   const { setCheckinOpen, setTutorialOpen, tutorialOpen } = useUiStore();
   const { tutorialCompleted, tutorialPhase, startTutorial } = useTutorialStore();
+  const { isAuthenticated, isLoading: authLoading, checkAuth } = useAuthStore();
 
   // 标记是否已完成初始化，防止重复执行
   const initRef = useRef(false);
 
-  // 初始化：从 API 加载所有持久化数据（仅执行一次）
+  // 初始化：检查认证 + 从 API 加载所有持久化数据（仅执行一次）
   useEffect(() => {
     if (initRef.current) return;
     initRef.current = true;
 
     let cancelled = false;
     (async () => {
-      // 数据迁移（旧 localStorage 数据）
+      // 1. 检查登录状态
+      await checkAuth();
+
+      if (cancelled) return;
+
+      // 2. 未登录 → 跳转登录页
+      if (!useAuthStore.getState().isAuthenticated) {
+        router.push('/login');
+        return;
+      }
+
+      // 3. 数据迁移（旧 localStorage 数据）
       await migrateFromLocalStorage();
 
       // 并行加载所有 store
@@ -141,7 +156,7 @@ export default function Home() {
     };
   }, []);
 
-  if (!player) {
+  if (authLoading || !player) {
     return (
       <div className="min-h-screen bg-[#0A0806] flex items-center justify-center">
         <div className="text-[#C9A04E] animate-breathe">✦ 加载中 ...</div>

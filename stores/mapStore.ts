@@ -23,9 +23,10 @@ const defaultLocations: MapLocation[] = [
     x: 320,
     y: 150,
     region: '落星坡',
-    isUnlocked: true,
+    isUnlocked: false,
     isExplored: false,
     type: 'scene',
+    unlockHint: '击败破庙附近的山鼠，残玉共鸣后开启',
   },
   {
     id: 'qing_mu_ling',
@@ -146,7 +147,7 @@ interface MapState {
 export const useMapStore = create<MapState>()((set, get) => ({
   currentLocation: defaultLocations[0],
   unlockedLocations: [
-    'po_miao', 'shan_gu', 'qing_mu_ling', 'xi_feng_zhen',
+    'po_miao', 'qing_mu_ling', 'xi_feng_zhen',
     'bai_cao_yuan', 'fang_shi', 'qing_yang_fen_tan', 'fei_zhai',
   ],
   exploredLocations: [],

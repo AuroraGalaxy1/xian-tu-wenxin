@@ -538,33 +538,30 @@ export const CompassMap = () => {
                       </div>
                     );
                   })}
-
-                  {/* 未解锁地点点击提示——放在地图容器内，随着地图缩放/拖动而移动，但用 fix 定位保证不被裁切 */}
-                  {lockedHint && (
-                    <motion.div
-                      key={lockedHint.id}
-                      initial={{ opacity: 0, y: 8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="fixed z-50 max-w-[88%] px-4 py-3 rounded-lg bg-[#0D0A08]/95 border border-[#C9A04E]/40 shadow-xl shadow-black/50"
-                      style={{
-                        left: '50%',
-                        top: '50%',
-                        transform: 'translate(-50%, -50%)',
-                      }}
-                    >
-                      <p className="text-xs text-[#C9A04E] font-medium flex items-center gap-1.5">
-                        <Lock className="w-3 h-3" />
-                        {lockedHint.name} · 未解锁
-                      </p>
-                      <p className="text-xs text-[#E8DCC8] mt-1 leading-relaxed">
-                        {lockedHint.hint}
-                      </p>
-                    </motion.div>
-                  )}
                 </div>
               </div>
             </div>
           </div>
+
+          {/* 未解锁提示——放在面板层（地图容器之外），居中显示，不受地图缩放/拖动影响 */}
+          {lockedHint && (
+            <div className="absolute inset-0 z-50 flex items-center justify-center pointer-events-none">
+              <motion.div
+                key={lockedHint.id}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="pointer-events-auto max-w-[88%] px-4 py-3 rounded-lg bg-[#0D0A08]/95 border border-[#C9A04E]/40 shadow-xl shadow-black/50"
+              >
+                <p className="text-xs text-[#C9A04E] font-medium flex items-center gap-1.5">
+                  <Lock className="w-3 h-3" />
+                  {lockedHint.name} · 未解锁
+                </p>
+                <p className="text-xs text-[#E8DCC8] mt-1 leading-relaxed">
+                  {lockedHint.hint}
+                </p>
+              </motion.div>
+            </div>
+          )}
 
           {/* 底部信息栏 */}
           <div className="px-3 py-2 border-t border-[#C9A04E]/15 bg-[#0D0A08]/90 rounded-b-2xl flex items-center justify-between text-xs text-[#8B7A5E]">

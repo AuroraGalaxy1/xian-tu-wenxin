@@ -1,10 +1,21 @@
 const BASE_URL = '/api';
 
+/** 从 localStorage 读取会话令牌（SSR 时返回 null） */
+function getToken(): string | null {
+  if (typeof window === 'undefined') return null;
+  return localStorage.getItem('auth-token');
+}
+
 async function request<T>(method: string, path: string, body?: unknown): Promise<T | null> {
   try {
+    const token = getToken();
+    const headers: Record<string, string> = {};
+    if (body) headers['Content-Type'] = 'application/json';
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+
     const res = await fetch(`${BASE_URL}${path}`, {
       method,
-      headers: body ? { 'Content-Type': 'application/json' } : undefined,
+      headers,
       body: body ? JSON.stringify(body) : undefined,
     });
     if (!res.ok) {

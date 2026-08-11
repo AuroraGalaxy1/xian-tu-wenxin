@@ -2,6 +2,25 @@
 import { Enemy } from '@/types/enemy';
 
 export const enemiesData: Record<string, Enemy> = {
+  shan_shu: {
+    id: 'shan_shu',
+    name: '山鼠',
+    realm: '感气',
+    description: '一只半人高的山鼠，毛色灰黑，獠牙外露，正在破庙墙角啃食供果残渣。见你靠近，它发出威胁性的嘶嘶声。',
+    hp: 20,
+    atk: 5,
+    def: 2,
+    skills: [
+      { id: 'bite', name: '啃咬', power: 1, desc: '露出门牙咬来' },
+      { id: 'scratch', name: '抓挠', power: 0.8, desc: '挥爪乱挠' },
+    ],
+    xiuweiReward: 10,
+    drops: [
+      { itemId: 'yao_shou_ge', rate: 0.3 },
+    ],
+    sceneId: 'po_miao',
+  },
+
   shan_hu: {
     id: 'shan_hu',
     name: '月影灵狐',

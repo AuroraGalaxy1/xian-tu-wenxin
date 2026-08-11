@@ -1,11 +1,19 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { usePlayerStore } from '@/stores/playerStore';
-import { Bell, MessageCircle, Settings } from 'lucide-react';
+import { useAuthStore } from '@/stores/authStore';
+import { Bell, MessageCircle, Settings, LogOut } from 'lucide-react';
 
 export const TopBar = () => {
+  const router = useRouter();
   const realm = usePlayerStore((state) => state.player?.realm);
   const realmStage = usePlayerStore((state) => state.player?.realmStage);
+
+  const handleLogout = async () => {
+    await useAuthStore.getState().logout();
+    router.push('/login');
+  };
 
   return (
     <header className="h-14 px-6 flex items-center justify-between bg-[#0D0A08]/95 border-b border-[#C9A04E]/20 glass-panel-light">
@@ -44,6 +52,14 @@ export const TopBar = () => {
         <span className="text-xs text-[#8B7A5E]/50 tracking-wider border-l border-[#8B7A5E]/20 pl-4">
           末道 · 九洲
         </span>
+        <button
+          onClick={handleLogout}
+          title="登出"
+          className="flex items-center gap-1.5 px-2.5 py-1 text-xs text-[#8B7A5E] hover:text-[#E8DCC8] border border-[#8B7A5E]/20 hover:border-[#C9A04E]/40 rounded transition-colors"
+        >
+          <LogOut className="w-3.5 h-3.5" />
+          登出
+        </button>
       </div>
     </header>
   );

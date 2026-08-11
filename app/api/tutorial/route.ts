@@ -1,19 +1,25 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { getUserFromRequest } from '@/lib/auth';
 
-const TUTORIAL_ID = 'default';
+export async function GET(request: Request) {
+  const user = await getUserFromRequest(request);
+  if (!user) return NextResponse.json({ error: '未登录' }, { status: 401 });
 
-export async function GET() {
-  const tutorial = await prisma.tutorial.findUnique({ where: { id: TUTORIAL_ID } });
+  const tutorial = await prisma.tutorial.findUnique({ where: { userId: user.id } });
   return NextResponse.json(tutorial);
 }
 
-export async function PUT(req: Request) {
-  const body = await req.json();
+export async function PUT(request: Request) {
+  const user = await getUserFromRequest(request);
+  if (!user) return NextResponse.json({ error: '未登录' }, { status: 401 });
+
+  const body = await request.json();
+  const { id, ...data } = body;
   const tutorial = await prisma.tutorial.upsert({
-    where: { id: TUTORIAL_ID },
-    update: body,
-    create: { ...body, id: TUTORIAL_ID },
+    where: { userId: user.id },
+    update: data,
+    create: { ...data, userId: user.id },
   });
   return NextResponse.json(tutorial);
 }

@@ -3,6 +3,19 @@ import { Quest } from '@/types/quest';
 
 export const questsData: Record<string, Quest> = {
   /* ===== 主线 ===== */
+  q0: {
+    id: 'q0',
+    name: '残玉共鸣',
+    type: 'main',
+    description: '眉心残玉碎片微微发烫，似与落星坡的地脉共鸣。就在这时，一只妖兽闯入了破庙……先解决它，残玉或许会指引你下一步的方向。',
+    objectives: [
+      { type: 'kill_enemy', target: 'shan_shu', desc: '击败山鼠' },
+    ],
+    rewards: { xiuwei: 10, lingShi: 5 },
+    hints: [
+      { sceneId: 'po_miao', text: '那只山鼠还在附近，击败它，看看残玉有什么反应' },
+    ],
+  },
   q1: {
     id: 'q1',
     name: '残玉指引',

@@ -1,19 +1,25 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { getUserFromRequest } from '@/lib/auth';
 
-const LORE_ID = 'default';
+export async function GET(request: Request) {
+  const user = await getUserFromRequest(request);
+  if (!user) return NextResponse.json({ error: '未登录' }, { status: 401 });
 
-export async function GET() {
-  const lore = await prisma.lore.findUnique({ where: { id: LORE_ID } });
+  const lore = await prisma.lore.findUnique({ where: { userId: user.id } });
   return NextResponse.json(lore);
 }
 
-export async function PUT(req: Request) {
-  const body = await req.json();
+export async function PUT(request: Request) {
+  const user = await getUserFromRequest(request);
+  if (!user) return NextResponse.json({ error: '未登录' }, { status: 401 });
+
+  const body = await request.json();
+  const { id, ...data } = body;
   const lore = await prisma.lore.upsert({
-    where: { id: LORE_ID },
-    update: body,
-    create: { ...body, id: LORE_ID },
+    where: { userId: user.id },
+    update: data,
+    create: { ...data, userId: user.id },
   });
   return NextResponse.json(lore);
 }

@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { getUserFromRequest } from '@/lib/auth';
 
 /** zustand persist 旧数据可能是 { state: ... } 包装，也可能是直接对象 */
 function unwrap(raw: unknown): Record<string, any> {
@@ -15,7 +16,6 @@ function flattenPlayer(state: Record<string, any>) {
   const p = state.player && typeof state.player === 'object' ? state.player : state;
   const stats = p.stats && typeof p.stats === 'object' ? p.stats : {};
   return {
-    id: p.id ?? 'player_001',
     name: p.name ?? '无名修士',
     realm: p.realm ?? '感气',
     realmStage: p.realmStage ?? '悟',
@@ -44,6 +44,9 @@ function flattenPlayer(state: Record<string, any>) {
 
 export async function POST(req: Request) {
   try {
+    const user = await getUserFromRequest(req);
+    if (!user) return NextResponse.json({ error: '未登录' }, { status: 401 });
+
     const body = await req.json();
     const results: Record<string, boolean> = {};
 
@@ -52,9 +55,9 @@ export async function POST(req: Request) {
       const state = unwrap(body['player-storage']);
       const row = flattenPlayer(state);
       await prisma.player.upsert({
-        where: { id: row.id },
+        where: { userId: user.id },
         update: row,
-        create: row,
+        create: { ...row, userId: user.id },
       });
       results['player-storage'] = true;
     }
@@ -80,9 +83,9 @@ export async function POST(req: Request) {
         exploredLocations: JSON.stringify(explored),
       };
       await prisma.mapState.upsert({
-        where: { id: 'default' },
+        where: { userId: user.id },
         update: row,
-        create: { ...row, id: 'default' },
+        create: { ...row, userId: user.id },
       });
       results['map-storage'] = true;
     }
@@ -95,9 +98,9 @@ export async function POST(req: Request) {
         consecutiveDays: state.consecutiveDays ?? 0,
       };
       await prisma.checkin.upsert({
-        where: { id: 'default' },
+        where: { userId: user.id },
         update: row,
-        create: { ...row, id: 'default' },
+        create: { ...row, userId: user.id },
       });
       results['checkin-storage'] = true;
     }
@@ -109,9 +112,9 @@ export async function POST(req: Request) {
         unlockedIds: JSON.stringify(Array.isArray(state.unlockedIds) ? state.unlockedIds : []),
       };
       await prisma.achievement.upsert({
-        where: { id: 'default' },
+        where: { userId: user.id },
         update: row,
-        create: { ...row, id: 'default' },
+        create: { ...row, userId: user.id },
       });
       results['achievement-storage'] = true;
     }
@@ -123,9 +126,9 @@ export async function POST(req: Request) {
         unlockedIds: JSON.stringify(Array.isArray(state.unlockedIds) ? state.unlockedIds : []),
       };
       await prisma.lore.upsert({
-        where: { id: 'default' },
+        where: { userId: user.id },
         update: row,
-        create: { ...row, id: 'default' },
+        create: { ...row, userId: user.id },
       });
       results['lore-storage'] = true;
     }
@@ -138,6 +141,7 @@ export async function POST(req: Request) {
           await prisma.gameLog.create({
             data: {
               id: log.id,
+              userId: user.id,
               timestamp: log.timestamp ?? '',
               content: log.content ?? '',
               type: log.type ?? 'normal',
@@ -155,9 +159,9 @@ export async function POST(req: Request) {
         tutorialCompleted: Boolean(state.tutorialCompleted),
       };
       await prisma.tutorial.upsert({
-        where: { id: 'default' },
+        where: { userId: user.id },
         update: row,
-        create: { ...row, id: 'default' },
+        create: { ...row, userId: user.id },
       });
       results['tutorial-storage'] = true;
     }

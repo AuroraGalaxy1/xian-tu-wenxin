@@ -1,19 +1,25 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { getUserFromRequest } from '@/lib/auth';
 
-const CHECKIN_ID = 'default';
+export async function GET(request: Request) {
+  const user = await getUserFromRequest(request);
+  if (!user) return NextResponse.json({ error: '未登录' }, { status: 401 });
 
-export async function GET() {
-  const checkin = await prisma.checkin.findUnique({ where: { id: CHECKIN_ID } });
+  const checkin = await prisma.checkin.findUnique({ where: { userId: user.id } });
   return NextResponse.json(checkin);
 }
 
-export async function PUT(req: Request) {
-  const body = await req.json();
+export async function PUT(request: Request) {
+  const user = await getUserFromRequest(request);
+  if (!user) return NextResponse.json({ error: '未登录' }, { status: 401 });
+
+  const body = await request.json();
+  const { id, ...data } = body;
   const checkin = await prisma.checkin.upsert({
-    where: { id: CHECKIN_ID },
-    update: body,
-    create: { ...body, id: CHECKIN_ID },
+    where: { userId: user.id },
+    update: data,
+    create: { ...data, userId: user.id },
   });
   return NextResponse.json(checkin);
 }
